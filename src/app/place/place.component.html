@@ -1,1 +1,17 @@
-<p>place works!</p>
+<aside class="map-screen">
+ 
+   
+    <div class="map">
+        
+        <google-map height="120vh"
+                    width="100%"
+                    [options]="mapOptions">
+          <map-marker *ngFor="let marker of markers"
+                      [position]="marker.position"></map-marker>
+        </google-map>
+      </div>
+        
+
+    
+
+</aside>

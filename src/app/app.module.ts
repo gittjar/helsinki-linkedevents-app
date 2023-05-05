@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PlaceComponent } from './place/place.component';
 
+import { GoogleMapsModule } from '@angular/google-maps';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -15,6 +17,7 @@ import { PlaceComponent } from './place/place.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    GoogleMapsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
