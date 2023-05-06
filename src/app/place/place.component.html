@@ -3,7 +3,7 @@
    
     <div class="map">
         
-        <google-map height="120vh"
+        <google-map height="500px"
                     width="100%"
                     [options]="mapOptions">
           <map-marker *ngFor="let marker of markers"
@@ -11,7 +11,7 @@
         </google-map>
       </div>
         
-
+<div *ngFor="let x of pleissi.data">{{x.position.coordinates[1]}} and {{x.position.coordinates[0]}}</div>
     
 
 </aside>
