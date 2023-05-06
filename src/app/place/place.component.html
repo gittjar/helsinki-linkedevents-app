@@ -6,8 +6,20 @@
         <google-map height="500px"
                     width="100%"
                     [options]="mapOptions">
-          <map-marker *ngFor="let marker of markers"
-                      [position]="marker.position"></map-marker>
+          <map-marker 
+          
+          
+          
+          *ngFor="let marker of markers"
+                      [position]="marker.position"
+                      
+        [label]="marker.label"
+      [title]="marker.title" 
+      [options]="marker.options"
+      [icon]="marker.icon"
+                      
+                      
+                      ></map-marker>
         </google-map>
       </div>
        <!--

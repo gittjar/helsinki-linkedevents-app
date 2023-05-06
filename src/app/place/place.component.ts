@@ -41,18 +41,46 @@ export class PlaceComponent implements OnInit{
       this.pleissi = data;
     })
   } */
+
+
+
+  
   pleissi: any;
   markers: any[] = [];
 getPlaceMarker(): void {
   this.placehttp.getPlace().subscribe((data: any) => {
     this.pleissi = data;
     this.pleissi.data.forEach((place: any) => {
+
+      const contentString = '<div><p>This is the info window content</p></div>';
+      const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        position: { lat: place.position?.coordinates[1], lng: place.position?.coordinates[0] },
+        maxWidth: 200
+      });
+
       const marker = new google.maps.Marker({
         position: { lat: place.position?.coordinates[1], lng: place.position?.coordinates[0] },
         // map : 'GoogleMap' // replace "this.map" with a reference to your Google Map instance
+        opacity : 0.3,
+        label : {text: place.name.fi, color: 'black', fontWeight: '700', fontFamily: 'Verdana' },
+        title : place.street_address.fi,
+        animation : google.maps.Animation.DROP,
+
+      icon: {url: '/assets/close.png'}
+        
       });
+
+   
+
       this.markers.push(marker);
     });
+
+
   });
+  
+
 }
+
+
 }
