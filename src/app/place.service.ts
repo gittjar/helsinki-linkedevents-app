@@ -10,7 +10,7 @@ export class PlaceService {
   constructor(private PlaceHTTP: HttpClient) { }
 
   getPlace(): any {
-    const place = this.PlaceHTTP.get('https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/place/');
+    const place = this.PlaceHTTP.get('https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/place/?text=ravintola');
     return place;
     }
 

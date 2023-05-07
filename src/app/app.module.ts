@@ -7,11 +7,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { PlaceComponent } from './place/place.component';
 
 import { GoogleMapsModule } from '@angular/google-maps';
+import { SamplemapComponent } from './samplemap/samplemap.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    PlaceComponent
+    PlaceComponent,
+    SamplemapComponent
   ],
   imports: [
     BrowserModule,

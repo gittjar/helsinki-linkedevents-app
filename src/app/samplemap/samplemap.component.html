@@ -1,0 +1,29 @@
+<!-- google-maps-demo.component.html -->
+<!--
+<google-map height="400px"
+            width="750px"
+            [center]="center"
+            [zoom]="zoom"
+            (mapClick)="addMarker($event)">
+  <map-marker #marker="mapMarker"
+              *ngFor="let markerPosition of markerPositions"
+              [position]="markerPosition"
+              (mapClick)="openInfoWindow(marker)"></map-marker>
+  <map-info-window>Info Window content</map-info-window>
+</google-map>
+-->
+<section class="main">
+
+    <div id="map"></div>
+    <!--
+    <article class="places d-flex align-content-center">
+        
+      <button class="btn place" (click)="showContent('places')">Places</button>
+   
+    </article>
+    -->
+<aside>
+    <div *ngFor="let x of pleissi?.data"> {{x?.name?.fi}} and {{x.position?.coordinates[1]}} and {{x.position?.coordinates[0]}}</div>
+</aside>
+
+  </section>

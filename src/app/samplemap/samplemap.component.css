@@ -1,0 +1,68 @@
+
+.main {
+    display: flex;
+    flex-direction: row;
+}
+  
+  #map {
+    height: 600px; /* The height is 400 pixels */
+    width: 100%; /* The width is the width of the web page */
+}
+  
+  .places {
+    top: 10%;
+  }
+  
+  .btn {
+    width: 150px;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 10px;
+    margin: 0.5rem;
+  }
+  
+.infoscreen {
+    background-color: #2b0950;
+}
+  
+ 
+  
+  .place {
+    background-color:  #2b0950;
+    color: rgb(230, 230, 223);
+  }
+  
+
+
+  .list {
+    width: auto;
+    background-color: rgb(246, 246, 246);
+    color: grey;
+  }
+
+
+  
+  @media only screen and (max-width: 768px) {
+    .places {
+     top: 85%;
+     flex-wrap: wrap;
+    }
+
+    .btn {
+      width: 25%;
+      margin: 0.5rem;
+    }
+   }
+
+  @media only screen and (max-width: 425px) {
+   .places {
+    top: 75%;
+    flex-wrap: wrap;
+   }
+
+   .btn {
+    width: 40%;
+    padding: 0.7rem;
+    margin: 0.5em;
+  }
+  }
