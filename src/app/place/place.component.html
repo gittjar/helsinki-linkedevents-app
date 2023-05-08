@@ -1,5 +1,13 @@
 
-<section class="button-bar"></section>
+<section class="button-bar">
+
+  <button type="button" class="btn place" (click)="SearchHaaga()">Haaga
+    </button>
+
+    <button type="button" class="btn place" (click)="SearchRavintola()">Ravintola
+    </button>
+
+</section>
 <section class="main">
 
 
@@ -15,7 +23,7 @@
           <h3 class="text-white-900 text-sm font-semibold"> {{x?.name?.fi}}</h3>
           <p class="text-sm">
            {{x?.street_address?.fi}}, {{x.postal_code}}, {{x.address_locality?.fi}}
-          <br><a href="{{x?.info_url?.fi}}">Lue lisää -></a>
+          <br><a href="{{x?.info_url?.fi}}">Lue lisää</a>
         </p>
         </article>
     </aside>

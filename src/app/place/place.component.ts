@@ -47,8 +47,16 @@ DoSearch() {
   }
 
   resetMap() {
-  
-    
+   
+  }
+
+  SearchHaaga() {
+    this.textid = 'Haaga';
+    this.showContent('MyText');
+  }
+  SearchRavintola() {
+    this.textid = 'Ravintola';
+    this.showContent('MyText');
   }
 
 
