@@ -1,18 +1,23 @@
 
+<section class="button-bar"></section>
 <section class="main">
 
 
   <aside>
-
-      Enter text: 
-      <input [(ngModel)]="textid" placeholder="Enter a value"><br>
+      <input class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-slate-500 focus:ring-sky-700 focus:ring-1 sm:text-sm" [(ngModel)]="textid" placeholder="Hae paikkaa esim. ravintola"><br>
       <button class="btn place" (click)="DoSearch()">Search {{textid}}</button>
       <button class="btn place" (click)="resetMap()">Reset map</button>
     
     
     
     
-        <div class="list" *ngFor="let x of pleissi?.data"> {{x?.name?.fi}} and {{x.position?.coordinates[1]}} and {{x.position?.coordinates[0]}}</div>
+        <article class="list" *ngFor="let x of pleissi?.data">
+          <h3 class="text-white-900 text-sm font-semibold"> {{x?.name?.fi}}</h3>
+          <p class="text-sm">
+           {{x?.street_address?.fi}}, {{x.postal_code}}, {{x.address_locality?.fi}}
+          <br><a href="{{x?.info_url?.fi}}">Lue lisää -></a>
+        </p>
+        </article>
     </aside>
     
 

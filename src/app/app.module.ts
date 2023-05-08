@@ -10,13 +10,15 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { SamplemapComponent } from './samplemap/samplemap.component';
 import { PlaceService } from './place.service';
 import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     PlaceComponent,
-    SamplemapComponent
+    SamplemapComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
