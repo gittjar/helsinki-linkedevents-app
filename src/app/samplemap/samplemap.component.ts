@@ -10,21 +10,6 @@ import { PlaceService } from '../place.service';
   styleUrls: ['./samplemap.component.css']
 })
 export class SamplemapComponent implements OnInit{
-/*
-  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
-
-  center: google.maps.LatLngLiteral = {lat: 60, lng: 23};
-  markerPositions: google.maps.LatLngLiteral[] = [];
-  zoom = 9;
-
-  addMarker(event: google.maps.MapMouseEvent) {
-    this.markerPositions.push(event.latLng!.toJSON());
-  }
-
-  openInfoWindow(marker: MapMarker) {
-    this.infoWindow.open(marker);
-  }
-  */
 
   mapLoaded!: boolean;
   map!: google.maps.Map;
@@ -48,7 +33,7 @@ ngOnInit() {
     this.options
   );
   this.infoWindow = new google.maps.InfoWindow();
-  this.showContent('places');
+  this.showContent('MyText');
 }
 
 markers = [] as any;
@@ -56,6 +41,17 @@ markers = [] as any;
 constructor(private placeservice: PlaceService) {} 
 
 pleissi?: any;
+textid : string = "";
+
+DoSearch() {
+  console.log(this.textid);
+  this.showContent('MyText');
+  }
+
+  resetMap() {
+    
+  }
+
 
 showContent(contentType: string) {
 
@@ -63,9 +59,9 @@ showContent(contentType: string) {
 
   let content: any = null
 
-
-  if(contentType === "places") {
-    content = this.placeservice.getPlace()
+  // getPlace in placeservice is configured to show text and it changes here what user gives.
+  if(contentType === "MyText") {
+    content = this.placeservice.getPlace(this.textid);
   }
   else {
     console.error("unknown content type");

@@ -18,11 +18,21 @@
     <!--
     <article class="places d-flex align-content-center">
         
-      <button class="btn place" (click)="showContent('places')">Places</button>
    
     </article>
     -->
 <aside>
+<!--
+  <button class="btn place" (click)="showContent('places')">Places</button>
+-->
+  Enter text: 
+  <input [(ngModel)]="textid" placeholder="Enter a value">
+  <button (click)="DoSearch()">Search {{textid}}</button>
+  <button (click)="resetMap()">Reset map</button>
+
+
+
+
     <div *ngFor="let x of pleissi?.data"> {{x?.name?.fi}} and {{x.position?.coordinates[1]}} and {{x.position?.coordinates[0]}}</div>
 </aside>
 

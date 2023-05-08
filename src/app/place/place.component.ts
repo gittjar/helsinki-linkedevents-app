@@ -2,24 +2,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { PlaceService } from '../place.service';
 
-interface MarkerProperties {
-  position: {
-    lat: number;
-    lng: number;
-    title: string;
-  }
-};
-
 @Component({
   selector: 'app-place',
   templateUrl: './place.component.html',
   styleUrls: ['./place.component.css']
 })
 export class PlaceComponent implements OnInit{
-
+/*
   @ViewChild('GoogleMap', { static: true }) 
 
- // map!: GoogleMap;
   map!: google.maps.Map;
 
   infoWindow!: google.maps.InfoWindow;
@@ -29,34 +20,22 @@ export class PlaceComponent implements OnInit{
     
   };
   
-
-
-  /*
-  markers: MarkerProperties[] = [
-    { position: { lat: 60.169266, lng: 24.938164, title: 'Kauppakeskus Forum' }}, // Kauppakeskus Forum
-  ];
-  */
+  textid: string = '';
 
  
-
+*/
   constructor (private placehttp: PlaceService){}
 
   ngOnInit(): void {
-    this.getPlaceMarker();
-    this.infoWindow = new google.maps.InfoWindow();
+  // this.getPlaceMarker();
+   // this.infoWindow = new google.maps.InfoWindow();
   }
 
 
+
+
+
 /*
-  pleissi : any;
-  getPlaceMarker():void {
-    this.placehttp.getPlace().subscribe((data: any) => {
-      this.pleissi = data;
-    })
-  } */
-
-
-
 
   
   pleissi?: any;
@@ -92,7 +71,7 @@ getPlaceMarker(): void {
     });
     
   };
-
+*/
 
 }
 

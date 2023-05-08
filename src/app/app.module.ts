@@ -8,6 +8,8 @@ import { PlaceComponent } from './place/place.component';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 import { SamplemapComponent } from './samplemap/samplemap.component';
+import { PlaceService } from './place.service';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import { SamplemapComponent } from './samplemap/samplemap.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
