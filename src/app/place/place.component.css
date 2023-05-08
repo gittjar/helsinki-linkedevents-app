@@ -1,0 +1,54 @@
+
+
+.main {
+    display: flex;
+    flex-direction: row;
+}
+  
+  #map {
+    height: 600px; /* The height is 400 pixels */
+    width: 100%; /* The width is the width of the web page */
+}
+  
+
+  
+  .btn {
+    width: 120px;
+    padding: 0.4rem;
+    border: none;
+    border-radius: 10px;
+    margin: 0.5%;
+  }
+  
+.infoscreen {
+    background-color: #2b0950;
+}
+  
+ 
+  
+  .place {
+    background-color:  #2b0950;
+    color: rgb(230, 230, 223);
+  }
+  
+
+
+  .list {
+    width: auto;
+    background-color: rgb(68, 108, 253);
+    color: rgb(243, 240, 240);
+    padding: 3px;
+    margin: 3px;
+    border-radius: 3px;
+    font-weight: 400;
+  }
+
+
+  
+  @media only screen and (max-width: 768px) {
+
+   }
+
+  @media only screen and (max-width: 425px) {
+
+  }

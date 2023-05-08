@@ -1,31 +1,22 @@
-<aside class="map-screen">
- 
-   <!--
-    <div class="map">
-        
-        <google-map height="500px"
-                    width="100%"
-                    [options]="mapOptions">
-          <map-marker 
-          
-          
-          
-          *ngFor="let marker of markers"
-                      [position]="marker.position"
-                      
-        [label]="marker.label"
-      [title]="marker.title" 
-      [options]="marker.options"
-      [icon]="marker.icon"
-      
-                      >
-                      <map-info-window>Info Window content</map-info-window>
 
-                    </map-marker>
-        </google-map>
-      </div>
-       
-<div *ngFor="let x of pleissi?.data"> {{x?.name?.fi}} and {{x.position?.coordinates[1]}} and {{x.position?.coordinates[0]}}</div>
-    -->
+<section class="main">
 
-</aside>
+
+  <aside>
+
+      Enter text: 
+      <input [(ngModel)]="textid" placeholder="Enter a value"><br>
+      <button class="btn place" (click)="DoSearch()">Search {{textid}}</button>
+      <button class="btn place" (click)="resetMap()">Reset map</button>
+    
+    
+    
+    
+        <div class="list" *ngFor="let x of pleissi?.data"> {{x?.name?.fi}} and {{x.position?.coordinates[1]}} and {{x.position?.coordinates[0]}}</div>
+    </aside>
+    
+
+    <div id="map"></div>
+
+
+  </section>
