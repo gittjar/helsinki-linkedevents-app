@@ -14,6 +14,23 @@
 -->
 <section class="main">
 
+
+  <aside>
+    <!--
+      <button class="btn place" (click)="showContent('places')">Places</button>
+    -->
+      Enter text: 
+      <input [(ngModel)]="textid" placeholder="Enter a value"><br>
+      <button class="btn place" (click)="DoSearch()">Search {{textid}}</button>
+      <button class="btn place" (click)="resetMap()">Reset map</button>
+    
+    
+    
+    
+        <div class="list" *ngFor="let x of pleissi?.data"> {{x?.name?.fi}} and {{x.position?.coordinates[1]}} and {{x.position?.coordinates[0]}}</div>
+    </aside>
+    
+
     <div id="map"></div>
     <!--
     <article class="places d-flex align-content-center">
@@ -21,19 +38,5 @@
    
     </article>
     -->
-<aside>
-<!--
-  <button class="btn place" (click)="showContent('places')">Places</button>
--->
-  Enter text: 
-  <input [(ngModel)]="textid" placeholder="Enter a value">
-  <button (click)="DoSearch()">Search {{textid}}</button>
-  <button (click)="resetMap()">Reset map</button>
-
-
-
-
-    <div *ngFor="let x of pleissi?.data"> {{x?.name?.fi}} and {{x.position?.coordinates[1]}} and {{x.position?.coordinates[0]}}</div>
-</aside>
 
   </section>

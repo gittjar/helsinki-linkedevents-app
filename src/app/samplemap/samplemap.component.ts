@@ -49,6 +49,7 @@ DoSearch() {
   }
 
   resetMap() {
+  
     
   }
 
