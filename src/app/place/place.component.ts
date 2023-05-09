@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { PlaceService } from '../place.service';
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-place',
@@ -9,6 +11,11 @@ import { PlaceService } from '../place.service';
 })
 export class PlaceComponent implements OnInit{
 
+  // fontawesome
+  ArrowUpRightIcon = faArrowUpRightFromSquare;
+  ChevronRight = faChevronRight;
+
+  // googlemaps
   mapLoaded!: boolean;
   map!: google.maps.Map;
   geocoder = new google.maps.Geocoder();
@@ -20,9 +27,9 @@ export class PlaceComponent implements OnInit{
   //  disableDoubleClickZoom: true,
     center: {
       lat: 60.16833266,
-      lng: 24.951496194,
+      lng: 24.951496394,
     },
-    zoom: 16,
+    zoom: 13,
   };
 
 ngOnInit() {
@@ -47,7 +54,13 @@ DoSearch() {
   }
 
   resetMap() {
-   
+   this.textid = '';
+   this.ngOnInit();
+  }
+
+  SearchPasila() {
+    this.textid = 'Pasila';
+    this.showContent('MyText');
   }
 
   SearchHaaga() {
@@ -58,6 +71,12 @@ DoSearch() {
     this.textid = 'Ravintola';
     this.showContent('MyText');
   }
+
+  SearchKauppakeskus(){
+    this.textid = 'Kauppakeskus';
+    this.showContent('MyText');
+  }
+  
 
 
 showContent(contentType: string) {
