@@ -76,6 +76,10 @@ DoSearch() {
     this.textid = 'Kauppakeskus';
     this.showContent('MyText');
   }
+
+
+
+  getDataByImage(imageid: number) {}
   
 
 
@@ -115,9 +119,16 @@ showContent(contentType: string) {
         
 
 
-        let markerContent = '<div class="infoscreen">' +
-                            place.name.fi + 
-                            `<p class="place_text">${place?.address_locality?.fi}</p>` + 
+        let markerContent = '<div class="map-infowindow">' +
+                           `<div class="map-infowindow-title">${place.name.fi}</div>` + 
+                           `<div class="map-infowindow-content">${place?.street_address?.fi}</div>` + 
+                           `<div class="map-infowindow-content">${place?.postal_code}, ${place?.address_locality?.fi}</div>` + 
+                           `<div class="map-infowindow-content"><a href="${place?.info_url?.fi}">Lue lisää ></a></div>
+                           ` + 
+
+                           `<hr>` + `<br>`+ 
+                           `<div class="map-infowindow-content">${place?.description?.fi}</div>` + 
+
                             '</div>'
                            
 
@@ -126,15 +137,17 @@ showContent(contentType: string) {
         // To add the marker to the map, call setMap();
         marker.setMap(this.map);
         google.maps.event.addListener(marker, "click", () => {
-          let infowindow = new google.maps.InfoWindow();
+         let infowindow = new google.maps.InfoWindow();
           infowindow.setContent(markerContent)
           infowindow.open(this.map, marker);
+         
         });
       });
       
     });
   
 }
+
 
 
 
