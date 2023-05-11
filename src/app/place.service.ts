@@ -7,7 +7,7 @@ import { Observable, map, switchMap } from 'rxjs';
 })
 export class PlaceService {
 
-  private linkedEventsApiRoot = 'https://api.hel.fi/linkedevents/v1';
+  private linkedEventsApiRoot = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1';
 
   constructor(private PlaceHTTP: HttpClient) { }
   
@@ -28,16 +28,9 @@ export class PlaceService {
           return PlaceText;  
           } 
 
-          public getPlaceDataByImageId(imageId: number): Observable<any> {
+          public getPlaceImageById(imageId: number): Observable<any> {
             // First fetch the image data
-            return this.PlaceHTTP.get<any>(`${this.linkedEventsApiRoot}/image/${imageId}`).pipe(
-              // Use the image data to fetch related place data
-              switchMap((imageData) =>
-                this.PlaceHTTP.get<any>(`${this.linkedEventsApiRoot}/place/?image=${imageData.id}`)
-              ),
-              // Return only the relevant data from the response
-              map((responseData) => responseData.data)
-            );
+            return this.PlaceHTTP.get<any>(`${this.linkedEventsApiRoot}/image/${imageId}`)
           }
 
 }

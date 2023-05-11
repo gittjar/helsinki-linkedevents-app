@@ -3,6 +3,10 @@ import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { PlaceService } from '../place.service';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-place',
@@ -32,13 +36,15 @@ export class PlaceComponent implements OnInit{
     zoom: 13,
   };
 
+  
 ngOnInit() {
   this.map = new google.maps.Map(
     document.getElementById("map")!,
     this.options
   );
   this.infoWindow = new google.maps.InfoWindow();
-  this.showContent('MyText');
+  this.showContent('MyText'); 
+ // this.getImageById(this.placeservice.);
 }
 
 markers = [] as any;
@@ -79,7 +85,15 @@ DoSearch() {
 
 
 
-  getDataByImage(imageid: number) {}
+    ImageDetail : any = {};
+    getImageById(imageid: number) :void {
+    if (imageid) {
+      this.placeservice.getPlaceImageById(imageid).subscribe((data: any) =>{
+        this.ImageDetail = data;
+      })
+    }
+
+    }
   
 
 
@@ -88,6 +102,7 @@ showContent(contentType: string) {
   this.markers = []
 
   let content: any = null
+
 
   // getPlace in placeservice is configured to show text and it changes here what user gives.
   if(contentType === "MyText") {
