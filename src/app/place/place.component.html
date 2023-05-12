@@ -27,9 +27,85 @@
   <button type="button" class="btn place" (click)="SearchUrheilu()">Urheilu <fa-icon [icon]="ChevronRight"></fa-icon>
   </button>
 </section>
-<aside class="weather">
-  weather
-</aside>
+  <aside class="weather">
+  <!-- TÄSTÄ ALKAA ENNUSTETTU SÄÄ-->
+  <!--KLO 8:00-->
+         <article class="weather-card" *ngIf="helsinkiforecastweather?.location.localtime < helsinkiforecastweather?.forecast.forecastday[0].hour[8].time">
+          {{helsinkiforecastweather?.forecast.forecastday[0].hour[8].time}}
+          <section class="flex justify-between center">
+        <div>
+          <figure>
+            <img src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[8].condition.icon}}">
+          </figure>
+          </div>
+          <div class="asteluku">
+            {{helsinkiforecastweather?.forecast.forecastday[0].hour[8].temp_c}} 
+          </div>
+          </section> 
+        </article>
+        <!--12:00-->
+        <article class="weather-card" *ngIf="helsinkiforecastweather?.location.localtime < helsinkiforecastweather?.forecast.forecastday[0].hour[12].time">
+          {{helsinkiforecastweather?.forecast.forecastday[0].hour[12].time}}
+          <section class="flex justify-between center">
+        <div>
+          <figure>
+            <img src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[12].condition.icon}}">
+          </figure>
+          </div>
+          <div class="asteluku">
+            {{helsinkiforecastweather?.forecast.forecastday[0].hour[12].temp_c}} 
+          </div>
+          </section> 
+        </article>
+
+        <!--16:00-->
+        <article class="weather-card" *ngIf="helsinkiforecastweather?.location.localtime < helsinkiforecastweather?.forecast.forecastday[0].hour[16].time">
+          {{helsinkiforecastweather?.forecast.forecastday[0].hour[16].time}}
+          <section class="flex justify-between center">
+        <div>
+          <figure>
+            <img src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[16].condition.icon}}">
+          </figure>
+          </div>
+          <div class="asteluku">
+            {{helsinkiforecastweather?.forecast.forecastday[0].hour[16].temp_c}} 
+          </div>
+          </section> 
+        </article>
+
+      <!--19:00-->
+      <article class="weather-card" *ngIf="helsinkiforecastweather?.location.localtime < helsinkiforecastweather?.forecast.forecastday[0].hour[19].time">
+        {{helsinkiforecastweather?.forecast.forecastday[0].hour[19].time}}
+        <section class="flex justify-between center">
+      <div>
+        <figure>
+          <img src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[19].condition.icon}}">
+        </figure>
+        </div>
+        <div class="asteluku">
+          {{helsinkiforecastweather?.forecast.forecastday[0].hour[19].temp_c}} 
+        </div>
+        </section> 
+      </article>
+
+    <!--23:00-->
+    <article class="weather-card" *ngIf="helsinkiforecastweather?.location.localtime < helsinkiforecastweather?.forecast.forecastday[0].hour[23].time">
+      {{helsinkiforecastweather?.forecast.forecastday[0].hour[23].time}}
+      <section class="center">
+    <div>
+      <figure>
+        <img src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[23].condition.icon}}">
+      </figure>
+      </div>
+      <div class="asteluku">
+        {{helsinkiforecastweather?.forecast.forecastday[0].hour[23].temp_c}} 
+      </div>
+      </section> 
+    </article>
+
+
+
+  </aside>
 </section>
 
 <!--Tässä kohdekorttien infot per button-->
