@@ -108,10 +108,11 @@ DoSearch() {
 
    // ReadMore:boolean = true
    // visible:boolean = false
+
+   // HOVER OVER KUVA> näyttää paikan kuvan
     ImageDetail : any = {};
     showWindow = false;
     getImageById(imageid: number) :void {
-   
       this.placeservice.getPlaceImageById(imageid).subscribe((data: any) =>{
         this.ImageDetail = data;
       })
@@ -130,19 +131,14 @@ DoSearch() {
       }, 10000);
       */
       this.showWindow = true;
-
     }
-
     closeWindow() {
       this.showWindow = false;
     }
 
   
 
-    
-  
-
-
+  // CONTENT FOR MAP AND MAP LOADING DATA
 showContent(contentType: string) {
 
   this.markers = []
@@ -179,8 +175,6 @@ showContent(contentType: string) {
           icon: {url: '/assets/locationpin.png'},
         });
         
-
-
         let markerContent = '<div class="map-infowindow">' +
                            `<div class="map-infowindow-title">${place.name.fi}</div>` + 
                            `<div class="map-infowindow-content">${place?.street_address?.fi}</div>` + 
@@ -193,24 +187,14 @@ showContent(contentType: string) {
 
                             '</div>'
                            
-
-        
-
         // To add the marker to the map, call setMap();
         marker.setMap(this.map);
         google.maps.event.addListener(marker, "click", () => {
          let infowindow = new google.maps.InfoWindow();
           infowindow.setContent(markerContent)
-          infowindow.open(this.map, marker);
-         
+          infowindow.open(this.map, marker);    
         });
       });
-      
-    });
-  
+    }); 
 }
-
-
-
-
 }

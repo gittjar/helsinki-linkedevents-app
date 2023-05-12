@@ -1,14 +1,6 @@
 
-<section class="button-bar">
- 
-    <div class="ripple-1"></div>
-    <div class="ripple-2"></div>
-    <div class="ripple-3"></div>
-    <div class="ripple-4"></div>
-    <div class="ripple-5"></div>
-
- 
-
+<section class="upbar">
+<section class="buttons-and-input">
   <input class="text-input" [(ngModel)]="textid" placeholder="Hae paikkaa esim. ravintola">
 
   <button class="btn search" (click)="DoSearch()">Search  <fa-icon [icon]="MagnifyingGlassLocation"></fa-icon>
@@ -16,7 +8,7 @@
 
   <button class="btn reset" (click)="resetMap()">Reset <fa-icon [icon]="RectangXmark"></fa-icon>
   </button>
-<br>
+  <br>
   <button type="button" class="btn place" (click)="SearchHaaga()">Haaga  <fa-icon [icon]="ChevronRight"></fa-icon>
   </button>
 
@@ -34,7 +26,10 @@
 
   <button type="button" class="btn place" (click)="SearchUrheilu()">Urheilu <fa-icon [icon]="ChevronRight"></fa-icon>
   </button>
-
+</section>
+<aside class="weather">
+  weather
+</aside>
 </section>
 
 <!--Tässä kohdekorttien infot per button-->
