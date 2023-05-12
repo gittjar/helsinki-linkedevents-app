@@ -3,6 +3,8 @@ import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { PlaceService } from '../place.service';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlassLocation } from '@fortawesome/free-solid-svg-icons';
+import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { Collapse } from 'tw-elements';
@@ -24,6 +26,8 @@ export class PlaceComponent implements OnInit{
   // fontawesome
   ArrowUpRightIcon = faArrowUpRightFromSquare;
   ChevronRight = faChevronRight;
+  MagnifyingGlassLocation = faMagnifyingGlassLocation;
+  RectangXmark = faRectangleXmark;
 
   // googlemaps
   mapLoaded!: boolean;
@@ -90,6 +94,14 @@ DoSearch() {
 
   SearchKauppakeskus(){
     this.textid = 'Kauppakeskus';
+    this.showContent('MyText');
+  }
+  SearchTeatteri(){
+    this.textid = 'Teatteri';
+    this.showContent('MyText');
+  }
+  SearchUrheilu(){
+    this.textid = 'Urheilu';
     this.showContent('MyText');
   }
 

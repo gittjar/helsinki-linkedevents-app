@@ -34,7 +34,7 @@
   left: 10%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  background-color:  #1e1b4b;
+  background-color: #1e1b4b;
   border-radius: 10px;
   color: white;
 }
@@ -64,8 +64,12 @@
     color: rgb(230, 230, 223);
   }
 
-  .search, .reset {
+  .reset {
     background-color: #83046e;
+    color: rgb(230, 230, 223);
+  }
+  .search {
+    background-color: #06b52c;
     color: rgb(230, 230, 223);
   }
   
