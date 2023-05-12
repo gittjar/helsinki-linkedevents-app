@@ -1,12 +1,20 @@
 
 <section class="button-bar">
+ 
+    <div class="ripple-1"></div>
+    <div class="ripple-2"></div>
+    <div class="ripple-3"></div>
+    <div class="ripple-4"></div>
+    <div class="ripple-5"></div>
+
+ 
 
   <input class="text-input" [(ngModel)]="textid" placeholder="Hae paikkaa esim. ravintola"><br>
 
-  <button class="btn place" (click)="DoSearch()">Search  <fa-icon [icon]="ChevronRight"></fa-icon>
+  <button class="btn search" (click)="DoSearch()">Search  <fa-icon [icon]="ChevronRight"></fa-icon>
   </button>
 
-  <button class="btn place" (click)="resetMap()">Reset map  <fa-icon [icon]="ChevronRight"></fa-icon>
+  <button class="btn reset" (click)="resetMap()">Reset map  <fa-icon [icon]="ChevronRight"></fa-icon>
   </button>
 
   <button type="button" class="btn place" (click)="SearchHaaga()">Haaga  <fa-icon [icon]="ChevronRight"></fa-icon>
@@ -21,9 +29,42 @@
   <button type="button" class="btn place" (click)="SearchKauppakeskus()">Kauppakeskus <fa-icon [icon]="ChevronRight"></fa-icon>
   </button>
 
-
 </section>
+
+<!--Tässä kohdekorttien infot per button-->
+<!--Hidden info screen-->
+<!--
+<ng-container *ngIf="visible" >
+  <div 
+  class="kortti flex flex-col rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 md:max-w-xl md:flex-row">
+  <img
+    class="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
+    [src]="ImageDetail?.url" alt="" />
+  <div class="flex flex-col justify-start p-6">
+    <h5
+      class="mb-2 text-xl font-medium text-neutral-800 dark:text-neutral-50">
+      {{ImageDetail.data_source}}   </h5>
+    <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+      {{ImageDetail.name}} 
+    </p>
+    <p class="text-xs text-neutral-500 dark:text-neutral-300">
+      {{ImageDetail.last_modified_time | date}}
+    </p>
+  </div>
+</div>  
+</ng-container>
+-->
+
+
+
+
+
+
 <section class="main">
+
+
+  
+
 
   <aside>
       
@@ -32,35 +73,47 @@
 
  
     
-    
+
         <article class="list" *ngFor="let x of pleissi?.data">
           <h3 class="text-white-900 text-sm font-semibold"> {{x?.name?.fi}}</h3>
 
           <p class="text-sm">
 
-           {{x?.street_address?.fi}}, {{x.postal_code}}, {{x.address_locality?.fi}}
-          <br><a href="{{x?.info_url?.fi}}">Lue lisää <fa-icon [icon]="ArrowUpRightIcon"></fa-icon></a>
-            
-            <span *ngIf="x?.image">
-              <br>image id: {{x?.image}}
+           {{x?.street_address?.fi}}, {{x.postal_code}}, {{x.address_locality?.fi}}</p>
 
-            <button class="btn place" (click)="getImageById(x?.image)">Näytä kohdekuva
-              <fa-icon [icon]="ChevronRight"></fa-icon>
-            </button>
-           
-           
-          </span>
-        </p>
+           <article class="flex justify-between">
+            <section>
+          <a href="{{x?.info_url?.fi}}">Lue lisää <fa-icon [icon]="ArrowUpRightIcon"></fa-icon></a>
+        </section>
 
-        </article>
+            <section *ngIf="x?.image">
+            <button (mouseenter)="getImageById(x?.image)" (mouseleave)="closeWindow()"> Kuva  <fa-icon [icon]="ChevronRight"></fa-icon></button>
+            <div *ngIf="showWindow" class="window"> 
+              <img
+              class="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
+              [src]="ImageDetail?.url" alt="" />
+              <p class="text-xs text-neutral-500 dark:text-neutral-600">
+               Kuvattu: {{ImageDetail?.last_modified_time | date}}
+               <br>
+               Kuvaaja: {{ImageDetail?.photographer_name}}
+               <br>
+               Lisenssi: {{ImageDetail?.license}}
+              </p>
+              </div>
+            </section>
+
+
+           </article>
+          
+          
+          </article>
     </aside>
-
+    
     <div id="map"></div>
 
-    <figure>
-    <!--buttonin takaa kohdekuva-->
-    <img [src]="ImageDetail?.url">
-  </figure>
+
 
 
   </section>
+
+  
