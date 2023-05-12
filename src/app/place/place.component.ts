@@ -11,6 +11,7 @@ import { Collapse } from 'tw-elements';
 import { Modal, initTE } from "tw-elements";
 import { Ripple, Toast } from "tw-elements";
 import { SlicePipe } from '@angular/common';
+import { WeatherService } from '../weather.service';
 
 
 
@@ -46,6 +47,9 @@ export class PlaceComponent implements OnInit{
     zoom: 13,
   };
 
+  // weather
+  helsinkiforecastweather : any;
+
   
 ngOnInit() {
   this.map = new google.maps.Map(
@@ -57,13 +61,19 @@ ngOnInit() {
  // this.getImageById(this.placeservice.);
 
  initTE({ Modal, Ripple, Collapse, Toast });
-
-
+ this.getForecastHelsinki();
 }
 
 markers = [] as any;
 
-constructor(private placeservice: PlaceService) {} 
+constructor(private placeservice: PlaceService, private weatherservice : WeatherService) {} 
+
+  // Weather Forecast Helsinki
+  getForecastHelsinki(): void {
+    this.weatherservice.getHelsinkiForecastData().subscribe ((data: any) =>{
+      this.helsinkiforecastweather = data;
+    })
+  }  
 
 pleissi?: any;
 textid : string = "";
