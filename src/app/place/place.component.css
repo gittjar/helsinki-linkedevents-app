@@ -6,7 +6,7 @@
 }
 
 .button-bar {
-    height: 15vh;
+    height: 17vh;
     border-bottom: #1e1b4b 1px solid;
 }
   
@@ -28,7 +28,16 @@
 
 }
   
-
+.window {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color:  #1e1b4b;
+  border-radius: 10px;
+  color: white;
+}
   
   .btn {
     padding-left: 1%;
@@ -42,7 +51,6 @@
   }
   .btn:hover {
     opacity: 0.85;
-  
   }
   
 .infoscreen {
@@ -55,17 +63,25 @@
     background-color: #3730a3;
     color: rgb(230, 230, 223);
   }
+
+  .search, .reset {
+    background-color: #83046e;
+    color: rgb(230, 230, 223);
+  }
   
+  .kortti {
+    margin: 1%;
+  }
 
 
   .list {
     width: auto;
     background-color: #1e1b4b;
     color: rgb(243, 240, 240);
-    
+    padding-right: 12px;
     padding-left: 12px;
     padding-top: 3px;
-    padding-bottom: 3px;
+    padding-bottom: 10px;
     margin: 3px;
     border-radius: 3px 8px 3px 3px;
     font-weight: 400;

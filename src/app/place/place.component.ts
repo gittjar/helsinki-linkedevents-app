@@ -5,6 +5,12 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
+import { Collapse } from 'tw-elements';
+import { Modal, initTE } from "tw-elements";
+import { Ripple, Toast } from "tw-elements";
+import { SlicePipe } from '@angular/common';
+
+
 
 
 
@@ -45,6 +51,10 @@ ngOnInit() {
   this.infoWindow = new google.maps.InfoWindow();
   this.showContent('MyText'); 
  // this.getImageById(this.placeservice.);
+
+ initTE({ Modal, Ripple, Collapse, Toast });
+
+
 }
 
 markers = [] as any;
@@ -84,16 +94,40 @@ DoSearch() {
   }
 
 
-
+   // ReadMore:boolean = true
+   // visible:boolean = false
     ImageDetail : any = {};
+    showWindow = false;
     getImageById(imageid: number) :void {
-    if (imageid) {
+   
       this.placeservice.getPlaceImageById(imageid).subscribe((data: any) =>{
         this.ImageDetail = data;
       })
-    }
+
+     // this.ReadMore = !this.ReadMore; //not equal to condition
+     // this.visible = !this.visible
+
+     /* INFOBOX WITH BUTTON
+      let win = window.open('', 'Kohteen kuva', 'width=300,height=200');
+      win?.document.write(`<figure class="picture"><img  style="width:100%" src=${this.ImageDetail.url}></figure>`);
+      win?.document.write(`<p>${this.ImageDetail.last_modified_time}</p>`)
+      win?.document.write(`<button class="btn" onclick="window.close()">Close Window</button>`);
+
+      setTimeout(() => {
+        win?.close();
+      }, 10000);
+      */
+      this.showWindow = true;
 
     }
+
+    closeWindow() {
+      this.showWindow = false;
+    }
+
+  
+
+    
   
 
 
@@ -121,6 +155,7 @@ showContent(contentType: string) {
 
       arr.forEach((place: any) => {
         this.pleissi = response;
+        
         let marker = new google.maps.Marker({
           position: {
             lat: place?.position?.coordinates[1],
