@@ -44,7 +44,7 @@ export class PlaceComponent implements OnInit{
       lat: 60.16833266,
       lng: 24.951496394,
     },
-    zoom: 13,
+    zoom: 12,
   };
 
   // weather
