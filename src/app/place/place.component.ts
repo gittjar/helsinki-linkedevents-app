@@ -8,7 +8,7 @@ import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { Collapse } from 'tw-elements';
-import { Modal, initTE } from "tw-elements";
+import { Modal, initTE, Chip, ChipsInput } from "tw-elements";
 import { Ripple, Toast } from "tw-elements";
 import { SlicePipe } from '@angular/common';
 import { WeatherService } from '../weather.service';
@@ -61,6 +61,8 @@ ngOnInit() {
  // this.getImageById(this.placeservice.);
 
  initTE({ Modal, Ripple, Collapse, Toast });
+ initTE({ Chip, ChipsInput });
+
  this.getForecastHelsinki();
 }
 
