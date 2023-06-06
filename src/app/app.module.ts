@@ -11,7 +11,15 @@ import { SamplemapComponent } from './samplemap/samplemap.component';
 import { PlaceService } from './place.service';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MainpageComponent } from './mainpage/mainpage.component'
+
+import { GalleryModule } from  'ng-gallery';
+import { GALLERY_CONFIG } from 'ng-gallery';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 
 
@@ -20,7 +28,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
     AppComponent,
     PlaceComponent,
     SamplemapComponent,
-    NavbarComponent
+    NavbarComponent,
+    MainpageComponent
   ],
   imports: [
     BrowserModule,
@@ -28,9 +37,18 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
     HttpClientModule,
     GoogleMapsModule,
     FormsModule,
-    FontAwesomeModule
+    BrowserAnimationsModule,
+    FontAwesomeModule,
+    GalleryModule
   ],
-  providers: [],
+  providers: [    {
+    provide: GALLERY_CONFIG,
+    useValue: {
+      dots: true,
+      imageSize: 'cover'
+    }
+    
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
