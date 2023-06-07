@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../image.service';
+import { Ripple, initTE } from "tw-elements";
+import { Clipboard } from '@angular/cdk/clipboard';
+
+
+
 
 @Component({
   selector: 'app-image',
@@ -8,10 +13,12 @@ import { ImageService } from '../image.service';
 })
 export class ImageComponent implements OnInit {
 
-  constructor(private http: ImageService ) {}
+  constructor(private http: ImageService, private clipboard: Clipboard) {}
 
   ngOnInit(): void {
     this.getImageData(1);
+    initTE({ Ripple });
+
   }
 
   images : any;
@@ -28,8 +35,33 @@ export class ImageComponent implements OnInit {
     this.images = data;
     })
     }
-    increasePageNumber(): void {
-      this.newPageNumber++;
-      }
 
+  increasePageNumber(): void {
+    this.newPageNumber++;
+    }
+
+  onPageChangeMinus(): any {
+    this.decreasePageNumber();
+    this.http.getImages(this.newPageNumber).subscribe((data: any) => {
+    this.images = data;
+    })
+    }
+
+  decreasePageNumber(): void {
+    if (this.newPageNumber > 1) {
+    this.newPageNumber--;
+    }
+    } 
+
+    copied: boolean = false;
+    scrollOffset: number = 0;
+
+  copyURLToClipboard(url: string): void {
+      this.clipboard.copy(url);
+      this.copied = true;
+      setTimeout(() => {
+        this.copied = false;
+      }, 2000);
+    }
+ 
 }

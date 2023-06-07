@@ -1,5 +1,38 @@
+.main {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
 .pagenappi {
     padding: 1%;
     border-radius: 10px;
     font-weight: 700;
 }
+
+.kortit {
+  
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+  .kuvakortti {
+    margin: 0.5%;
+  }
+  .copy-message {
+    position: fixed;
+    bottom: 20px; /* Adjust this value to control the distance from the bottom */
+    left: 50%;
+    font-weight: 600;
+    transform: translateX(-50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    animation: fadeOut 2s;
+  }
+  
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }

@@ -24,19 +24,7 @@ export class ImageService {
     return ImageUrl;
   }
 
-  getImageData(): Observable<ImageResponse> {
-    return this.imageHTTP.get<ImageResponse>('https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/image/');
-  }
 
-  getPageNumber(url: string): number {
-    const match = url.match(/page=(\d+)/);
-    return match ? parseInt(match[1], 10) : 1;
-  }
-  
-  getMaxPageNumber(url: string): number {
-    const match = url.match(/page=(\d+)/);
-    return match ? parseInt(match[1], 10) : 1;
-  }
 
 
 }
