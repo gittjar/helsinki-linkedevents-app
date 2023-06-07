@@ -1,1 +1,18 @@
-<p>image works!</p>
+
+
+
+<button type="button" class="pagenappi bg-gradient-to-r from-teal-200 to-sky-700 hover:from-teal-500 hover:to-sky-700" (click)="onPageChangePlus()">Seuraava sivu ></button>
+<br>
+
+
+olet sivulla:{{newPageNumber}}
+
+
+
+
+
+<br>
+<div *ngFor="let image of images.data">
+   
+    {{image.id}}<br>
+</div>
