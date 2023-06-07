@@ -18,6 +18,7 @@ import { GalleryModule } from  'ng-gallery';
 import { GALLERY_CONFIG } from 'ng-gallery';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ImageComponent } from './image/image.component';
 
 
 
@@ -29,7 +30,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PlaceComponent,
     SamplemapComponent,
     NavbarComponent,
-    MainpageComponent
+    MainpageComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,
