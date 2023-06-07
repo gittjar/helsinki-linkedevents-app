@@ -195,7 +195,7 @@ showContent(contentType: string) {
                            ` + 
 
                            `<hr>` + `<br>`+ 
-                           `<div class="map-infowindow-content">${place?.description?.fi}</div>` + 
+                           `<div class="map-infowindow-content">${place?.description?.fi.lenght!}</div>` + 
 
                             '</div>'
                            
