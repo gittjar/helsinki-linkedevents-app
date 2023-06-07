@@ -28,38 +28,40 @@
   </button>
 
 </section>
-  <aside class="weather">
+  <aside class="weather flex justify-end">
   <!-- TÄSTÄ ALKAA ENNUSTETTU SÄÄ-->
   <!--KLO 8:00-->
-        <article class="weather-card" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[8].time > helsinkiforecastweather?.location.localtime">
-          <span class="weathertime">
-          {{helsinkiforecastweather?.forecast.forecastday[0].hour[8].time}}
-        </span>
-        <div
-        data-te-chip-init
-        data-te-ripple-init
-        class="[word-wrap: break-word] my-[5px] mr-4 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
-        <img
-          class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
-          src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[8].condition.icon}}"
-          alt="" />
-          {{helsinkiforecastweather?.forecast.forecastday[0].hour[8].temp_c}} <br>
-          <span
-          data-te-chip-close
-          class="float-right w-4 cursor-pointer pl-[8px] text-[16px] text-[#afafaf] opacity-[.53] transition-all duration-200 ease-in-out hover:text-[#8b8b8b] dark:text-neutral-400 dark:hover:text-neutral-100">
-        </span>
-      </div>
-    </article>
+  <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[8].time > helsinkiforecastweather?.location.localtime">      
+    <span class="weathertime">
+      <fa-icon [icon]="Clock"></fa-icon>
+    {{helsinkiforecastweather?.forecast.forecastday[0].hour[8].time | date: 'HH:mm'}}
+  </span>
+  <div
+  data-te-chip-init
+  data-te-ripple-init
+  class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
+  <img
+    class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
+    src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[8].condition.icon}}"
+    alt="" />
+    {{helsinkiforecastweather?.forecast.forecastday[0].hour[8].temp_c}} <br>
+    <span
+    data-te-chip-close
+    class="float-right w-4 cursor-pointer pl-[8px] text-[16px] text-[#afafaf] opacity-[.53] transition-all duration-200 ease-in-out hover:text-[#8b8b8b] dark:text-neutral-400 dark:hover:text-neutral-100">
+  </span>
+</div>
+</article>
 
         <!--12:00-->
-        <article class="weather-card" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[12].time > helsinkiforecastweather?.location.localtime">
+        <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[12].time > helsinkiforecastweather?.location.localtime">      
           <span class="weathertime">
-          {{helsinkiforecastweather?.forecast.forecastday[0].hour[12].time}}
+            <fa-icon [icon]="Clock"></fa-icon>
+          {{helsinkiforecastweather?.forecast.forecastday[0].hour[12].time | date: 'HH:mm'}}
         </span>
         <div
         data-te-chip-init
         data-te-ripple-init
-        class="[word-wrap: break-word] my-[5px] mr-4 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
+        class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
         <img
           class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
           src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[12].condition.icon}}"
@@ -73,13 +75,15 @@
     </article>
 
         <!--16:00-->
-        <article class="weather-card" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[16].time > helsinkiforecastweather?.location.localtime">          <span class="weathertime">
-          {{helsinkiforecastweather?.forecast.forecastday[0].hour[16].time}}
+        <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[16].time > helsinkiforecastweather?.location.localtime">      
+          <span class="weathertime">
+            <fa-icon [icon]="Clock"></fa-icon>
+          {{helsinkiforecastweather?.forecast.forecastday[0].hour[16].time | date: 'HH:mm'}}
         </span>
         <div
         data-te-chip-init
         data-te-ripple-init
-        class="[word-wrap: break-word] my-[5px] mr-4 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
+        class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
         <img
           class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
           src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[16].condition.icon}}"
@@ -93,14 +97,15 @@
     </article>
 
       <!--19:00-->
-      <article class="weather-card" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[19].time > helsinkiforecastweather?.location.localtime">        
+      <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[19].time > helsinkiforecastweather?.location.localtime">      
         <span class="weathertime">
-        {{helsinkiforecastweather?.forecast.forecastday[0].hour[19].time}}
+          <fa-icon [icon]="Clock"></fa-icon>
+        {{helsinkiforecastweather?.forecast.forecastday[0].hour[19].time | date: 'HH:mm'}}
       </span>
       <div
       data-te-chip-init
       data-te-ripple-init
-      class="[word-wrap: break-word] my-[5px] mr-4 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
+      class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
       <img
         class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
         src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[19].condition.icon}}"
@@ -114,14 +119,15 @@
   </article>
 
     <!--23:00-->
-    <article class="weather-card" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[23].time > helsinkiforecastweather?.location.localtime">      
+    <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[23].time > helsinkiforecastweather?.location.localtime">      
       <span class="weathertime">
-      {{helsinkiforecastweather?.forecast.forecastday[0].hour[23].time}}
+        <fa-icon [icon]="Clock"></fa-icon>
+      {{helsinkiforecastweather?.forecast.forecastday[0].hour[23].time | date: 'HH:mm'}}
     </span>
     <div
     data-te-chip-init
     data-te-ripple-init
-    class="[word-wrap: break-word] my-[5px] mr-4 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
+    class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
     <img
       class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
       src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[23].condition.icon}}"

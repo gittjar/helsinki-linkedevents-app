@@ -3,6 +3,7 @@ import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { PlaceService } from '../place.service';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faClockFour } from '@fortawesome/free-solid-svg-icons';
 import { faMagnifyingGlassLocation } from '@fortawesome/free-solid-svg-icons';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { HttpClient } from '@angular/common/http';
@@ -29,6 +30,7 @@ export class PlaceComponent implements OnInit{
   ChevronRight = faChevronRight;
   MagnifyingGlassLocation = faMagnifyingGlassLocation;
   RectangXmark = faRectangleXmark;
+  Clock = faClockFour;
 
   // googlemaps
   mapLoaded!: boolean;

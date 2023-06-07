@@ -15,10 +15,19 @@ export class ImageComponent implements OnInit {
 
   constructor(private http: ImageService, private clipboard: Clipboard) {}
 
+  isLoading: boolean = true;
+
   ngOnInit(): void {
     this.getImageData(1);
     initTE({ Ripple });
+    this.loadingDataWindow();
+  }
 
+  loadingDataWindow() {
+      setTimeout(() => {
+      // Data loading is complete
+      this.isLoading = false;
+      }, 2700);
   }
 
   images : any;
