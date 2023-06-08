@@ -11,7 +11,8 @@ export class EventComponent implements OnInit {
   constructor(private http: EventService){}
 
   ngOnInit(): void {
-    this.getAllEvents('');
+    // searchstring empty and pagenumber
+    this.getAllEvents('',1);
   }
 
   // Aikojen säätöjä
@@ -22,9 +23,10 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
 
 
   searchText : string = "";
+  pageNumber : number = 1;
   events : any;
-  getAllEvents(searchText: string):void {
-    this.http.getEvent(searchText).subscribe((data: any) => {
+  getAllEvents(searchText: string, pageNumber: number):void {
+    this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {
       this.events = data;
     })
   }
@@ -36,13 +38,13 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
   }
 
   DoSearch() {
-    this.getAllEvents(this.searchText);
+    this.getAllEvents(this.searchText, this.newPageNumber = 1);
     }
   SearchStadion() {
-    this.getAllEvents(this.searchText = 'Stadion')
+    this.getAllEvents(this.searchText = 'Stadion', this.newPageNumber = 1)
   }
   SearchLapset() {
-    this.getAllEvents(this.searchText = 'Lapset')
+    this.getAllEvents(this.searchText = 'Lapset', this.newPageNumber = 1)
   }
 
   searchTextDate : string = "";
@@ -67,8 +69,24 @@ changeToday(){
   this.getAllEventsDate(this.searchTextDate);
 }
 
- 
+// Sivujen vaihdot
 
+newPageNumber = 1;
+onPageChangePlus(): any {
+  this.increasePageNumber();
+  this.getAllEvents(this.searchText, this.newPageNumber);
+  }
+increasePageNumber(): void {
+  this.newPageNumber++;
+  }
 
-
+onPageChangeMinus(): any {
+  this.decreasePageNumber();
+  this.getAllEvents(this.searchText, this.newPageNumber);
+  }
+decreasePageNumber(): void {
+  if (this.newPageNumber > 1) {
+  this.newPageNumber--;
+  }
+  }
 }

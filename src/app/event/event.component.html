@@ -1,31 +1,37 @@
 <section class="main">
 <input class="text-input" [(ngModel)]="searchText" placeholder="Hae tapahtumaa esim. Sibelius">
 
-<button class="btn" (click)="DoSearch()">Search
+<button class="btn bg-indigo-700 text-stone-100" (click)="DoSearch()">Search
 </button>
 
-<button class="btn" (click)="SearchStadion()">Stadion
+<button class="btn bg-indigo-700 text-stone-100" (click)="SearchStadion()">Stadion
 </button>
 
-<button class="btn" (click)="SearchLapset()">Lapset
+<button class="btn bg-indigo-700 text-stone-100" (click)="SearchLapset()">Lapset
 </button>
 
-<button class="btn" type="submit" (click)="changeToday()"
+<button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday()"
 >{{currentDate | date:'dd.MM.yyyy'}} Tänään</button>
 
-<button class="btn" type="submit" (click)="changeToday1()"
+<button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday1()"
 >{{tomorrowDate | date:'dd.MM.yyyy'}} Huomenna</button>
 
-<button class="btn" type="submit" (click)="changeToday2()"
+<button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday2()"
 >{{tomorrow2Date | date:'dd.MM.yyyy'}} Ylihuomenna</button>
 <hr>
 
-<article *ngFor="let event of events.data" class="flex">
+<br>
+<button class="btn bg-slate-900 text-stone-100" (click)="onPageChangeMinus()">Edellinen sivu</button>
+Olet sivulla: {{newPageNumber}}
+<button class="btn bg-slate-900 text-stone-100" (click)="onPageChangePlus()">Seuraava sivu</button>
+
+
+<article *ngFor="let event of events.data" class="flex eventcard">
 
     <figure class="cardimage">
         <!--If there is not picture replace empty value with random placeholde picture-->
-        <ng-container *ngIf="event?.images && event.images.length > 0; else placeholder">
-          <img src="{{ event.images[0]?.url }}">
+        <ng-container *ngIf="event?.images && event?.images?.length > 0; else placeholder">
+          <img src="{{ event?.images[0]?.url }}" title="lisenssi: {{event?.images[0]?.license }}, kuvaaja: {{event?.images[0]?.photographer_name}}">
         </ng-container>
         <ng-template #placeholder>
           <img src="https://picsum.photos/640/360">
@@ -33,13 +39,15 @@
       </figure>
 
     <aside class="cardtext">
-        
-    {{event?.id}},
-    Alkaa: {{event?.start_time | date : 'short'}}
-    Loppuu: {{event?.end_time | date : 'short'}}
-    {{event?.short_description}}
+       <h2>{{event?.name?.fi}}</h2>
+    <ul>
+       <li>{{event?.short_description?.fi}}</li>
+        <li>Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</li>
+        <li>Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
+    </ul>
+
     </aside>
-    
+
 </article>
 
 </section>

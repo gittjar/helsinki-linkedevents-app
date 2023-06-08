@@ -9,14 +9,14 @@ export class EventService {
 
   constructor(private eventHTTP: HttpClient) { }
 // free text search
-  PAGEURL = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/event/?text='
+  PAGEURL = 'https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/event/?text='
 
-  getEvent(searchText: string): any {
-    const events = this.eventHTTP.get(this.PAGEURL+searchText);
+  getEvent(searchText: string, pageNumber: number): any {
+    const events = this.eventHTTP.get(this.PAGEURL+searchText+'&page='+pageNumber);
     return events;  
     }
 // search by date
-    PAGEURL_Date = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/event/?start='
+    PAGEURL_Date = 'https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/event/?start='
  
     getEventDate(searchDate: string): any {
       const events = this.eventHTTP.get(this.PAGEURL_Date+searchDate);

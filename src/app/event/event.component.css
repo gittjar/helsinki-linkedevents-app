@@ -3,6 +3,12 @@
     margin-left: 2%;
 }
 
+h2 {
+    font-size: 1.7rem;
+    font-weight: 500;
+    
+}
+
 .btn {
     padding-left: 1.2%;
     padding-right: 1.2%;
@@ -12,12 +18,14 @@
     border-radius: 4px;
     margin: 0.5%;
     box-shadow: 0px 4px 6px #2b0950;
-    background-color: #3730a3;
-    color: rgb(230, 230, 223);
+  
   }
   .btn:hover {
     opacity: 0.85;
   }
+
+
+
   .text-input {
     width: 35%;
     padding: 6px 10px;
@@ -27,10 +35,26 @@
     border-radius: 4px;
     box-sizing: border-box;
     box-shadow: 0px 4px 6px #2b0950;
-  
   }
+    
+    /*CARDS*/
+    .eventcard {
+        padding: 0.2%;
+        border: #2b0950 1px solid;
+        margin: 0.2%;
+    }
+
+    .cardtext {
+        margin-left: 1%;
+    }
+
+    .smalltext {
+        font-size: 0.5;
+        color: #a4a3a3;
+    }
+  
   figure {
-    width: 15%;
+    width: 20%;
    /* border: black solid 1px; */
     padding: 0.1rem;
 }    
