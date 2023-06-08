@@ -1,10 +1,45 @@
-<p>event works!</p>
+<section class="main">
+<input class="text-input" [(ngModel)]="searchText" placeholder="Hae tapahtumaa esim. Sibelius">
 
-<div *ngFor="let event of events.data">
+<button class="btn" (click)="DoSearch()">Search
+</button>
+
+<button class="btn" (click)="SearchStadion()">Stadion
+</button>
+
+<button class="btn" (click)="SearchLapset()">Lapset
+</button>
+
+<button class="btn" type="submit" (click)="changeToday()"
+>{{currentDate | date:'dd.MM.yyyy'}} Tänään</button>
+
+<button class="btn" type="submit" (click)="changeToday1()"
+>{{tomorrowDate | date:'dd.MM.yyyy'}} Huomenna</button>
+
+<button class="btn" type="submit" (click)="changeToday2()"
+>{{tomorrow2Date | date:'dd.MM.yyyy'}} Ylihuomenna</button>
+<hr>
+
+<article *ngFor="let event of events.data" class="flex">
+
+    <figure class="cardimage">
+        <!--If there is not picture replace empty value with random placeholde picture-->
+        <ng-container *ngIf="event?.images && event.images.length > 0; else placeholder">
+          <img src="{{ event.images[0]?.url }}">
+        </ng-container>
+        <ng-template #placeholder>
+          <img src="https://picsum.photos/640/360">
+        </ng-template>
+      </figure>
+
+    <aside class="cardtext">
+        
     {{event?.id}},
-    Alkaa: {{event?.start_time | date}}
-    Loppuu: {{event?.end_time | date}}
+    Alkaa: {{event?.start_time | date : 'short'}}
+    Loppuu: {{event?.end_time | date : 'short'}}
     {{event?.short_description}}
-    <img src="{{event?.images[0].url}}">
-    <hr>
-</div>
+    </aside>
+    
+</article>
+
+</section>

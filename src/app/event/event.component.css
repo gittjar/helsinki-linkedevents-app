@@ -1,0 +1,39 @@
+.main {
+    margin-right: 2%;
+    margin-left: 2%;
+}
+
+.btn {
+    padding-left: 1.2%;
+    padding-right: 1.2%;
+    padding-top: 0.7%;
+    padding-bottom: 0.7%;
+    border: none;
+    border-radius: 4px;
+    margin: 0.5%;
+    box-shadow: 0px 4px 6px #2b0950;
+    background-color: #3730a3;
+    color: rgb(230, 230, 223);
+  }
+  .btn:hover {
+    opacity: 0.85;
+  }
+  .text-input {
+    width: 35%;
+    padding: 6px 10px;
+    margin: 8px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 6px #2b0950;
+  
+  }
+  figure {
+    width: 15%;
+   /* border: black solid 1px; */
+    padding: 0.1rem;
+}    
+figure img {
+    max-width: 100%;   
+}
