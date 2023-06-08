@@ -1,0 +1,10 @@
+<p>event works!</p>
+
+<div *ngFor="let event of events.data">
+    {{event?.id}},
+    Alkaa: {{event?.start_time | date}}
+    Loppuu: {{event?.end_time | date}}
+    {{event?.short_description}}
+    <img src="{{event?.images[0].url}}">
+    <hr>
+</div>
