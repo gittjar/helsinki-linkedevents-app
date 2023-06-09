@@ -21,12 +21,19 @@
 <hr>
 
 <br>
+<section class="flex justify-between">
 <button class="btn bg-slate-900 text-stone-100" (click)="onPageChangeMinus()">Edellinen sivu</button>
-Olet sivulla: {{newPageNumber}}
+<br>
+Sivu {{newPageNumber}} / {{ events?.meta?.count / 20 }}<br>
+Kohteiden määrä: {{ events?.meta?.count }} <br>
+
+
+
+
 <button class="btn bg-slate-900 text-stone-100" (click)="onPageChangePlus()">Seuraava sivu</button>
+</section>
 
-
-<article *ngFor="let event of events.data" class="flex eventcard">
+<article *ngFor="let event of events?.data" class="flex eventcard">
 
     <figure class="cardimage">
         <!--If there is not picture replace empty value with random placeholde picture-->
@@ -40,13 +47,44 @@ Olet sivulla: {{newPageNumber}}
 
     <aside class="cardtext">
        <h2>{{event?.name?.fi}}</h2>
-    <ul>
+        <ul>
        <li>{{event?.short_description?.fi}}</li>
         <li>Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</li>
         <li>Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
-    </ul>
+        </ul>
 
-    </aside>
+
+          <!-- With button click data
+          <div *ngIf="locationInfo">
+            Location Name: {{ locationInfo?.name?.fi }}
+            Katuosoite: {{ locationInfo?.street_address?.fi }}
+          </div>
+        
+          <button class="btn" (click)="getLocationData(events.data[0]?.location['@id'])">Get Location Data</button>
+        -->
+         
+            <button class="btn bg-indigo-900 text-neutral-200" (click)="getLocationData(events.data[0]?.location['@id'])" (mouseleave)="closeWindow()">Osoite ja lisätiedot</button>
+            <!--INFO IKKUNA ALAOSASSA-->
+            <div *ngIf="showWindow" class="window"> 
+              <p class="text-s text-neutral-500 dark:text-neutral-600">
+                Paikan nimi: {{ locationInfo?.name?.fi }}<br>
+                Katuosoite: {{ locationInfo?.street_address?.fi }}, {{ locationInfo?.postal_code}}, {{ locationInfo?.address_locality?.fi}}
+                <br>
+                Puhelin: {{ locationInfo?.telephone?.fi }}
+            </p>
+            <hr>
+            <p class="text-s text-neutral-500 dark:text-neutral-600">
+                {{ locationInfo?.description?.fi}}
+                </p>
+              </div>
+           
+
+
+        </aside>
+
+<section class="liput">
+    
+</section>
 
 </article>
 

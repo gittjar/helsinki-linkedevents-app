@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-event',
@@ -8,11 +10,13 @@ import { EventService } from '../event.service';
 })
 export class EventComponent implements OnInit {
 
-  constructor(private http: EventService){}
+  constructor(private http: EventService, private hpservice: HttpClient){}
 
   ngOnInit(): void {
     // searchstring empty and pagenumber
     this.getAllEvents('',1);
+
+
   }
 
   // Aikojen säätöjä
@@ -28,14 +32,36 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
   getAllEvents(searchText: string, pageNumber: number):void {
     this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {
       this.events = data;
+
     })
   }
+
+  // get specific location data from different JSON 
+  showWindow = false;
+  locationInfo : any;
+  getLocationData(link: string): void {
+    this.hpservice.get(link).subscribe((locationData: any) => {
+      // Process the location data and assign it to a variable in your component
+      this.locationInfo = locationData;
+    });
+    this.showWindow = true;
+  }
+  closeWindow() {
+    this.showWindow = false;
+  
+  }
+
 
   getAllEventsDate(searchDate: string): void {
     this.http.getEventDate(searchDate).subscribe((data: any) => {
       this.events = data;
+
     })
   }
+
+
+
+
 
   DoSearch() {
     this.getAllEvents(this.searchText, this.newPageNumber = 1);

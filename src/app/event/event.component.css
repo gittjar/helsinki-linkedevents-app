@@ -42,10 +42,12 @@ h2 {
         padding: 0.2%;
         border: #2b0950 1px solid;
         margin: 0.2%;
+        
     }
 
     .cardtext {
-        margin-left: 1%;
+        margin: 0.5%;
+        width: 60%;
     }
 
     .smalltext {
@@ -61,3 +63,25 @@ h2 {
 figure img {
     max-width: 100%;   
 }
+/*Infowindow*/
+.window {
+    position: fixed;
+    bottom: 20px; /* Adjust this value to control the distance from the bottom */
+    left: 50%;
+    font-weight: 600;
+    transform: translateX(-50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    animation: fadeOut 2s;
+  }
+
+  /*LIPUT*/
+  .liput {
+    border: #2b0950 1px solid;
+    padding: 1%;
+    width: 20%;
+    background-color: rgb(64, 92, 92);
+  }
