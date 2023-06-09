@@ -23,9 +23,17 @@
 <br>
 <section class="flex justify-between">
 <button class="btn bg-slate-900 text-stone-100" (click)="onPageChangeMinus()">Edellinen sivu</button>
-<br>
-Sivu {{newPageNumber}} / {{ events?.meta?.count / 20 }}<br>
-Kohteiden määrä: {{ events?.meta?.count }} <br>
+
+<!--20 item per page-->
+<div
+  class="mb-1 rounded-lg bg-info-100 px-1 py-1  text-base text-info-800"
+  role="alert">
+  Sivu {{newPageNumber}} / {{ events?.meta?.count / 20 | number: '1.0-0' }}<br>
+    Kohteiden määrä: {{ events?.meta?.count | number: '1.0-0' }} <br>
+</div>
+
+
+
 
 
 
@@ -82,8 +90,13 @@ Kohteiden määrä: {{ events?.meta?.count }} <br>
 
         </aside>
 
-<section class="liput">
-    
+<section class="liput bg-gradient-to-r from-indigo-500 to-pink-400">
+    <h2>Lipputiedot</h2>
+    <span *ngIf="event?.offers[0]?.is_free === true || false">Ilmaistapahtuma: {{event?.offers[0]?.is_free}}<br></span>
+<span *ngIf="event?.offers[0]?.price?.fi.length!">Liput: {{event?.offers[0]?.price?.fi}}<br></span>
+Alaikäraja: {{event?.audience_min_age}}<br>
+Yläikäraja: {{event?.audience_max_age}}
+
 </section>
 
 </article>

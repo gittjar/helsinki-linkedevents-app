@@ -80,8 +80,7 @@ figure img {
 
   /*LIPUT*/
   .liput {
-    border: #2b0950 1px solid;
     padding: 1%;
     width: 20%;
-    background-color: rgb(64, 92, 92);
+    border-radius: 25px 0px 0px 12px;
   }

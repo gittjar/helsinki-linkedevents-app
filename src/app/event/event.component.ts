@@ -32,7 +32,6 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
   getAllEvents(searchText: string, pageNumber: number):void {
     this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {
       this.events = data;
-
     })
   }
 
@@ -48,20 +47,13 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
   }
   closeWindow() {
     this.showWindow = false;
-  
   }
-
 
   getAllEventsDate(searchDate: string): void {
     this.http.getEventDate(searchDate).subscribe((data: any) => {
       this.events = data;
-
     })
   }
-
-
-
-
 
   DoSearch() {
     this.getAllEvents(this.searchText, this.newPageNumber = 1);
