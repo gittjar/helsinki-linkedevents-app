@@ -1,13 +1,22 @@
 <section class="main">
-<input class="text-input" [(ngModel)]="searchText" placeholder="Hae tapahtumaa esim. Sibelius">
+    <div *ngIf="isLoading" class="loading-message">
+        <p>Ladataan tapahtumia rajapinnasta...</p>
+      </div>
 
-<button class="btn bg-indigo-700 text-stone-100" (click)="DoSearch()">Search
+
+
+<input class="text-input" [(ngModel)]="searchText" placeholder="Hae tapahtumaa esim. Sibelius tai Konsertti">
+
+<button class="btn bg-emerald-600 text-stone-100" (click)="DoSearch()">Search
 </button>
 
 <button class="btn bg-indigo-700 text-stone-100" (click)="SearchStadion()">Stadion
 </button>
 
 <button class="btn bg-indigo-700 text-stone-100" (click)="SearchLapset()">Lapset
+</button>
+
+<button class="btn bg-indigo-700 text-stone-100" (click)="SearchHipHop()">Hip Hop
 </button>
 
 <button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday()"
@@ -18,7 +27,12 @@
 
 <button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday2()"
 >{{tomorrow2Date | date:'dd.MM.yyyy'}} Ylihuomenna</button>
+
+
 <hr>
+
+
+
 
 <br>
 <section class="flex justify-between">
@@ -32,14 +46,12 @@
     Kohteiden määrä: {{ events?.meta?.count | number: '1.0-0' }} <br>
 </div>
 
-
-
-
-
-
-
 <button class="btn bg-slate-900 text-stone-100" (click)="onPageChangePlus()">Seuraava sivu</button>
 </section>
+
+     
+    
+
 
 <article *ngFor="let event of events?.data" class="flex eventcard">
 
@@ -59,6 +71,8 @@
        <li>{{event?.short_description?.fi}}</li>
         <li>Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</li>
         <li>Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
+        <li>Osoite: {{event?.location?.street_address?.fi }}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}</li>
+       
         </ul>
 
 
@@ -70,9 +84,12 @@
         
           <button class="btn" (click)="getLocationData(events.data[0]?.location['@id'])">Get Location Data</button>
         -->
-         
+
+
+
+         <!--
             <button class="btn bg-indigo-900 text-neutral-200" (click)="getLocationData(events.data[0]?.location['@id'])" (mouseleave)="closeWindow()">Osoite ja lisätiedot</button>
-            <!--INFO IKKUNA ALAOSASSA-->
+            INFO IKKUNA ALAOSASSA
             <div *ngIf="showWindow" class="window"> 
               <p class="text-s text-neutral-500 dark:text-neutral-600">
                 Paikan nimi: {{ locationInfo?.name?.fi }}<br>
@@ -85,20 +102,21 @@
                 {{ locationInfo?.description?.fi}}
                 </p>
               </div>
-           
+           -->
 
 
         </aside>
 
-<section class="liput bg-gradient-to-r from-indigo-500 to-pink-400">
+<section class="liput bg-gradient-to-r from-indigo-500 to-indigo-800 text-stone-50">
     <h2>Lipputiedot</h2>
-    <span *ngIf="event?.offers[0]?.is_free === true || false">Ilmaistapahtuma: {{event?.offers[0]?.is_free}}<br></span>
+    <span *ngIf="event?.offers[0]?.is_free === true || false">Ilmaistapahtuma: {{event?.offers[0]?.is_free ? 'Kyllä' : 'Ei'}}<br></span>
 <span *ngIf="event?.offers[0]?.price?.fi.length!">Liput: {{event?.offers[0]?.price?.fi}}<br></span>
-Alaikäraja: {{event?.audience_min_age}}<br>
-Yläikäraja: {{event?.audience_max_age}}
+<span *ngIf="event?.audience_min_age?.length!">Alaikäraja: {{event?.audience_min_age}}<br></span>
+<span *ngIf="event?.audience_max_age?.length!">Yläikäraja: {{event?.audience_max_age}}</span>
 
 </section>
 
 </article>
+
 
 </section>

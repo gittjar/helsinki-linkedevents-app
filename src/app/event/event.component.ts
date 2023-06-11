@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventService } from '../event.service';
 import { HttpClient } from '@angular/common/http';
+import { Select, initTE } from "tw-elements";
+
 
 
 @Component({
@@ -13,11 +15,17 @@ export class EventComponent implements OnInit {
   constructor(private http: EventService, private hpservice: HttpClient){}
 
   ngOnInit(): void {
-    // searchstring empty and pagenumber
+    // searchstring empty and pagenumber = 1
     this.getAllEvents('',1);
-
-
+    initTE({ Select });
+    this.loadingDataWindow();
   }
+  isLoading: boolean = true;
+  loadingDataWindow() {
+    setTimeout(() => {
+    // Data loading is complete
+    this.isLoading = false;
+    }, 2700);}
 
   // Aikojen säätöjä
 currentDate = new Date(); // tänään
@@ -36,8 +44,9 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
   }
 
   // get specific location data from different JSON 
+ /*
   showWindow = false;
-  locationInfo : any;
+  locationInfo : any = {};
   getLocationData(link: string): void {
     this.hpservice.get(link).subscribe((locationData: any) => {
       // Process the location data and assign it to a variable in your component
@@ -46,9 +55,10 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
     this.showWindow = true;
   }
   closeWindow() {
-    this.showWindow = false;
-  }
+    this.showWindow = false; 
+  }*/
 
+  
   getAllEventsDate(searchDate: string): void {
     this.http.getEventDate(searchDate).subscribe((data: any) => {
       this.events = data;
@@ -58,12 +68,17 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
   DoSearch() {
     this.getAllEvents(this.searchText, this.newPageNumber = 1);
     }
+
   SearchStadion() {
     this.getAllEvents(this.searchText = 'Stadion', this.newPageNumber = 1)
   }
   SearchLapset() {
     this.getAllEvents(this.searchText = 'Lapset', this.newPageNumber = 1)
   }
+  SearchHipHop() {
+    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1)
+  }
+
 
   searchTextDate : string = "";
   // Ylihuomenna
@@ -107,4 +122,6 @@ decreasePageNumber(): void {
   this.newPageNumber--;
   }
   }
+
+
 }

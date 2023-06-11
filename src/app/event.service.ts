@@ -11,11 +11,14 @@ export class EventService {
 // free text search
   PAGEURL = 'https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/event/?text='
 
+  BASEURL ='https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/event/?include=location,keywords&text='
+
   getEvent(searchText: string, pageNumber: number): any {
-    const events = this.eventHTTP.get(this.PAGEURL+searchText+'&page='+pageNumber);
+    const events = this.eventHTTP.get(this.BASEURL+searchText+'&page='+pageNumber);
     return events;  
     }
 // search by date
+
     PAGEURL_Date = 'https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/event/?start='
  
     getEventDate(searchDate: string): any {
