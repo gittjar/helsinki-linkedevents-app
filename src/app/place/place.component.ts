@@ -83,7 +83,7 @@ pleissi?: any;
 textid : string = "";
 
 DoSearch() {
-  console.log(this.textid);
+  this.textid;
   this.showContent('MyText');
   }
 
