@@ -91,16 +91,20 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
 
   DoSearch() {
     this.getAllEvents(this.searchText, this.newPageNumber = 1);
+    this.showContent('MyText');
     }
 
   SearchStadion() {
     this.getAllEvents(this.searchText = 'Stadion', this.newPageNumber = 1)
+    this.showContent('MyText');
   }
   SearchLapset() {
     this.getAllEvents(this.searchText = 'Lapset', this.newPageNumber = 1)
+    this.showContent('MyText');
   }
   SearchHipHop() {
-    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1)
+    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1);
+    this.showContent('MyText');
   }
 
 
@@ -158,8 +162,6 @@ showContent(contentType: string) {
 
   let content: any = null
 
-
-  // getPlace in placeservice is configured to show text and it changes here what user gives.
   if(contentType === "MyText") {
     content = this.http.getEvent(this.searchText, this.pageNumber);
   }
@@ -189,9 +191,9 @@ showContent(contentType: string) {
         });
         
         let markerContent = '<div class="map-infowindow">' +
-                           `<div class="map-infowindow-title">${eventplace.name.fi}</div>` + 
-                           `<div class="map-infowindow-content">${eventplace?.street_address?.fi}</div>` + 
-                           `<div class="map-infowindow-content">${eventplace?.postal_code}, ${eventplace?.address_locality?.fi}</div>` + 
+                           `<div class="map-infowindow-title">${eventplace?.name?.fi}</div>` + 
+                           `<div class="map-infowindow-content">${eventplace?.location?.street_address?.fi}</div>` + 
+                           `<div class="map-infowindow-content">${eventplace?.location?.postal_code}, ${eventplace?.location?.address_locality?.fi}</div>` + 
                            `<div class="map-infowindow-content"><a href="${eventplace?.info_url?.fi}">Lue lisää ></a></div>
                            ` + 
 
