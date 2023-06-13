@@ -17,6 +17,11 @@ export class EventService {
     const events = this.eventHTTP.get(this.BASEURL+searchText+'&page='+pageNumber);
     return events;  
     }
+
+    getEventId(id: string): any {
+      const product = this.eventHTTP.get('https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/event/?include=location,keywords&text=' + id);
+      return product;
+      } 
 // search by date
 
     PAGEURL_Date = 'https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/event/?start='

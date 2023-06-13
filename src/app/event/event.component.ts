@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
-import { HttpClient } from '@angular/common/http';
 import { Select, initTE } from "tw-elements";
-import MarkerClusterer from '@googlemaps/markerclustererplus';
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -13,6 +12,8 @@ import MarkerClusterer from '@googlemaps/markerclustererplus';
   styleUrls: ['./event.component.css']
 })
 export class EventComponent implements OnInit {
+
+  arrowUpRightFromBox = faArrowUpRightFromSquare;
 
   constructor(private http: EventService){}
 
@@ -45,21 +46,11 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
     })
   }
 
-  // get specific location data from different JSON 
- /*
-  showWindow = false;
-  locationInfo : any = {};
-  getLocationData(link: string): void {
-    this.hpservice.get(link).subscribe((locationData: any) => {
-      // Process the location data and assign it to a variable in your component
-      this.locationInfo = locationData;
-    });
-    this.showWindow = true;
+  // avaa google mapsiin kohde
+  getGoogleMapsLink(latitude: number, longitude: number): string {
+    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    return encodeURI(url);
   }
-  closeWindow() {
-    this.showWindow = false; 
-  }*/
-
   
   getAllEventsDate(searchDate: string): void {
     this.http.getEventDate(searchDate).subscribe((data: any) => {
