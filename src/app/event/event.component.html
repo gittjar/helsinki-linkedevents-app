@@ -1,6 +1,6 @@
 <section class="main">
     <div *ngIf="isLoading" class="loading-message">
-        <p>Ladataan tapahtumia rajapinnasta...</p>
+        <p>Ladataan tietoja hakusanalla {{searchText}} rajapinnasta...odota</p>
       </div>
 
 
@@ -49,19 +49,32 @@
 <button class="btn bg-slate-900 text-stone-100" (click)="onPageChangePlus()">Seuraava sivu</button>
 </section>
 
-     
-    
-
-
 <section class="keskiosa">
-
+    <!--
 <aside class="googlemap" id="map"></aside>
+-->
 
 <aside class="korttilista">
+    <!--
+    <div class="card-list">
+        <div class="card" *ngFor="let marker of visibleMarkers">
+         
+          <div>{{ marker.marker.getTitle() }}</div>
+          <div>{{ marker.markerContent }}</div>
+          <div></div>
+
+        </div>
+      </div>-->
+
+<!---->
+
+
+
     <article *ngFor="let event of events?.data" class="flex eventcard">
 
     <figure class="cardimage">
         <!--If there is not picture replace empty value with random placeholde picture-->
+       
         <ng-container *ngIf="event?.images && event?.images?.length > 0; else placeholder">
           <img src="{{ event?.images[0]?.url }}" title="lisenssi: {{event?.images[0]?.license }}, kuvaaja: {{event?.images[0]?.photographer_name}}">
         </ng-container>
@@ -74,7 +87,7 @@
        <h2>{{event?.name?.fi}}</h2>
         <ul>
        <li>{{event?.short_description?.fi}}</li>
-        <li>Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</li>
+        <li><span class="ring-2 ring-green-600 p-0.5">Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</span></li>
         <li>Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
         <li>Osoite: {{event?.location?.street_address?.fi }}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}</li>
        
@@ -92,7 +105,7 @@
 
 
 
-         <!--
+         <!-- BUTTONILLA TIEDOT
             <button class="btn bg-indigo-900 text-neutral-200" (click)="getLocationData(events.data[0]?.location['@id'])" (mouseleave)="closeWindow()">Osoite ja lisätiedot</button>
             INFO IKKUNA ALAOSASSA
             <div *ngIf="showWindow" class="window"> 
@@ -121,7 +134,9 @@
         </section>
        
     </article>
-    
+
+ 
+
 </aside>
 
 </section>

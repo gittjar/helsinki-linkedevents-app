@@ -31,6 +31,21 @@
     text-align: justify;
   }
 
+  .map-infowindow-kuva {
+    width: 200px;
+  }
+  figure {
+    width: 200px;
+   /* border: black solid 1px; */
+    padding: 0.1rem;
+}    
+figure img {
+    max-width: 100%;
+    border-radius: 12px 0 0 12px;
+}
+
+
+
   .btn {
     padding-left: 1%;
     padding-right: 1%;

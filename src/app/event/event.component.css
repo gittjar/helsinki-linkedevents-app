@@ -61,15 +61,15 @@ h2 {
         flex-direction: row;
       }
 
-
+/*
 .googlemap {
     width: 35%;
-    background-color: #2b0950;
     height: 600px;
-}
+    border-radius: 12px 12px 12px 12px;
+}*/
     
 .korttilista {
-    width: 65%;
+    width: 100%;
 }
     /*CARDS*/
     .eventcard {
@@ -79,6 +79,8 @@ h2 {
         background-color: #f7f3f3;
         font-size: 0.8rem;
         font-weight: 600;
+        border-radius: 12px 12px 12px 12px;
+
         
     }
 
@@ -100,7 +102,6 @@ h2 {
 figure img {
     max-width: 100%;
     border-radius: 12px 0 0 12px;
-
 }
 /*Infowindow*/
 .window {
