@@ -25,6 +25,9 @@ import { EventComponent } from './event/event.component';
 
 
 
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +46,8 @@ import { EventComponent } from './event/event.component';
     FormsModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
-    GalleryModule
+    GalleryModule,
+    
   ],
   providers: [    {
     provide: GALLERY_CONFIG,
