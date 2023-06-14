@@ -3,55 +3,114 @@
         <p>Ladataan tietoja hakusanalla {{searchText}} rajapinnasta...odota</p>
       </div>
 
+      <div class="inline-flex" role="group">
+        <button
+        [ngClass]="{'disabled-button': button3Clicked}" [disabled]="button3Clicked"
+        (click)="onPageChangeMinusDate()"
+          type="button"
+          class="inline-block rounded-l border-2 border-primary px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-primary-700 active:text-primary-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+          data-te-ripple-init
+          data-te-ripple-color="light">
+          <fa-icon [icon]="faArrowLeft"></fa-icon> Sivu: {{newPageNumber - 1}}
+        </button>
+        <button
+        [ngClass]="{'disabled-button': button1Clicked}" [disabled]="button1Clicked"
+          (click)="changeToday()"
+          (click)="onButton1Click()"
+          type="button"
+          class="-ml-0.5 inline-block border-2 border-primary px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-primary-700 active:text-primary-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+          data-te-ripple-init
+          data-te-ripple-color="light">
+          {{currentDate | date:'dd.MM.yyyy'}} Tänään
+        </button>
+        <button
+        [ngClass]="{'disabled-button': button1Clicked}" [disabled]="button1Clicked"
+        (click)="changeToday1()"
+        (click)="onButton1Click()"
+        type="button"
+        class="-ml-0.5 inline-block border-2 border-primary px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-primary-700 active:text-primary-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+        data-te-ripple-init
+        data-te-ripple-color="light">
+        {{tomorrowDate | date:'dd.MM.yyyy'}} Huomenna
+      </button>
+      <button
+      [ngClass]="{'disabled-button': button1Clicked}" [disabled]="button1Clicked"
+      (click)="changeToday2()"
+      (click)="onButton1Click()"
+      type="button"
+      class="-ml-0.5 inline-block border-2 border-primary px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-primary-700 active:text-primary-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+      data-te-ripple-init
+      data-te-ripple-color="light">
+      {{tomorrow2Date | date:'dd.MM.yyyy'}} Ylihuomenna
+    </button>
+        <button
+        [ngClass]="{'disabled-button': button3Clicked}" [disabled]="button3Clicked"
+          (click)="onPageChangePlusDate()"
+          
+          type="button"
+          class="-ml-0.5 inline-block rounded-r border-2 border-primary px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:border-primary-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:border-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:border-primary-700 active:text-primary-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+          data-te-ripple-init
+          data-te-ripple-color="light">
+          Sivu: {{newPageNumber + 1}}  <fa-icon [icon]="faArrowRight"></fa-icon>
+          
+            </button>
+        </div>
 
 
+
+        <br>
 <input class="text-input" [(ngModel)]="searchText" placeholder="Hae tapahtumaa esim. Sibelius tai Konsertti">
 
-<button class="btn bg-emerald-600 text-stone-100" (click)="DoSearch()">Search
+<button class="btn bg-emerald-600 text-stone-100" 
+(click)="onButton2Click()"
+(click)="DoSearch()">Search
 </button>
 
-<button class="btn bg-indigo-700 text-stone-100" (click)="SearchStadion()">Stadion
+<button class="btn bg-indigo-700 text-stone-100" 
+(click)="onButton2Click()"
+(click)="SearchStadion()">Stadion
 </button>
 
-<button class="btn bg-indigo-700 text-stone-100" (click)="SearchLapset()">Lapset
+<button class="btn bg-indigo-700 text-stone-100" 
+(click)="onButton2Click()"
+(click)="SearchLapset()">Lapset
 </button>
 
-<button class="btn bg-indigo-700 text-stone-100" (click)="SearchHipHop()">Hip Hop
+<button class="btn bg-indigo-700 text-stone-100" 
+(click)="onButton2Click()"
+(click)="SearchHipHop()">Hip Hop
 </button>
 
-<button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday1()"
->{{ getTomorrowDate() }} Huomenna</button>
-
-<p>Current Date: {{ getCurrentDate() }}</p>
-<p>Tomorrow's Date: {{ getTomorrowDate() }}</p>
-<p>Day After Tomorrow's Date: {{ getDayAfterTomorrowDate() }}</p>
-<!--
-<button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday()"
->{{currentDate | date:'dd.MM.yyyy'}} Tänään</button>
-
-
-<button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday1()"
->{{tomorrowDate | date:'dd.MM.yyyy'}} Huomenna</button>
-
-<button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday2()"
->{{tomorrow2Date | date:'dd.MM.yyyy'}} Ylihuomenna</button>
+<!-- Buttons for testing
+  <button [ngClass]="{'disabled-button': button1Clicked}" [disabled]="button1Clicked" (click)="onButton1Click()">Button 1</button>
+  <button [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked" (click)="onButton2Click()">Button 2</button>
+  <button [ngClass]="{'disabled-button': button3Clicked}" [disabled]="button3Clicked" (click)="onButton3Click()">Button 3</button>
 -->
 
-<button
-data-te-ripple-init
-data-te-ripple-color="light"
-data-te-ripple-duration="5s" type="button" class="btn bg-indigo-700 text-stone-100" (click)="sortDate(true)">Wanhimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
-<button
-data-te-ripple-init
-data-te-ripple-color="light"
-data-te-ripple-duration="5s"
+
+
+
+
+
+
+
+
+
+
+
+
+<button [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked"
+type="button" class="btn bg-indigo-700 text-stone-100" (click)="sortDate(true) ">Wanhimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
+
+<button [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked"
 type="button" class="btn bg-indigo-700 text-stone-100" (click)="sortDate(false)">Uusimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
 
 <hr>
 
 <br>
 <section class="flex justify-between">
-<button class="btn bg-slate-900 text-stone-100" (click)="onPageChangeMinus()">Edellinen sivu</button>
+<button [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked"
+class="btn bg-slate-900 text-stone-100" (click)="onPageChangeMinus()">Edellinen sivu</button>
 
 <!--20 item per page-->
 <div
@@ -61,7 +120,8 @@ type="button" class="btn bg-indigo-700 text-stone-100" (click)="sortDate(false)"
     Kohteiden määrä: {{ events?.meta?.count | number: '1.0-0' }} <br>
 </div>
 
-<button class="btn bg-slate-900 text-stone-100" (click)="onPageChangePlus()">Seuraava sivu</button>
+<button [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked"
+class="btn bg-slate-900 text-stone-100" (click)="onPageChangePlus()">Seuraava sivu</button>
 </section>
 
 <section class="keskiosa">

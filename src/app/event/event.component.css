@@ -28,6 +28,17 @@ h3 {
     opacity: 0.85;
   }
 
+  .inline-flex {
+    margin: 0.5%;
+  }
+  .disabled-button {
+    opacity: 0.2;
+    cursor: not-allowed;
+    color: #f9f8f8;
+    background-color: #a8a8a9;
+    /* Add any other styles you want for disabled buttons */
+  }
+
 a {
     color: rgb(49, 49, 247)
 }
