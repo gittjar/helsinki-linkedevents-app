@@ -19,14 +19,33 @@
 <button class="btn bg-indigo-700 text-stone-100" (click)="SearchHipHop()">Hip Hop
 </button>
 
+<button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday1()"
+>{{ getTomorrowDate() }} Huomenna</button>
+
+<p>Current Date: {{ getCurrentDate() }}</p>
+<p>Tomorrow's Date: {{ getTomorrowDate() }}</p>
+<p>Day After Tomorrow's Date: {{ getDayAfterTomorrowDate() }}</p>
+<!--
 <button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday()"
 >{{currentDate | date:'dd.MM.yyyy'}} Tänään</button>
+
 
 <button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday1()"
 >{{tomorrowDate | date:'dd.MM.yyyy'}} Huomenna</button>
 
 <button class="btn bg-indigo-700 text-stone-100" type="submit" (click)="changeToday2()"
 >{{tomorrow2Date | date:'dd.MM.yyyy'}} Ylihuomenna</button>
+-->
+
+<button
+data-te-ripple-init
+data-te-ripple-color="light"
+data-te-ripple-duration="5s" type="button" class="btn bg-indigo-700 text-stone-100" (click)="sortDate(true)">Wanhimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
+<button
+data-te-ripple-init
+data-te-ripple-color="light"
+data-te-ripple-duration="5s"
+type="button" class="btn bg-indigo-700 text-stone-100" (click)="sortDate(false)">Uusimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
 
 <hr>
 

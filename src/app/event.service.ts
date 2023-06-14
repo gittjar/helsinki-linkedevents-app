@@ -27,7 +27,7 @@ export class EventService {
     PAGEURL_Date = 'https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/event/?start='
  
     getEventDate(searchDate: string): any {
-      const events = this.eventHTTP.get(this.PAGEURL_Date+searchDate);
+      const events = this.eventHTTP.get(this.PAGEURL_Date+searchDate+'&end='+searchDate);
       return events;  
       }
 

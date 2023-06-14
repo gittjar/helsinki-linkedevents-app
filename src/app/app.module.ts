@@ -20,14 +20,6 @@ import { GALLERY_CONFIG } from 'ng-gallery';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ImageComponent } from './image/image.component';
 import { EventComponent } from './event/event.component';
-import { EventdetailComponent } from './eventdetail/eventdetail.component';
-
-
-
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -38,7 +30,6 @@ import { EventdetailComponent } from './eventdetail/eventdetail.component';
     MainpageComponent,
     ImageComponent,
     EventComponent,
-    EventdetailComponent
   ],
   imports: [
     BrowserModule,

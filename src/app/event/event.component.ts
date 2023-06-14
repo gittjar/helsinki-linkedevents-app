@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
 import { Select, initTE } from "tw-elements";
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpRightFromSquare, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -14,6 +14,7 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 export class EventComponent implements OnInit {
 
   arrowUpRightFromBox = faArrowUpRightFromSquare;
+  faArrowRight = faArrowRight;
 
   constructor(private http: EventService){}
 
@@ -31,10 +32,32 @@ export class EventComponent implements OnInit {
     }, 2700);}
 
   // Aikojen säätöjä
-currentDate = new Date(); // tänään
-today = new Date();
-tomorrowDate = new Date(this.today.setDate(this.today.getDate() + 1)); // huomenna
-tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihuominen
+  getCurrentDate(): string {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
+  getTomorrowDate(): string {
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const year = tomorrowDate.getFullYear();
+    const month = (tomorrowDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = tomorrowDate.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
+  getDayAfterTomorrowDate(): string {
+    const dayAfterTomorrowDate = new Date();
+    dayAfterTomorrowDate.setDate(dayAfterTomorrowDate.getDate() + 2);
+    const year = dayAfterTomorrowDate.getFullYear();
+    const month = (dayAfterTomorrowDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = dayAfterTomorrowDate.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
 
 
   searchText : string = "";
@@ -77,19 +100,19 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
   SearchHipHop() {
     this.isLoading = true;
     this.loadingDataWindow();
-    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1);
-    
+    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1); 
   }
 
 
+
+
   searchTextDate : string = "";
-  // Ylihuomenna
-changeToday2() {
-  const date = new Date(this.tomorrow2Date);
-  this.searchTextDate = date.toLocaleDateString();
+  // huomenna
+changeToday1() {
+  this.searchTextDate = this.getTomorrowDate();
   this.getAllEventsDate(this.searchTextDate);
 }
-
+/*
 // Huomenna
 changeToday1() {
   const date = new Date(this.tomorrowDate);
@@ -102,7 +125,7 @@ changeToday(){
   const date = new Date(this.currentDate);
   this.searchTextDate = date.toLocaleDateString();
   this.getAllEventsDate(this.searchTextDate);
-}
+}*/
 
 // Sivujen vaihdot
 newPageNumber = 1;
@@ -122,6 +145,15 @@ decreasePageNumber(): void {
   if (this.newPageNumber > 1) {
   this.newPageNumber--;
   }
+  }
+
+  // sorted by date
+  sortDate(isAsc: boolean) {
+    if (isAsc) {
+      this.events.data.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? 1 : ((b.start_time > a.start_time) ? -1 : 0)
+    )} else {
+      this.events.data.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? -1 : ((b.start_time > a.start_time) ? 1 : 0)
+    )}
   }
   
 }
