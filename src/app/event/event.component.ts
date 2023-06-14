@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
-import { HttpClient } from '@angular/common/http';
 import { Select, initTE } from "tw-elements";
-import MarkerClusterer from '@googlemaps/markerclustererplus';
-
-
-
+import { faArrowUpRightFromSquare, faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-event',
@@ -13,6 +9,10 @@ import MarkerClusterer from '@googlemaps/markerclustererplus';
   styleUrls: ['./event.component.css']
 })
 export class EventComponent implements OnInit {
+
+  arrowUpRightFromBox = faArrowUpRightFromSquare;
+  faArrowRight = faArrowRight;
+  faArrowLeft = faArrowLeft;
 
   constructor(private http: EventService){}
 
@@ -29,44 +29,76 @@ export class EventComponent implements OnInit {
     this.isLoading = false;
     }, 2700);}
 
+  // Aikojen säätöjä muotoon YYYY-MM-DD
+  getCurrentDate(): string {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  getTomorrowDate(): string {
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const year = tomorrowDate.getFullYear();
+    const month = (tomorrowDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = tomorrowDate.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  getDayAfterTomorrowDate(): string {
+    const dayAfterTomorrowDate = new Date();
+    dayAfterTomorrowDate.setDate(dayAfterTomorrowDate.getDate() + 2);
+    const year = dayAfterTomorrowDate.getFullYear();
+    const month = (dayAfterTomorrowDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = dayAfterTomorrowDate.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  searchTextDate : string = "";
+  // today
+  changeToday(){
+    this.searchTextDate = this.getCurrentDate();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  }
+  // huomenna
+  changeToday1() {
+    this.searchTextDate = this.getTomorrowDate();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  }
+  // ylihuomenna
+  changeToday2() {
+    this.searchTextDate = this.getDayAfterTomorrowDate();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  }
+  // päiväämärät localize FI muotoon
   // Aikojen säätöjä
-currentDate = new Date(); // tänään
-today = new Date();
-tomorrowDate = new Date(this.today.setDate(this.today.getDate() + 1)); // huomenna
-tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihuominen
+  currentDate = new Date(); // tänään
+  today = new Date();
+  tomorrowDate = new Date(this.today.setDate(this.today.getDate() + 1)); // huomenna
+  tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihuominen
 
-
+  
   searchText : string = "";
   pageNumber : number = 1;
   events : any;
   getAllEvents(searchText: string, pageNumber: number):void {
-    this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {
-      this.events = data;
+    this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {     
+    this.events = data;
     })
   }
 
-  // get specific location data from different JSON 
- /*
-  showWindow = false;
-  locationInfo : any = {};
-  getLocationData(link: string): void {
-    this.hpservice.get(link).subscribe((locationData: any) => {
-      // Process the location data and assign it to a variable in your component
-      this.locationInfo = locationData;
-    });
-    this.showWindow = true;
+  // avaa google mapsiin kohde
+  getGoogleMapsLink(latitude: number, longitude: number): string {
+    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    return encodeURI(url);
   }
-  closeWindow() {
-    this.showWindow = false; 
-  }*/
-
   
-  getAllEventsDate(searchDate: string): void {
-    this.http.getEventDate(searchDate).subscribe((data: any) => {
+  getAllEventsDate(searchDate: string, pageNumber: number): void {
+    this.http.getEventDate(searchDate, pageNumber).subscribe((data: any) => {
       this.events = data;
+      //this.EventsDateNextButtons();
     })
   }
-
+// search buttons methods
   DoSearch() {
     this.isLoading = true;
     this.loadingDataWindow();
@@ -86,38 +118,15 @@ tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihu
   SearchHipHop() {
     this.isLoading = true;
     this.loadingDataWindow();
-    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1);
-    
+    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1); 
   }
 
 
-  searchTextDate : string = "";
-  // Ylihuomenna
-changeToday2() {
-  const date = new Date(this.tomorrow2Date);
-  this.searchTextDate = date.toLocaleDateString();
-  this.getAllEventsDate(this.searchTextDate);
-}
-
-// Huomenna
-changeToday1() {
-  const date = new Date(this.tomorrowDate);
-  this.searchTextDate = date.toLocaleDateString();
-  this.getAllEventsDate(this.searchTextDate);
-}
-
-// Tänään
-changeToday(){
-  const date = new Date(this.currentDate);
-  this.searchTextDate = date.toLocaleDateString();
-  this.getAllEventsDate(this.searchTextDate);
-}
-
-// Sivujen vaihdot
+// Sivujen vaihdot by event
 newPageNumber = 1;
 onPageChangePlus(): any {
   this.increasePageNumber();
-  this.getAllEvents(this.searchText, this.newPageNumber);
+  this.getAllEvents(this.searchText, this.newPageNumber); 
   }
 increasePageNumber(): void {
   this.newPageNumber++;
@@ -131,6 +140,57 @@ decreasePageNumber(): void {
   if (this.newPageNumber > 1) {
   this.newPageNumber--;
   }
+  }
+  // Sivujen vaihdot by eventdate
+  onPageChangePlusDate(): any {
+    this.increasePageNumberDate();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber); 
+    }
+  increasePageNumberDate(): void {
+    this.newPageNumber++;
+    }
+
+  onPageChangeMinusDate(): any {
+    this.decreasePageNumberDate();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber);
+    }
+  decreasePageNumberDate(): void {
+    if (this.newPageNumber > 1) {
+    this.newPageNumber--;
+    }
+    }
+
+
+
+  // sorted by date
+  sortDate(isAsc: boolean) {
+    if (isAsc) {
+      this.events.data.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? 1 : ((b.start_time > a.start_time) ? -1 : 0)
+    )} else {
+      this.events.data.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? -1 : ((b.start_time > a.start_time) ? 1 : 0)
+    )}
+  }
+// DISABLING BUTTONS Functions see test buttons in HTML
+  button1Clicked = false;
+  button2Clicked = false;
+  button3Clicked = false;
+
+  onButton1Click() {
+    this.button1Clicked = false;
+    this.button2Clicked = true;
+    this.button3Clicked = false;
+  }
+
+  onButton2Click() {
+    this.button1Clicked = false;
+    this.button2Clicked = false;
+    this.button3Clicked = true;
+  }
+
+  onButton3Click() {
+    this.button1Clicked = false;
+    this.button2Clicked = false;
+    this.button3Clicked = true;
   }
   
 }

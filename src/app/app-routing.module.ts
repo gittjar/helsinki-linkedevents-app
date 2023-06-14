@@ -10,7 +10,8 @@ const routes: Routes = [
   {path: 'mainpage', component : MainpageComponent},
   {path: '', redirectTo: '/mainpage', pathMatch: 'full'},
   {path: 'image', component : ImageComponent},
-  {path: 'event', component : EventComponent}
+  {path: 'event', component : EventComponent},
+
 ];
 
 @NgModule({

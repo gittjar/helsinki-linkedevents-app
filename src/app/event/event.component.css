@@ -5,8 +5,12 @@
 
 h2 {
     font-size: 1.7rem;
+    font-weight: 500;  
+}
+
+h3 {
+    font-size: 1.4;
     font-weight: 500;
-    
 }
 
 .btn {
@@ -24,7 +28,24 @@ h2 {
     opacity: 0.85;
   }
 
+  .inline-flex {
+    margin: 0.5%;
+  }
+  .disabled-button {
+    opacity: 0.2;
+    cursor: not-allowed;
+    color: #f9f8f8;
+    background-color: #a8a8a9;
+    /* Add any other styles you want for disabled buttons */
+  }
 
+a {
+    color: rgb(49, 49, 247)
+}
+
+a:hover {
+    opacity: 0.8;
+}
 
   .text-input {
     width: 35%;
@@ -75,13 +96,13 @@ h2 {
     .eventcard {
         padding: 0%;
         margin: 0.2%;
-        margin-bottom: 1%;
+        margin-bottom: 0.3%;
         background-color: #f7f3f3;
         font-size: 0.8rem;
         font-weight: 600;
         border-radius: 12px 12px 12px 12px;
-
-        
+        display: flex;
+        flex-direction: row;   
     }
 
     .cardtext {

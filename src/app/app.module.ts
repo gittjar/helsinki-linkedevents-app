@@ -21,13 +21,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ImageComponent } from './image/image.component';
 import { EventComponent } from './event/event.component';
 
-
-
-
-
-
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +29,7 @@ import { EventComponent } from './event/event.component';
     NavbarComponent,
     MainpageComponent,
     ImageComponent,
-    EventComponent
+    EventComponent,
   ],
   imports: [
     BrowserModule,
