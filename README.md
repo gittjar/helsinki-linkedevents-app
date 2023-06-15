@@ -1,9 +1,10 @@
-# HelsinkiLinkedeventsApp
+# Helsinki Linkedevents App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.<br>
 
+- Working webapp: https://linkedevents.azurewebsites.net <br>
 - Data based to Helsinki Linked Events: https://dev.hel.fi/apis/linkedevents <br>
-- API location: https://api.hel.fi/linkedevents/v1/
+- API location: https://api.hel.fi/linkedevents/v1/ <br>
 
 ```
 {
@@ -20,3 +21,5 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     "user": "https://api.hel.fi/linkedevents/v1/user/"
 }
 ```
+
+- Design, development and layout by gittjar
