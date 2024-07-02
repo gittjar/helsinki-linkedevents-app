@@ -10,6 +10,11 @@
 
 }
 
+.g-dot {
+  width: 30px !important; /* Adjust as needed */
+  height: 30px !important; /* Adjust as needed */
+}
+
 
 
 .map-infowindow {

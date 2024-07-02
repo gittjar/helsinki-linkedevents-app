@@ -14,10 +14,6 @@ import { Ripple, Toast } from "tw-elements";
 import { SlicePipe } from '@angular/common';
 import { WeatherService } from '../weather.service';
 
-
-
-
-
 @Component({
   selector: 'app-place',
   templateUrl: './place.component.html',
@@ -51,6 +47,8 @@ export class PlaceComponent implements OnInit{
 
   // weather
   helsinkiforecastweather : any;
+  currentPage = 1;
+  
 
   
 ngOnInit() {
@@ -59,16 +57,18 @@ ngOnInit() {
     this.options
   );
   this.infoWindow = new google.maps.InfoWindow();
-  this.showContent('MyText'); 
+  this.showContent('MyText', this.currentPage) ; 
  // this.getImageById(this.placeservice.);
 
  initTE({ Modal, Ripple, Collapse, Toast });
  initTE({ Chip, ChipsInput });
 
  this.getForecastHelsinki();
+
 }
 
 markers = [] as any;
+
 
 constructor(private placeservice: PlaceService, private weatherservice : WeatherService) {} 
 
@@ -82,9 +82,13 @@ constructor(private placeservice: PlaceService, private weatherservice : Weather
 pleissi?: any;
 textid : string = "";
 
+
+
+
 DoSearch() {
   this.textid;
   this.showContent('MyText');
+
   }
 
   resetMap() {
@@ -150,26 +154,25 @@ DoSearch() {
       this.showWindow = false;
     }
 
-  
+    // Example modification for DoSearch to accept a pageNumbe
+
 
   // CONTENT FOR MAP AND MAP LOADING DATA
-showContent(contentType: string) {
+// Add pageNumber parameter to showContent
+showContent(contentType: string, pageNumber: number = this.currentPage) {
+  this.markers = [];
+  this.currentPage = pageNumber;
+    let content: any = null;
 
-  this.markers = []
-
-  let content: any = null
-
-
-  // getPlace in placeservice is configured to show text and it changes here what user gives.
-  if(contentType === "MyText") {
-    content = this.placeservice.getPlace(this.textid);
-  }
-  else {
+  // Pass pageNumber to getPlace
+  if (contentType === "MyText") {
+    content = this.placeservice.getPlace(this.textid, pageNumber); // Ensure pageNumber is used in the API call
+  } else {
     console.error("unknown content type");
-    return
+    return;
   }
 
-  console.log("click")
+  console.log("click");
 
   content.subscribe((response: any) => {
     
@@ -210,5 +213,21 @@ showContent(contentType: string) {
         });
       });
     }); 
+}
+
+// PAGE NUMBER BUTTONS
+newPageNumber = 1;
+// Example Next and Previous button handlers
+nextPage() {
+  this.currentPage++;
+  this.showContent('MyText', this.currentPage);
+}
+
+// Corrected previousPage method
+previousPage() {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+    this.showContent('MyText', this.currentPage);
+  }
 }
 }

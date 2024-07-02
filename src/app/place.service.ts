@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,32 +7,18 @@ import { Observable } from 'rxjs';
 })
 export class PlaceService {
 
-  private linkedEventsApiRoot = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1';
+  private linkedEventsApiRoot = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/';
 
-  constructor(private PlaceHTTP: HttpClient) { }
+
+  constructor(private http: HttpClient) { }
   
-/*
-  getPlace(): any {
-    const place = this.PlaceHTTP.get('https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/place/?text=ravintola');
-    return place;
-    }*/
-    
-          
-          // loads 1000 first items
-         // PAGEURL = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/place/?page_size=1000&current_page=1&text='
-          
-         PAGEURL = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/place/?text=';
-         getPlace(textid: string): Observable<any> {
-          //  const PlaceText = this.PlaceHTTP.get<any>(this.PAGEURL+textid+'&division='+this.getDivisionId());
-          const PlaceText = this.PlaceHTTP.get<any>(this.PAGEURL+textid);
-          return PlaceText;  
-          } 
+  // Updated to include dynamic page numbers and default to the first page
+  getPlace(textid: string, pageNumber: number = 1): Observable<any> {
+    const pageUrl = `${this.linkedEventsApiRoot}place/?text=${textid}&page=${pageNumber}`;
+    return this.http.get<any>(pageUrl);
+  }
 
-          public getPlaceImageById(imageId: number): Observable<any> {
-            // First fetch the image data
-            return this.PlaceHTTP.get<any>(`${this.linkedEventsApiRoot}/image/${imageId}`)
-          }
-
+  public getPlaceImageById(imageId: number): Observable<any> {
+    return this.http.get<any>(`${this.linkedEventsApiRoot}image/${imageId}`);
+  }
 }
-
-

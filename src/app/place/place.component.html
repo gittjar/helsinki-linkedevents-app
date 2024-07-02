@@ -8,6 +8,12 @@
 
   <button class="btn reset" (click)="resetMap()">Reset <fa-icon [icon]="RectangXmark"></fa-icon>
   </button>
+
+{{pleissi?.meta?.count}} kohdetta löytyi
+
+  <button class="btn" (click)="nextPage()">Next Page <fa-icon [icon]="ChevronRight"></fa-icon>
+  </button>
+
   <br>
   <button type="button" class="btn place" (click)="SearchHaaga()">Haaga  <fa-icon [icon]="ChevronRight"></fa-icon>
   </button>
@@ -150,16 +156,8 @@
 <section class="main">
 
 
-  
 
-
-  <aside>
-      
-
-
-
- 
-    
+  <aside> 
 
         <article class="list" *ngFor="let x of pleissi?.data">
           <h3 class="text-white-900 text-sm font-semibold"> {{x?.name?.fi}}</h3>
