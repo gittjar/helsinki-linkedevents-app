@@ -1,0 +1,17 @@
+<div *ngFor="let forecast of forecastData" class="weather-card">
+  <div class="weathertime">
+    <p class="asteluku">Time: {{ forecast.time }}</p>
+    <hr>
+    <p class="asteluku">Temperature: {{ forecast.temp_c }}°C</p>
+    <!-- Toggle Button -->
+    <button class="btn p-1" (click)="forecast.showDetails = !forecast.showDetails">
+      {{ forecast.showDetails ? 'Hide Details' : 'Show Details' }}
+    </button>
+    <!-- Additional Details -->
+    <div *ngIf="forecast.showDetails">
+      <p class="asteluku">Wind: {{ forecast.wind_kph }} km/h</p>
+      <p>Condition: {{ forecast.condition.text }}</p>
+      <img [src]="forecast.condition.icon" alt="Weather Icon" class="weather-icon">
+    </div>
+  </div>
+</div>
