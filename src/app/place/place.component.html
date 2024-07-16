@@ -1,10 +1,17 @@
-<app-weather></app-weather>
+
+<section class="weather-and-map">
 <div id="map" style="height: 400px; width: 100%;"></div>
+<app-weather></app-weather>
+
+</section>
+
 <div class="search-controls">
   <input class="text-input" type="text" [(ngModel)]="textid" placeholder="Search places..."><br/>
   <button class="btn search" (click)="doSearch()">Search</button>
   <button class="btn reset" (click)="resetMap()">Reset</button>
 </div>
+
+
 
 <div class="image-detail" *ngIf="showWindow">
   <h3>Image Details</h3>
@@ -17,10 +24,9 @@
   <button (click)="nextPage()" [disabled]="!nextPageUrl">Next</button>
 </div>
 
-<div class="loaded-places">
-  <h3>Loaded Places</h3>
-  <div *ngFor="let place of loadedPlaces">
-    <div class="place kortti list">
+<section class="korttilista">
+  <section *ngFor="let place of loadedPlaces" >
+    <div class="kortti">
       <h1>{{ place.name.fi }}</h1>
       <div >{{ place.street_address.fi }}</div>
       <div >{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
@@ -31,5 +37,5 @@
       <!-- If no info URL is available, display a message or leave it empty based on your preference -->
       <div class="map-infowindow-content" *ngIf="!place.infoUrl">No additional information available</div>
     </div>
-  </div>
-</div>
+  </section>
+</section>

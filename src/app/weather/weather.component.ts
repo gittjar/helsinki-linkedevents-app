@@ -20,13 +20,13 @@ export class WeatherComponent implements OnInit {
       const currentTime = new Date();
       const currentHour = currentTime.getHours();
       const forecastHours = [10, 14, 18, 22]; // Forecast times
-      let nextForecastHour = forecastHours.find(hour => hour > currentHour);
-      if (!nextForecastHour) {
-        nextForecastHour = forecastHours[0]; // If it's past 22:00, show the 10:00 forecast for the next day
-      }
+  
+      // Filter to include all forecast hours greater than the current hour
+      const relevantForecastHours = forecastHours.filter(hour => hour > currentHour);
+  
       this.forecastData = data.forecast.forecastday[0].hour.filter((hour: any) => {
         const forecastHour = new Date(hour.time).getHours();
-        return forecastHour === nextForecastHour;
+        return relevantForecastHours.includes(forecastHour);
       });
     });
   }
