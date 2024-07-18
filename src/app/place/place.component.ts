@@ -24,13 +24,12 @@ export class PlaceComponent implements OnInit {
   textid: string = "";
   showWindow = false;
   ImageDetail: any = {};
-  public loadedPlaces: any[] = []; // Add this line in your component class
+  public loadedPlaces: any[] = [];
 
   constructor(private placeservice: PlaceService) {}
 
   ngOnInit() {
     this.initMap();
-   
   }
 
   initMap(): void {
@@ -39,17 +38,26 @@ export class PlaceComponent implements OnInit {
     this.showContent(this.textid, this.currentPage);
   }
 
-
-
-  showContent(textid: string, pageNumber: number): void {
-    // Construct the URL based on current page number and textid
+  async showContent(textid: string, pageNumber: number): Promise<void> {
     let url = `${this.linkedEventsApiRoot}place/?text=${textid}&page=${pageNumber}`;
-    this.placeservice.getPlacesByUrl(url).subscribe(response => {
-      // Clear existing markers from the map
+    this.placeservice.getPlacesByUrl(url).subscribe(async response => {
       this.markers.forEach((marker: { setMap: (arg0: null) => any; }) => marker.setMap(null));
-      this.markers = []; // Reset the markers array
-  
-      response.data.forEach((place: any) => {
+      this.markers = [];
+      this.loadedPlaces = [];
+
+      const placesWithImages = await Promise.all(response.data.map(async (place: any) => {
+        if (place.images && place.images.length > 0) {
+          const imageData = await this.placeservice.getPlaceImageById(place.images[0].id).toPromise();
+          if (imageData) {
+            place.imageUrl = imageData.url; // Assign the image URL to the place
+          }
+        }
+        return place;
+      }));
+
+      this.loadedPlaces = placesWithImages; // Update the loaded places with images
+
+      this.loadedPlaces.forEach((place: any) => {
         const marker = new google.maps.Marker({
           position: { lat: place.position.coordinates[1], lng: place.position.coordinates[0] },
           label: { text: place.name.fi, color: 'black', fontWeight: '700', fontFamily: 'Verdana', fontSize: '13px' },
@@ -58,32 +66,28 @@ export class PlaceComponent implements OnInit {
           icon: { url: '/assets/locationpin.png' },
           map: this.map
         });
-  
-        // Add marker to the markers array
+
         this.markers.push(marker);
-        this.loadedPlaces = []; // Reset the loaded places array
-        this.loadedPlaces = response.data; // Update the loaded places array  
-  
-        this.nextPageUrl = response.meta.next || null;
-        this.previousPageUrl = response.meta.previous || null;
-  
-        // Check if info_url is not null before using it
+
         const infoUrl = place.info_url && place.info_url.fi ? `<a href="${place.info_url.fi}">Lue lisää ></a>` : "No additional information available";
-  
         const markerContent = `<div class="map-infowindow">
           <div class="map-infowindow-title">${place.name.fi}</div>
           <div class="map-infowindow-content">${place.street_address.fi}</div>
           <div class="map-infowindow-content">${place.postal_code}, ${place.address_locality.fi}</div>
           <div class="map-infowindow-content">${infoUrl}</div>
         </div>`;
-  
+
         marker.addListener("click", () => {
           this.infoWindow.setContent(markerContent);
           this.infoWindow.open(this.map, marker);
         });
       });
+
+      this.nextPageUrl = response.meta.next || null;
+      this.previousPageUrl = response.meta.previous || null;
     });
   }
+
   // Methods for search, reset, and navigation
   doSearch(): void {
     this.showContent(this.textid, this.currentPage);
@@ -102,15 +106,17 @@ export class PlaceComponent implements OnInit {
 
   // Add similar methods for Haaga, Ravintola, Kauppakeskus, Teatteri, Urheilu
 
-  getImageById(imageid: number): void {
-    this.placeservice.getPlaceImageById(imageid).subscribe((data: any) => {
+  hoveredImageId: number | null = null;
+
+  getImageById(imageId: number): void {
+    this.hoveredImageId = imageId; // Track the hovered image ID
+    this.placeservice.getPlaceImageById(imageId).subscribe((data: any) => {
       this.ImageDetail = data;
-      this.showWindow = true;
     });
   }
-
+  
   closeWindow(): void {
-    this.showWindow = false;
+    this.hoveredImageId = null; // Reset the hover state
   }
 
   // Pagination methods

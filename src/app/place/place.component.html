@@ -1,41 +1,48 @@
-
 <section class="weather-and-map">
-<div id="map" style="height: 400px; width: 100%;"></div>
-<app-weather></app-weather>
-
+  <div id="map" style="height: 400px; width: 100%;"></div>
+  <app-weather></app-weather>
 </section>
 
 <div class="search-controls">
-  <input class="text-input" type="text" [(ngModel)]="textid" placeholder="Search places..."><br/>
+  <input class="text-input" type="text" [(ngModel)]="textid" placeholder="Search places...">
+  <br/>
+  
   <button class="btn search" (click)="doSearch()">Search</button>
   <button class="btn reset" (click)="resetMap()">Reset</button>
+  
 </div>
-
-
 
 <div class="image-detail" *ngIf="showWindow">
   <h3>Image Details</h3>
   <p>Name: {{ ImageDetail.name }}</p>
   <p>Description: {{ ImageDetail.description }}</p>
+  <img *ngIf="ImageDetail.url" [src]="ImageDetail.url" alt="Image detail">
   <button (click)="closeWindow()">Close</button>
 </div>
+<!--
 <div class="pagination-controls">
   <button (click)="previousPage()" [disabled]="!previousPageUrl">Previous</button>
   <button (click)="nextPage()" [disabled]="!nextPageUrl">Next</button>
 </div>
+-->
+
 
 <section class="korttilista">
-  <section *ngFor="let place of loadedPlaces" >
+  <section *ngFor="let place of loadedPlaces">
     <div class="kortti">
-      <h1>{{ place.name.fi }}</h1>
-      <div >{{ place.street_address.fi }}</div>
-      <div >{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
-      <div >{{ place?.description?.fi }}</div>
-      <div  *ngIf="place.infoUrl">
-        <a href="{{ place.infoUrl }}" target="_blank">More Info</a>
+      <!-- Display this place's image if available -->
+      <div *ngIf="place.imageUrl" class="image-container">
+        <img [src]="place.imageUrl">
       </div>
-      <!-- If no info URL is available, display a message or leave it empty based on your preference -->
-      <div class="map-infowindow-content" *ngIf="!place.infoUrl">No additional information available</div>
+
+      <h1>{{ place.name.fi }}</h1>
+      <div>{{ place.street_address.fi }}</div>
+      <div>{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
+      <div *ngIf="place.description && place.description.fi">{{ place.description.fi }}</div>
+      <div *ngIf="place.info_url && place.info_url.fi">
+        <a href="{{ place.info_url.fi }}" target="_blank">More Info</a>
+      </div>
+      <div *ngIf="!place.info_url">No additional information available</div>
     </div>
   </section>
 </section>
