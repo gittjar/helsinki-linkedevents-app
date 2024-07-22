@@ -3,22 +3,27 @@
   <app-weather></app-weather>
 </section>
 
-<div class="search-controls">
-  <input class="text-input" type="text" [(ngModel)]="textid" placeholder="Search places...">
-  <br/>
-  
-  <button class="btn search" (click)="doSearch()">Search</button>
-  <button class="btn reset" (click)="resetMap()">Reset</button>
-  
-</div>
+<section class="search-controls">
+  <article class="search-input">
 
-<div class="image-detail" *ngIf="showWindow">
-  <h3>Image Details</h3>
-  <p>Name: {{ ImageDetail.name }}</p>
-  <p>Description: {{ ImageDetail.description }}</p>
-  <img *ngIf="ImageDetail.url" [src]="ImageDetail.url" alt="Image detail">
-  <button (click)="closeWindow()">Close</button>
-</div>
+    <h1 class="ml-3">Hae paikkoja</h1>
+    <input class="text-input" type="text" [(ngModel)]="textid" placeholder="Search places..."><br>
+    <button class="ml-2 rounded-md bg-green-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-400" (click)="doSearch()">Etsi  <fa-icon [icon]="ChevronRight"></fa-icon></button>
+    <button class="ml-2 rounded-md bg-white-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400" (click)="resetMap()">Tyhjennä  <fa-icon [icon]="RectangXmark"></fa-icon></button> 
+    <br>
+    
+    <p class="ml-3">Löytyi {{loadedPlaces.length}} kohdetta.</p>
+   
+  </article>
+
+  <article>
+  <app-search-select (search)="handleSearch($event)"></app-search-select>
+</article>
+
+</section>
+
+
+
 <!--
 <div class="pagination-controls">
   <button (click)="previousPage()" [disabled]="!previousPageUrl">Previous</button>
@@ -38,11 +43,17 @@
       <h1>{{ place.name.fi }}</h1>
       <div>{{ place.street_address.fi }}</div>
       <div>{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
-      <div *ngIf="place.description && place.description.fi">{{ place.description.fi }}</div>
-      <div *ngIf="place.info_url && place.info_url.fi">
-        <a href="{{ place.info_url.fi }}" target="_blank">More Info</a>
+      <button (click)="toggleInfo(place.id)" class="ml-1 rounded-md bg-white-500 px-3 py-3 text-sm font-semibold text-white-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-white-200">Lisätiedot</button> <!-- Add a button to toggle the info -->
+
+      <!-- Wrap the togglable content in a div and use *ngIf to check the toggle state -->
+      <div *ngIf="toggleStates.get(place.id)">
+        <div *ngIf="place.description && place.description.fi">{{ place.description.fi }}</div>
+        <div *ngIf="place.info_url && place.info_url.fi">
+          <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpFromBracket"></fa-icon>
+          </a>
+        </div>
+        <div *ngIf="!place.info_url">No additional information available</div>
       </div>
-      <div *ngIf="!place.info_url">No additional information available</div>
     </div>
   </section>
 </section>

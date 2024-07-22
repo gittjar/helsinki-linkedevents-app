@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PlaceService } from '../place.service';
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlassLocation } from '@fortawesome/free-solid-svg-icons';
+import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
+import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-place',
@@ -7,6 +12,25 @@ import { PlaceService } from '../place.service';
   styleUrls: ['./place.component.css']
 })
 export class PlaceComponent implements OnInit {
+
+    // fontawesome
+    ArrowUpRightIcon = faArrowUpRightFromSquare;
+    ChevronRight = faChevronRight;
+    MagnifyingGlassLocation = faMagnifyingGlassLocation;
+    RectangXmark = faRectangleXmark;
+    ArrowUpFromBracket = faArrowUpFromBracket;
+   
+    // toggle button
+
+    toggleStates = new Map<string, boolean>(); // To track toggle states by place id
+
+    toggleInfo(placeId: string): void {
+      const currentState = this.toggleStates.get(placeId) || false;
+      this.toggleStates.set(placeId, !currentState);
+    }
+
+    // Google Maps API
+
   linkedEventsApiRoot: string = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/';
   mapLoaded!: boolean;
   map!: google.maps.Map;
@@ -25,6 +49,8 @@ export class PlaceComponent implements OnInit {
   showWindow = false;
   ImageDetail: any = {};
   public loadedPlaces: any[] = [];
+
+
 
   constructor(private placeservice: PlaceService) {}
 
@@ -98,11 +124,11 @@ export class PlaceComponent implements OnInit {
     this.initMap();
   }
 
-  // Methods for specific searches
-  searchPasila(): void {
-    this.textid = 'Pasila';
-    this.showContent(this.textid, this.currentPage);
-  }
+// In the parent component from search-select.component.ts, add the following method:
+handleSearch(searchTerm: string): void {
+  this.textid = searchTerm;
+  this.showContent(this.textid, this.currentPage);
+}
 
   // Add similar methods for Haaga, Ravintola, Kauppakeskus, Teatteri, Urheilu
 

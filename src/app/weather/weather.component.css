@@ -1,6 +1,6 @@
 .weather-card {
-    width: fit-content; /* Adjust card width */
-    margin: 0 auto; /* Center the card */
+    width: 4rem; /* Adjust card width */
+    margin: 1 auto; /* Center the card */
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add some shadow for depth */
     border-radius: 10px; /* More pronounced rounded corners */
     overflow: hidden; /* Ensures the border-radius clips the content */
@@ -9,7 +9,7 @@
   }
   
   .weathertime {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     padding: 3%;
     font-weight: 600;
     text-align: center; /* Center the text */
