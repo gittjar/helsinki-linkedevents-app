@@ -16,7 +16,7 @@
    
   </article>
 
-  <article>
+  <article class="search-input">
   <app-search-select (search)="handleSearch($event)"></app-search-select>
 </article>
 
@@ -49,10 +49,11 @@
       <div *ngIf="toggleStates.get(place.id)">
         <div *ngIf="place.description && place.description.fi">{{ place.description.fi }}</div>
         <div *ngIf="place.info_url && place.info_url.fi">
-          <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpFromBracket"></fa-icon>
+          <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpRightIcon"></fa-icon>
           </a>
         </div>
         <div *ngIf="!place.info_url">No additional information available</div>
+       <div class="text-xs">Kohdetta päivitetty: {{ place.last_modified_time | date: 'dd.MM.yyyy'}}</div>
       </div>
     </div>
   </section>

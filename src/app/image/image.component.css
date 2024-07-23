@@ -5,18 +5,33 @@
 
 .pagenappi {
     padding: 1%;
-    border-radius: 10px;
+    border-radius: 3px;
     font-weight: 700;
+    color:black;
+}
+
+input {
+    padding: 1%;
+    border-radius: 3px 0pc 0pc 3px;
+    border: 1px solid #ccc;
+    margin-bottom: 0.5% ;
 }
 
 .kortit {
   
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
   .kuvakortti {
     margin: 0.5%;
+  }
+
+  .kuvakortti img {
+    width: 100%; /* Make the image fill the width of its container */
+    height: 200px; /* Fixed height for all images */
+    object-fit: cover; /* Cover the container without distorting the image */
+    border-radius: 0.5rem 0.5rem 0 0; /* Optional: Apply border-radius to match your design */
   }
 
   .loading-message {

@@ -7,10 +7,19 @@
       <!-- Your regular content -->
 <div *ngIf="!isLoading">
 
+      <!-- Search Input -->
+      <div class="search-container">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Hae kuvia..." class="search-input">
+        <button (click)="searchImages()" class="pagenappi ring-1">Hae</button>
+          </div>
+
+
 <aside class="flex justify-between pagenappulat">
    
     <button type="button" class="pagenappi bg-gradient-to-r from-teal-200 to-sky-700 hover:from-teal-500 hover:to-sky-700" (click)="onPageChangeMinus()"> Edellinen sivu</button>
   
+
+    Kohteiden määrä: {{images?.meta?.count}}<br>
     Olet sivulla:{{newPageNumber}}
 
 <button type="button" class="pagenappi bg-gradient-to-r from-teal-200 to-sky-700 hover:from-teal-500 hover:to-sky-700" (click)="onPageChangePlus()">Seuraava sivu </button>

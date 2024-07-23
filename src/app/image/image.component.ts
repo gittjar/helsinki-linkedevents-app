@@ -13,7 +13,12 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class ImageComponent implements OnInit {
 
+
+
+
   constructor(private http: ImageService, private clipboard: Clipboard) {}
+
+
 
   isLoading: boolean = true;
 
@@ -31,11 +36,34 @@ export class ImageComponent implements OnInit {
   }
 
   images : any;
+  /*
   getImageData(page: number): void {
     this.http.getImages(page).subscribe((data: any) => {
       this.images = data;
     })
-  }
+  }*/
+
+    sortOrder: string = ''; // Add a property to hold the sort order
+    searchTerm: string = ''; // Add a property to hold the search term
+
+    // Modify getImageData to pass the sortOrder
+    getImageData(page: number, searchText: string = ''): void {
+      this.http.getImages(page, searchText, this.sortOrder).subscribe((data: any) => {
+        this.images = data;
+      });
+    }
+
+    searchImages(): void {
+      // Assuming you want to search starting from the first page
+      this.newPageNumber = 1;
+      this.getImageData(this.newPageNumber, this.searchTerm);
+    }
+    
+    // Add a method to change the sort order and fetch images
+    changeSortOrder(newSortOrder: string): void {
+      this.sortOrder = newSortOrder;
+      this.getImageData(this.newPageNumber, this.searchTerm);
+    }
 
   newPageNumber = 1;
   onPageChangePlus(): any {
