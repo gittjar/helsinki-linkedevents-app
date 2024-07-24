@@ -10,19 +10,21 @@
       <!-- Search Input -->
       <div class="search-container">
         <input type="text" [(ngModel)]="searchTerm" placeholder="Hae kuvia..." class="search-input">
-        <button (click)="searchImages()" class="pagenappi ring-1">Hae</button>
+        <button (click)="searchImages()" class="yleisnappi">Hae
+            <fa-icon [icon]="ChevronRight"></fa-icon>
+        </button>
           </div>
 
 
 <aside class="flex justify-between pagenappulat">
    
-    <button type="button" class="pagenappi bg-gradient-to-r from-teal-200 to-sky-700 hover:from-teal-500 hover:to-sky-700" (click)="onPageChangeMinus()"> Edellinen sivu</button>
+    <button type="button" class="yleisnappi" (click)="onPageChangeMinus()"><fa-icon [icon]="ChevronLeft"></fa-icon> Edellinen sivu</button>
   
 
     Kohteiden määrä: {{images?.meta?.count}}<br>
     Olet sivulla:{{newPageNumber}}
 
-<button type="button" class="pagenappi bg-gradient-to-r from-teal-200 to-sky-700 hover:from-teal-500 hover:to-sky-700" (click)="onPageChangePlus()">Seuraava sivu </button>
+<button type="button" class="yleisnappi" (click)="onPageChangePlus()">Seuraava sivu <fa-icon [icon]="ChevronRight"></fa-icon></button>
 </aside>
 
         <section class="kortit">

@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../image.service';
 import { Ripple, initTE } from "tw-elements";
 import { Clipboard } from '@angular/cdk/clipboard';
+import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+
+
+
 
 
 
@@ -13,6 +17,8 @@ import { Clipboard } from '@angular/cdk/clipboard';
 })
 export class ImageComponent implements OnInit {
 
+  ChevronRight = faChevronRight;
+  ChevronLeft = faChevronLeft;
 
 
 

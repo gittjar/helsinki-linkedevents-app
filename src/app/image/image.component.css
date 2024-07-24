@@ -3,18 +3,27 @@
     padding-right: 5%;
 }
 
-.pagenappi {
+
+
+.yleisnappi {
     padding: 1%;
-    border-radius: 3px;
+    border-radius: 0px;
     font-weight: 700;
     color:black;
+    background-color: #f8f8f8;
+    border: 2px solid #000000;
+}
+
+.yleisnappi:hover {
+    background-color: #ececec;
 }
 
 input {
     padding: 1%;
     border-radius: 3px 0pc 0pc 3px;
-    border: 1px solid #ccc;
-    margin-bottom: 0.5% ;
+    border: 2px solid #000000;
+    margin-right: 0.5%;
+    margin-bottom: 0.5%;
 }
 
 .kortit {
@@ -24,12 +33,12 @@ input {
 }
 
   .kuvakortti {
-    margin: 0.5%;
+    margin: 1.5%;
   }
 
   .kuvakortti img {
     width: 100%; /* Make the image fill the width of its container */
-    height: 200px; /* Fixed height for all images */
+    height: 250px; /* Fixed height for all images */
     object-fit: cover; /* Cover the container without distorting the image */
     border-radius: 0.5rem 0.5rem 0 0; /* Optional: Apply border-radius to match your design */
   }
