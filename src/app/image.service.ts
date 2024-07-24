@@ -14,34 +14,21 @@ interface ImageResponse {
   providedIn: 'root'
 })
 export class ImageService {
-
   private IMGURL = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/image/';
 
-  constructor(private imageHTTP: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  getImages(page: number = 1, searchText: string = '', sort: string = '', lastModifiedSort: 'asc' | 'desc' | '' = ''): Observable<any> {
-    let url = this.IMGURL;
-    const queryParams = [];
+  getImages(page: number = 1, searchText: string = '', sort: string = ''): Observable<any> {
+    let url = `${this.IMGURL}?page=${page}`;
 
     if (searchText) {
-      queryParams.push(`text=${encodeURIComponent(searchText)}`);
-    } else {
-      queryParams.push(`page=${page}`);
+      url += `&text=${encodeURIComponent(searchText)}`;
     }
 
     if (sort) {
-      queryParams.push(`sort=${encodeURIComponent(sort)}`);
+      url += `&sort=${encodeURIComponent(sort)}`;
     }
 
-    // Add last_modified_time sorting if specified
-    if (lastModifiedSort) {
-      queryParams.push(`last_modified_time=${encodeURIComponent(lastModifiedSort)}`);
-    }
-
-    if (queryParams.length) {
-      url += `?${queryParams.join('&')}`;
-    }
-
-    return this.imageHTTP.get<any>(url);
+    return this.http.get<any>(url);
   }
 }
