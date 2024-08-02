@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WeatherService } from '../weather.service';
 import { faClockFour } from '@fortawesome/free-solid-svg-icons';
 import { faTemperature0 } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class WeatherComponent implements OnInit {
 
   Clock = faClockFour;
   Temperature = faTemperature0;
+  Calendar = faCalendar;
 
   constructor(private weatherService: WeatherService) {}
 
@@ -25,15 +27,30 @@ export class WeatherComponent implements OnInit {
     this.weatherService.getHelsinkiForecastData().subscribe(data => {
       const currentTime = new Date();
       const currentHour = currentTime.getHours();
-      const forecastHours = [6, 10, 14, 18, 22]; // Forecast times
+      let forecastEndTime: Date; // Explicitly declare the type as Date
   
-      // Filter to include all forecast hours greater than the current hour
-      const relevantForecastHours = forecastHours.filter(hour => hour > currentHour);
+      if (currentHour >= 18) {
+        // If it's 18:00 or later, set the end time to 06:00 the next day
+        forecastEndTime = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate() + 1, 6);
+      } else {
+        // Otherwise, set it to 12 hours from now
+        forecastEndTime = new Date(currentTime.getTime() + 12 * 60 * 60 * 1000);
+      }
   
-      this.forecastData = data.forecast.forecastday[0].hour.filter((hour: any) => {
-        const forecastHour = new Date(hour.time).getHours();
-        return relevantForecastHours.includes(forecastHour);
+      this.forecastData = [];
+  
+      // Assuming data.forecast.forecastday includes today and the next day
+      data.forecast.forecastday.forEach((day: { hour: any[]; }) => {
+        this.forecastData = this.forecastData.concat(day.hour.filter((hour: { time: string | number | Date; }) => {
+          const forecastTime = new Date(hour.time);
+          return forecastTime >= currentTime && forecastTime <= forecastEndTime;
+        }));
       });
+  
+      // If the current time is before 18:00 and the forecast data exceeds 12 hours, limit it
+      if (currentHour < 18 && this.forecastData.length > 12) {
+        this.forecastData = this.forecastData.slice(0, 12);
+      }
     });
   }
 }
