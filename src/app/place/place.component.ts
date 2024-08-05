@@ -4,6 +4,7 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { faMagnifyingGlassLocation } from '@fortawesome/free-solid-svg-icons';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-place',
@@ -17,6 +18,7 @@ export class PlaceComponent implements OnInit {
     ChevronRight = faChevronRight;
     MagnifyingGlassLocation = faMagnifyingGlassLocation;
     RectangXmark = faRectangleXmark;
+    ChevronDown = faChevronDown;
    
     // toggle button
 

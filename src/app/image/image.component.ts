@@ -45,7 +45,7 @@ i: any;
     this.isLoading = true;
     this.imageService.getImages(page, searchText, this.sortOrder).subscribe((data: any) => {
       this.images = data;
-      this.totalCount = data.meta.count; // And this too
+      this.totalCount = data.meta.count; 
       this.totalPages = Math.ceil(this.totalCount / this.itemsPerPage);
       this.isLoading = false;
     });

@@ -14,7 +14,7 @@ interface ImageResponse {
   providedIn: 'root'
 })
 export class ImageService {
-  private IMGURL = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/image/';
+  private IMGURL = 'https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/image/';
 
   constructor(private http: HttpClient) { }
 

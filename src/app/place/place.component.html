@@ -1,5 +1,9 @@
+<section class="place-container">
+  <h1 class="ml-3">Helsinki LinkedEvents</h1>
+  <p class="ml-3">Tervetuloa Helsinki LinkedEvents -sovellukseen. Täältä löydät tietoa Helsingin tapahtumista ja paikoista.</p>
+
 <section class="weather-and-map">
-  <div id="map" style="height: 400px; width: 100%;"></div>
+  <div id="map" ></div>
   <app-weather></app-weather>
 </section>
 
@@ -12,7 +16,7 @@
     <button class="ml-2 rounded-md bg-white-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400" (click)="resetMap()">Tyhjennä  <fa-icon [icon]="RectangXmark"></fa-icon></button> 
     <br>
     
-    <p class="ml-3">Löytyi {{loadedPlaces.length}} kohdetta.</p>
+    <p class="ml-3">Kartalla näytetään {{loadedPlaces.length}} kohdetta.</p>
    
   </article>
 
@@ -35,18 +39,18 @@
 <section class="korttilista">
   <section *ngFor="let place of loadedPlaces">
     <div class="kortti">
+      <h1 class="mx-2 mb-1">{{ place.name.fi }}</h1>
       <!-- Display this place's image if available -->
       <div *ngIf="place.imageUrl" class="image-container">
         <img [src]="place.imageUrl">
       </div>
 
-      <h1>{{ place.name.fi }}</h1>
       <div>{{ place.street_address.fi }}</div>
       <div>{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
-      <button (click)="toggleInfo(place.id)" class="ml-1 rounded-md bg-white-500 px-3 py-3 text-sm font-semibold text-white-500 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-white-200">Lisätiedot</button> <!-- Add a button to toggle the info -->
+      <button (click)="toggleInfo(place.id)" class="btn bg-indigo-700 hover:bg-indigo-800 text-white font-bold rounded">Lisätiedot <fa-icon [icon]="ChevronDown"></fa-icon></button> <!-- Add a button to toggle the info -->
 
       <!-- Wrap the togglable content in a div and use *ngIf to check the toggle state -->
-      <div *ngIf="toggleStates.get(place.id)">
+      <div *ngIf="toggleStates.get(place.id)" class="mt-2 mb-2">
         <div *ngIf="place.description && place.description.fi">{{ place.description.fi }}</div>
         <div *ngIf="place.info_url && place.info_url.fi">
           <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpRightIcon"></fa-icon>
@@ -57,4 +61,6 @@
       </div>
     </div>
   </section>
+</section>
+
 </section>

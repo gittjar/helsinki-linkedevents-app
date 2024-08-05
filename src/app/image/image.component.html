@@ -69,12 +69,13 @@
             alt="{{image?.alt_text}}" />
         </a>
         <div class="p-6">
+          <div class="text-sm">ID: {{image?.id}}</div>
             <h5
-            class="mb-2 text-neutral-200 font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-            ID: {{image?.id}}, Nimi: {{image?.name}}
+            class="mb-2 text-neutral-200 font-medium leading-tight text-neutral-800 dark:text-neutral-50 card-name">
+            Nimi: {{image?.name}}
             </h5>
             <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-            Lisenssi: {{image?.license}}, Kuvaaja: {{image?.photographer_name}}<br>
+            Lisenssi: {{image?.license}} <br> Kuvaaja: {{image?.photographer_name}}<br>
             Muokattu: {{image?.last_modified_time | date}}<br>
             </p>
 
