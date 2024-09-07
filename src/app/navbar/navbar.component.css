@@ -56,11 +56,31 @@ nav {
     z-index: 1000;
   }
 
+
+
 h3 {
     padding: 0.25%;
     font-size: x-large;
     font-weight: 800;
     margin-left: 1rem;
+}
+
+.gray-back {
+    background-color: #111111 !important;
+    width: fit-content  !important;
+    margin-left: 1rem;  
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-right: 1rem;
+    border-radius: 5%;
+}
+
+.gray-back:hover {
+    background-color: #f5f4f4 !important;
+    width: fit-content  !important;
+    margin-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 5%;
 }
 
 

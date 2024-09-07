@@ -1,5 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faMapPin } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -11,6 +12,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 export class NavbarComponent {
   isSticky = false;
   menuVisible = false; // Controls the visibility of the menu
+  MapPin = faMapPin;
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: any) {
