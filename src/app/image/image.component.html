@@ -1,95 +1,70 @@
-
 <section class="main">
-    <div *ngIf="isLoading" class="loading-message">
-        <p>Ladataan kuvia rajapinnasta...</p>
-      </div>
+  <div *ngIf="isLoading" class="loading-message">
+    <p>Ladataan kuvia rajapinnasta...</p>
+  </div>
 
-      <!-- Your regular content -->
-<div *ngIf="!isLoading">
+  <div *ngIf="!isLoading">
+    <div class="search-container">
+      Kohteiden määrä tänään: {{images?.meta?.count}}<br>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Hae kuvia..." class="search-input">
+      <button (click)="searchImages()" class="yleisnappi">Hae
+        <fa-icon [icon]="ChevronRight"></fa-icon>
+      </button>
+    </div>
 
-      <!-- Search Input -->
-      <div class="search-container">
-        Kohteiden määrä tänään: {{images?.meta?.count}}<br>
-        <input type="text" [(ngModel)]="searchTerm" placeholder="Hae kuvia..." class="search-input">
-        <button (click)="searchImages()" class="yleisnappi">Hae
-            <fa-icon [icon]="ChevronRight"></fa-icon>
-        </button>
-          </div>
-
-          
-
-
-<aside class="flex justify-between pagenappulat">
-   
-    <button type="button" class="yleisnappi" (click)="onPageChangeMinus()"><fa-icon [icon]="ChevronLeft"></fa-icon> Edellinen sivu</button>
-   
-    <nav aria-label="Page navigation">
+    <aside class="flex justify-between pagenappulat">
+      <button type="button" class="yleisnappi" (click)="onPageChangeMinus()"><fa-icon [icon]="ChevronLeft"></fa-icon> Edellinen sivu</button>
+      <nav aria-label="Page navigation">
         <ul class="pagination">
-          <!-- First page with conditional active class -->
           <li class="page-item" [class.active-page]="newPageNumber === 1">
             <a class="page-link" href="#" (click)="selectPage(1); $event.preventDefault()">1</a>
           </li>
-      
-          <!-- Conditional ellipsis for gap between first page and dynamic middle pages -->
           <li class="page-item" *ngIf="newPageNumber > 6">
             <span class="page-link">...</span>
           </li>
-      
-          <!-- Dynamic pages with conditional active class -->
           <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
             <li class="page-item" [class.active-page]="newPageNumber === i + 1" 
                 *ngIf="i + 1 >= newPageNumber - 5 && i + 1 <= newPageNumber + 5 && totalPages > 12 && i + 1 !== 1 && i + 1 !== totalPages || totalPages <= 12 && i + 1 !== 1 && i + 1 !== totalPages">
               <a class="page-link" href="#" (click)="selectPage(i + 1); $event.preventDefault()">{{ i + 1 }}</a>
             </li>
           </ng-container>
-      
-          <!-- Conditional ellipsis for gap between dynamic middle pages and the last page -->
           <li class="page-item" *ngIf="totalPages > 12 && newPageNumber < totalPages - 5">
             <span class="page-link">...</span>
           </li>
-      
-          <!-- Last page with conditional active class -->
           <li class="page-item" [class.active-page]="newPageNumber === totalPages" *ngIf="totalPages > 1">
             <a class="page-link" href="#" (click)="selectPage(totalPages); $event.preventDefault()">{{ totalPages }}</a>
           </li>
         </ul>
       </nav>
+      <button type="button" class="yleisnappi" (click)="onPageChangePlus()">Seuraava sivu <fa-icon [icon]="ChevronRight"></fa-icon></button>
+    </aside>
 
-<button type="button" class="yleisnappi" (click)="onPageChangePlus()">Seuraava sivu <fa-icon [icon]="ChevronRight"></fa-icon></button>
-
-</aside>
-
-        <section class="kortit">
-        <article *ngFor="let image of images?.data"
-        class="kuvakortti block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
-        <a href="{{image?.url}}">
-            <img
-            class="rounded-t-lg"
-            src="{{image?.url}}"
-            alt="{{image?.alt_text}}" />
+    <section class="kortit">
+      <article *ngFor="let image of images?.data" class="kuvakortti block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+        <a href="#" (click)="openJumbotron(image); $event.preventDefault()">
+          <img class="rounded-t-lg" src="{{image?.url}}" alt="{{image?.alt_text}}" />
         </a>
         <div class="p-6">
           <div class="text-sm">ID: {{image?.id}}</div>
-            <h5
-            class="mb-2 text-neutral-200 font-medium leading-tight text-neutral-800 dark:text-neutral-50 card-name">
+          <h5 class="mb-2 text-neutral-200 font-medium leading-tight text-neutral-800 dark:text-neutral-50 card-name">
             Nimi: {{image?.name}}
-            </h5>
-            <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+          </h5>
+          <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
             Lisenssi: {{image?.license}} <br> Kuvaaja: {{image?.photographer_name}}<br>
             Muokattu: {{image?.last_modified_time | date}}<br>
-            </p>
-
-            <button (click)="copyURLToClipboard(image.url)"
-            type="button"
-            class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-            data-te-ripple-init
-            data-te-ripple-color="light">
+          </p>
+          <button (click)="copyURLToClipboard(image.url)" type="button" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
             Kopioi kuvalinkki
-            </button>  
-            <span *ngIf="copied" class="copy-message">Kuvalinkki kopioitu!</span>
-       
+          </button>  
+          <span *ngIf="copied" class="copy-message">Kuvalinkki kopioitu!</span>
         </div>
-        </article>
-        </section>
-</div>
+      </article>
+    </section>
+  </div>
+
+  <div *ngIf="showJumbotron" class="jumbotron">
+    <button (click)="closeJumbotron()" class="yleisnappi">Sulje</button>
+    <img [src]="selectedImage?.url" [alt]="selectedImage?.alt_text" class="jumbotron-image">
+    <button (click)="copyURLToClipboard(selectedImage?.url)" class="mt-2 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">Kopioi kuvalinkki</button>
+  </div>
 </section>

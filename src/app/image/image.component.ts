@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../image.service';
-import { Ripple, initTE } from "tw-elements";
 import { Clipboard } from '@angular/cdk/clipboard';
 import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,16 +9,7 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
   styleUrls: ['./image.component.css']
 })
 export class ImageComponent implements OnInit {
-i: any;
-
-
-    searchImages(): void {
-      // Assuming you want to search starting from the first page
-      this.newPageNumber = 1;
-      this.getImageData(this.newPageNumber, this.searchTerm);
-    }
-
-
+  i: any;
   images: any;
   newPageNumber = 1;
   isLoading: boolean = true;
@@ -29,10 +19,10 @@ i: any;
   totalCount: number = 0; 
   totalPages: number = 0; 
   itemsPerPage: number = 10; 
-
+  showJumbotron: boolean = false;
+  selectedImage: any = null;
 
   constructor(private imageService: ImageService, private clipboard: Clipboard) { }
-
 
   ChevronRight = faChevronRight;
   ChevronLeft = faChevronLeft;
@@ -53,24 +43,24 @@ i: any;
 
   selectPage(page: number): void {
     this.newPageNumber = page;
-    this.getImageData(this.newPageNumber);
+    this.getImageData(this.newPageNumber, this.searchTerm);
   }
 
   onPageChangePlus(): void {
     this.newPageNumber++;
-    this.getImageData(this.newPageNumber);
-    this.searchTerm = '';
-
-
+    this.getImageData(this.newPageNumber, this.searchTerm);
   }
 
   onPageChangeMinus(): void {
     if (this.newPageNumber > 1) {
       this.newPageNumber--;
-      this.getImageData(this.newPageNumber);
-      this.searchTerm = '';
-
+      this.getImageData(this.newPageNumber, this.searchTerm);
     }
+  }
+
+  searchImages(): void {
+    this.newPageNumber = 1;
+    this.getImageData(this.newPageNumber, this.searchTerm);
   }
 
   copyURLToClipboard(url: string): void {
@@ -79,5 +69,15 @@ i: any;
     setTimeout(() => {
       this.copied = false;
     }, 2000);
+  }
+
+  openJumbotron(image: any): void {
+    this.selectedImage = image;
+    this.showJumbotron = true;
+  }
+
+  closeJumbotron(): void {
+    this.showJumbotron = false;
+    this.selectedImage = null;
   }
 }
