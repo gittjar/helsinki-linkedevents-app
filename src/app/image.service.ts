@@ -14,17 +14,21 @@ interface ImageResponse {
   providedIn: 'root'
 })
 export class ImageService {
+  private IMGURL = 'https://corsproxy.io/?https://api.hel.fi/linkedevents/v1/image/';
 
-  constructor(private imageHTTP: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  IMGURL = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/image/?page='
+  getImages(page: number = 1, searchText: string = '', sort: string = ''): Observable<any> {
+    let url = `${this.IMGURL}?page=${page}`;
 
-  getImages(page: number): Observable<any> {
-    const ImageUrl = this.imageHTTP.get<any>(this.IMGURL+page);
-    return ImageUrl;
+    if (searchText) {
+      url += `&text=${encodeURIComponent(searchText)}`;
+    }
+
+    if (sort) {
+      url += `&sort=${encodeURIComponent(sort)}`;
+    }
+
+    return this.http.get<any>(url);
   }
-
-
-
-
 }

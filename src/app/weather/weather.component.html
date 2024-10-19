@@ -1,0 +1,13 @@
+<section class="weather-container">
+<div *ngFor="let forecast of forecastData" class="weather-card">
+  <div class="weathertime">
+    <p class="date">   <fa-icon [icon]="Calendar"></fa-icon> {{ forecast.time  | date: 'dd.MM' }}</p>
+    <p class="asteluku">   <fa-icon [icon]="Clock"></fa-icon> {{ forecast.time  | date: 'HH:mm' }}</p>
+   
+    <hr>
+    <p class="asteluku"> <fa-icon [icon]="Temperature"></fa-icon>  {{ forecast.temp_c }}°C</p>
+    <hr>
+    <img [src]="forecast.condition.icon" alt="Weather Icon" class="weather-icon">
+  </div>
+</div>
+</section>

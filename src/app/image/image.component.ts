@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../image.service';
-import { Ripple, initTE } from "tw-elements";
 import { Clipboard } from '@angular/cdk/clipboard';
-
-
-
+import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-image',
@@ -12,65 +9,75 @@ import { Clipboard } from '@angular/cdk/clipboard';
   styleUrls: ['./image.component.css']
 })
 export class ImageComponent implements OnInit {
-
-  constructor(private http: ImageService, private clipboard: Clipboard) {}
-
+  i: any;
+  images: any;
+  newPageNumber = 1;
   isLoading: boolean = true;
+  copied: boolean = false;
+  sortOrder: string = '';
+  searchTerm: string = '';
+  totalCount: number = 0; 
+  totalPages: number = 0; 
+  itemsPerPage: number = 10; 
+  showJumbotron: boolean = false;
+  selectedImage: any = null;
+
+  constructor(private imageService: ImageService, private clipboard: Clipboard) { }
+
+  ChevronRight = faChevronRight;
+  ChevronLeft = faChevronLeft;
 
   ngOnInit(): void {
-    this.getImageData(1);
-    initTE({ Ripple });
-    this.loadingDataWindow();
+    this.getImageData(this.newPageNumber);
   }
 
-  loadingDataWindow() {
-      setTimeout(() => {
-      // Data loading is complete
-      this.isLoading = false;
-      }, 2700);
-  }
-
-  images : any;
-  getImageData(page: number): void {
-    this.http.getImages(page).subscribe((data: any) => {
+  getImageData(page: number, searchText: string = ''): void {
+    this.isLoading = true;
+    this.imageService.getImages(page, searchText, this.sortOrder).subscribe((data: any) => {
       this.images = data;
-    })
+      this.totalCount = data.meta.count; 
+      this.totalPages = Math.ceil(this.totalCount / this.itemsPerPage);
+      this.isLoading = false;
+    });
   }
 
-  newPageNumber = 1;
-  onPageChangePlus(): any {
-    this.increasePageNumber();
-    this.http.getImages(this.newPageNumber).subscribe((data: any) => {
-    this.images = data;
-    })
-    }
+  selectPage(page: number): void {
+    this.newPageNumber = page;
+    this.getImageData(this.newPageNumber, this.searchTerm);
+  }
 
-  increasePageNumber(): void {
+  onPageChangePlus(): void {
     this.newPageNumber++;
-    }
+    this.getImageData(this.newPageNumber, this.searchTerm);
+  }
 
-  onPageChangeMinus(): any {
-    this.decreasePageNumber();
-    this.http.getImages(this.newPageNumber).subscribe((data: any) => {
-    this.images = data;
-    })
-    }
-
-  decreasePageNumber(): void {
+  onPageChangeMinus(): void {
     if (this.newPageNumber > 1) {
-    this.newPageNumber--;
+      this.newPageNumber--;
+      this.getImageData(this.newPageNumber, this.searchTerm);
     }
-    } 
+  }
 
-    copied: boolean = false;
-    scrollOffset: number = 0;
+  searchImages(): void {
+    this.newPageNumber = 1;
+    this.getImageData(this.newPageNumber, this.searchTerm);
+  }
 
   copyURLToClipboard(url: string): void {
-      this.clipboard.copy(url);
-      this.copied = true;
-      setTimeout(() => {
-        this.copied = false;
-      }, 2000);
-    }
- 
+    this.clipboard.copy(url);
+    this.copied = true;
+    setTimeout(() => {
+      this.copied = false;
+    }, 2000);
+  }
+
+  openJumbotron(image: any): void {
+    this.selectedImage = image;
+    this.showJumbotron = true;
+  }
+
+  closeJumbotron(): void {
+    this.showJumbotron = false;
+    this.selectedImage = null;
+  }
 }

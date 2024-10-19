@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faMapPin } from '@fortawesome/free-solid-svg-icons';
+
 
 
 @Component({
@@ -8,21 +10,21 @@ import { HostListener } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  isSticky = false;
+  menuVisible = false; // Controls the visibility of the menu
+  MapPin = faMapPin;
 
-  // add a property to check if the navbar is sticky or not
-isSticky = false;
-
-// listen for scroll events on window
-@HostListener('window:scroll', ['$event'])
-onScroll(event: any) {
-  // get the current scroll position
-  const scrollTop = event.target.documentElement.scrollTop;
-  // check if the scroll position is greater than a certain value
-  if (scrollTop > 100) {
-    this.isSticky = true;
-  } else {
-    this.isSticky = false;
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: any) {
+    const scrollTop = event.target.documentElement.scrollTop;
+    this.isSticky = scrollTop > 100;
   }
-}
 
+  toggleMenu(shouldOpen?: boolean) {
+    if (shouldOpen === undefined) {
+      this.menuVisible = !this.menuVisible; // Toggle the menu visibility
+    } else {
+      this.menuVisible = shouldOpen; // Set the menu visibility explicitly
+    }
+  }
 }

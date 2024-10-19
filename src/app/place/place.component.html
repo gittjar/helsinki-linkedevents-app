@@ -1,206 +1,66 @@
+<section class="place-container">
+  <h1 class="ml-3">Helsinki LinkedEvents</h1>
+  <p class="ml-3">Tervetuloa Helsinki LinkedEvents -sovellukseen. Täältä löydät tietoa Helsingin tapahtumista ja paikoista.</p>
 
-<section class="upbar">
-<section class="buttons-and-input">
-  <input class="text-input" [(ngModel)]="textid" placeholder="Hae paikkaa esim. ravintola">
-
-  <button class="btn search" (click)="DoSearch()">Search  <fa-icon [icon]="MagnifyingGlassLocation"></fa-icon>
-  </button>
-
-  <button class="btn reset" (click)="resetMap()">Reset <fa-icon [icon]="RectangXmark"></fa-icon>
-  </button>
-  <br>
-  <button type="button" class="btn place" (click)="SearchHaaga()">Haaga  <fa-icon [icon]="ChevronRight"></fa-icon>
-  </button>
-
-  <button type="button" class="btn place" (click)="SearchPasila()">Pasila <fa-icon [icon]="ChevronRight"></fa-icon>
-  </button>
-
-  <button type="button" class="btn place" (click)="SearchRavintola()">Ravintola <fa-icon [icon]="ChevronRight"></fa-icon>
-  </button>
-
-  <button type="button" class="btn place" (click)="SearchKauppakeskus()">Kauppakeskus <fa-icon [icon]="ChevronRight"></fa-icon>
-  </button>
-
-  <button type="button" class="btn place" (click)="SearchTeatteri()">Teatteri <fa-icon [icon]="ChevronRight"></fa-icon>
-  </button>
-
-  <button type="button" class="btn place" (click)="SearchUrheilu()">Urheilu <fa-icon [icon]="ChevronRight"></fa-icon>
-  </button>
-
+<section class="weather-and-map">
+  <div id="map" ></div>
+  <app-weather></app-weather>
 </section>
-  <aside class="weather flex justify-end">
-  <!-- TÄSTÄ ALKAA ENNUSTETTU SÄÄ-->
-  <!--KLO 8:00-->
-  <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[8].time > helsinkiforecastweather?.location.localtime">      
-    <span class="weathertime">
-      <fa-icon [icon]="Clock"></fa-icon>
-    {{helsinkiforecastweather?.forecast.forecastday[0].hour[8].time | date: 'HH:mm'}}
-  </span>
-  <div
-  data-te-chip-init
-  data-te-ripple-init
-  class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
-  <img
-    class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
-    src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[8].condition.icon}}"
-    alt="" />
-    {{helsinkiforecastweather?.forecast.forecastday[0].hour[8].temp_c}} <br>
-    <span
-    data-te-chip-close
-    class="float-right w-4 cursor-pointer pl-[8px] text-[16px] text-[#afafaf] opacity-[.53] transition-all duration-200 ease-in-out hover:text-[#8b8b8b] dark:text-neutral-400 dark:hover:text-neutral-100">
-  </span>
-</div>
-</article>
 
-        <!--12:00-->
-        <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[12].time > helsinkiforecastweather?.location.localtime">      
-          <span class="weathertime">
-            <fa-icon [icon]="Clock"></fa-icon>
-          {{helsinkiforecastweather?.forecast.forecastday[0].hour[12].time | date: 'HH:mm'}}
-        </span>
-        <div
-        data-te-chip-init
-        data-te-ripple-init
-        class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
-        <img
-          class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
-          src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[12].condition.icon}}"
-          alt="" />
-          {{helsinkiforecastweather?.forecast.forecastday[0].hour[12].temp_c}} <br>
-          <span
-          data-te-chip-close
-          class="float-right w-4 cursor-pointer pl-[8px] text-[16px] text-[#afafaf] opacity-[.53] transition-all duration-200 ease-in-out hover:text-[#8b8b8b] dark:text-neutral-400 dark:hover:text-neutral-100">
-        </span>
-      </div>
-    </article>
+<section class="search-controls">
+  <article class="search-input">
 
-        <!--16:00-->
-        <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[16].time > helsinkiforecastweather?.location.localtime">      
-          <span class="weathertime">
-            <fa-icon [icon]="Clock"></fa-icon>
-          {{helsinkiforecastweather?.forecast.forecastday[0].hour[16].time | date: 'HH:mm'}}
-        </span>
-        <div
-        data-te-chip-init
-        data-te-ripple-init
-        class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
-        <img
-          class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
-          src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[16].condition.icon}}"
-          alt="" />
-          {{helsinkiforecastweather?.forecast.forecastday[0].hour[16].temp_c}} <br>
-          <span
-          data-te-chip-close
-          class="float-right w-4 cursor-pointer pl-[8px] text-[16px] text-[#afafaf] opacity-[.53] transition-all duration-200 ease-in-out hover:text-[#8b8b8b] dark:text-neutral-400 dark:hover:text-neutral-100">
-        </span>
-      </div>
-    </article>
-
-      <!--19:00-->
-      <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[19].time > helsinkiforecastweather?.location.localtime">      
-        <span class="weathertime">
-          <fa-icon [icon]="Clock"></fa-icon>
-        {{helsinkiforecastweather?.forecast.forecastday[0].hour[19].time | date: 'HH:mm'}}
-      </span>
-      <div
-      data-te-chip-init
-      data-te-ripple-init
-      class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
-      <img
-        class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
-        src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[19].condition.icon}}"
-        alt="" />
-        {{helsinkiforecastweather?.forecast.forecastday[0].hour[19].temp_c}} <br>
-        <span
-        data-te-chip-close
-        class="float-right w-4 cursor-pointer pl-[8px] text-[16px] text-[#afafaf] opacity-[.53] transition-all duration-200 ease-in-out hover:text-[#8b8b8b] dark:text-neutral-400 dark:hover:text-neutral-100">
-      </span>
-    </div>
+    <h1 class="ml-3">Hae paikkoja</h1>
+    <input class="text-input" type="text" [(ngModel)]="textid" placeholder="Search places..."><br>
+    <button class="ml-2 rounded-md bg-green-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-400" (click)="doSearch()">Etsi  <fa-icon [icon]="ChevronRight"></fa-icon></button>
+    <button class="ml-2 rounded-md bg-white-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400" (click)="resetMap()">Tyhjennä  <fa-icon [icon]="RectangXmark"></fa-icon></button> 
+    <br>
+    
+    <p class="ml-3">Kartalla näytetään {{loadedPlaces.length}} kohdetta.</p>
+   
   </article>
 
-    <!--23:00-->
-    <article class="weather-card center mr-3" *ngIf="helsinkiforecastweather?.forecast.forecastday[0].hour[23].time > helsinkiforecastweather?.location.localtime">      
-      <span class="weathertime">
-        <fa-icon [icon]="Clock"></fa-icon>
-      {{helsinkiforecastweather?.forecast.forecastday[0].hour[23].time | date: 'HH:mm'}}
-    </span>
-    <div
-    data-te-chip-init
-    data-te-ripple-init
-    class="[word-wrap: break-word] my-[5px] mr-0 flex h-[42px] cursor-pointer items-center justify-between rounded-[21px] bg-[#eceff1] px-[12px] py-0 text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:!shadow-none active:bg-[#cacfd1] dark:bg-neutral-600 dark:text-neutral-200">
-    <img
-      class="my-0 -ml-[12px] mr-[8px] h-[inherit] w-[inherit] rounded-[100%]"
-      src="{{helsinkiforecastweather?.forecast.forecastday[0].hour[23].condition.icon}}"
-      alt="" />
-      {{helsinkiforecastweather?.forecast.forecastday[0].hour[23].temp_c}} <br>
-      <span
-      data-te-chip-close
-      class="float-right w-4 cursor-pointer pl-[8px] text-[16px] text-[#afafaf] opacity-[.53] transition-all duration-200 ease-in-out hover:text-[#8b8b8b] dark:text-neutral-400 dark:hover:text-neutral-100">
-    </span>
-  </div>
+  <article class="search-input">
+  <app-search-select (search)="handleSearch($event)"></app-search-select>
 </article>
 
-
-
-  </aside>
 </section>
 
-<!--Tässä kohdekorttien infot per button-->
-
-<section class="main">
 
 
-  
+<!--
+<div class="pagination-controls">
+  <button (click)="previousPage()" [disabled]="!previousPageUrl">Previous</button>
+  <button (click)="nextPage()" [disabled]="!nextPageUrl">Next</button>
+</div>
+-->
 
 
-  <aside>
-      
+<section class="korttilista">
+  <section *ngFor="let place of loadedPlaces">
+    <div class="kortti">
+      <h1 class="mx-2 mb-1">{{ place.name.fi }}</h1>
+      <!-- Display this place's image if available -->
+      <div *ngIf="place.imageUrl" class="image-container">
+        <img [src]="place.imageUrl">
+      </div>
 
+      <div>{{ place.street_address.fi }}</div>
+      <div>{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
+      <button (click)="toggleInfo(place.id)" class="btn bg-indigo-700 hover:bg-indigo-800 text-white font-bold rounded">Lisätiedot <fa-icon [icon]="ChevronDown"></fa-icon></button> <!-- Add a button to toggle the info -->
 
-
- 
-    
-
-        <article class="list" *ngFor="let x of pleissi?.data">
-          <h3 class="text-white-900 text-sm font-semibold"> {{x?.name?.fi}}</h3>
-
-          <p class="text-sm">
-
-           {{x?.street_address?.fi}}, {{x.postal_code}}, {{x.address_locality?.fi}}</p>
-
-           <article class="flex justify-between">
-            <section>
-          <a href="{{x?.info_url?.fi}}">Lue lisää <fa-icon [icon]="ArrowUpRightIcon"></fa-icon></a>
-        </section>
-
-            <section *ngIf="x?.image">
-            <button (mouseenter)="getImageById(x?.image)" (mouseleave)="closeWindow()"> Kuva  <fa-icon [icon]="ChevronRight"></fa-icon></button>
-            <div *ngIf="showWindow" class="window"> 
-              <img
-              class="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-480 md:rounded-none md:rounded-l-lg"
-              [src]="ImageDetail?.url" alt="" />
-              <p class="text-xs text-neutral-500 dark:text-neutral-600">
-               Kuvattu: {{ImageDetail?.last_modified_time | date}}
-               <br>
-               Kuvaaja: {{ImageDetail?.photographer_name}}
-               <br>
-               Lisenssi: {{ImageDetail?.license}}
-              </p>
-              </div>
-            </section>
-
-
-           </article>
-          
-          
-          </article>
-    </aside>
-    
-    <div id="map"></div>
-
-
-
-
+      <!-- Wrap the togglable content in a div and use *ngIf to check the toggle state -->
+      <div *ngIf="toggleStates.get(place.id)" class="mt-2 mb-2">
+        <div *ngIf="place.description && place.description.fi">{{ place.description.fi }}</div>
+        <div *ngIf="place.info_url && place.info_url.fi">
+          <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpRightIcon"></fa-icon>
+          </a>
+        </div>
+        <div *ngIf="!place.info_url">No additional information available</div>
+       <div class="text-xs">Kohdetta päivitetty: {{ place.last_modified_time | date: 'dd.MM.yyyy'}}</div>
+      </div>
+    </div>
   </section>
+</section>
 
-  
+</section>

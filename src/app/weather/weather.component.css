@@ -1,0 +1,52 @@
+.weather-container  {
+  display: flex !important;
+  flex-wrap: wrap;
+  margin-top: 2px;
+  margin-bottom: 1rem;
+
+}
+ 
+
+.weather-card {
+    width: 6rem; /* Adjust card width */
+    margin: 1 auto; /* Center the card */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add some shadow for depth */
+    border-radius: 10px; /* More pronounced rounded corners */
+    overflow: hidden; /* Ensures the border-radius clips the content */
+    background-color: white;
+    margin-right: 20px; 
+  }
+  
+  .weathertime {
+    font-size: 0.7rem;
+    padding: 3%;
+    font-weight: 600;
+    text-align: center; /* Center the text */
+  }
+  
+  .center {
+    text-align: center;
+  }
+  
+  .asteluku {
+    padding-right: 5%;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  .date {
+    font-size: 0.85rem;
+    padding-right: 5%;
+    font-weight: 500;
+    color: rgb(200, 200, 200);
+    background-color: #192231;
+    border-radius: 20px;
+    text-align: center; /* Center the text */
+  }
+  
+  .weather-icon {
+    width: 50px; /* Adjust icon size */
+    height: auto;
+    display: block; /* Center the image */
+    margin: 0 auto; /* Center the image */
+  }
