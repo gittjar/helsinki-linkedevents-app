@@ -16,6 +16,7 @@ export class ImageComponent implements OnInit {
   copied: boolean = false;
   sortOrder: string = '';
   searchTerm: string = '';
+  lastSearchTerm: string = ''; // Add this property
   totalCount: number = 0; 
   totalPages: number = 0; 
   itemsPerPage: number = 10; 
@@ -60,6 +61,7 @@ export class ImageComponent implements OnInit {
 
   searchImages(): void {
     this.newPageNumber = 1;
+    this.lastSearchTerm = this.searchTerm; // Update the last search term
     this.getImageData(this.newPageNumber, this.searchTerm);
   }
 
