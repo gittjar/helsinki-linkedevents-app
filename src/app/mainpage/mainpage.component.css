@@ -4,6 +4,8 @@ gallery {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: rgb(255, 255, 255);
+    margin-top: -1rem ;
   }
   
   gallery img {

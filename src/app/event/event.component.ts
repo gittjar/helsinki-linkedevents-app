@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
 import { Select, initTE } from "tw-elements";
 import { faArrowUpRightFromSquare, faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { DoSearch, SearchStadion, SearchLapset, SearchHipHop, SearchHIFK, SearchJokerit, SearchKonsertti } from './search-functions';
 
 @Component({
   selector: 'app-event',
@@ -9,27 +10,113 @@ import { faArrowUpRightFromSquare, faArrowRight, faArrowLeft } from '@fortawesom
   styleUrls: ['./event.component.css']
 })
 export class EventComponent implements OnInit {
-
   arrowUpRightFromBox = faArrowUpRightFromSquare;
   faArrowRight = faArrowRight;
   faArrowLeft = faArrowLeft;
 
-  constructor(private http: EventService){}
+  isLoading: boolean = true;
+  searchText: string = "";
+  searchTextDate: string = "";
+  newPageNumber: number = 1;
+  events: any;
+  filteredEvents: any;
+  currentDate: Date | undefined;
+  tomorrowDate: Date | undefined;
+  tomorrow2Date: Date | undefined;
+  totalPages: number | undefined;
+  pages: number[] = [];
+  button1Clicked: boolean = false;
+  button2Clicked: boolean = false;
+
+  constructor(private http: EventService) {}
 
   ngOnInit(): void {
-    // searchstring empty and pagenumber = 1
-    this.getAllEvents('',1);
+    this.currentDate = new Date();
+    this.tomorrowDate = new Date(this.currentDate);
+    this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1);
+    this.tomorrow2Date = new Date(this.currentDate);
+    this.tomorrow2Date.setDate(this.tomorrow2Date.getDate() + 2);
+
+    this.getAllEvents('', 1);
     initTE({ Select });
     this.loadingDataWindow();
   }
-  isLoading: boolean = true;
+
   loadingDataWindow() {
     setTimeout(() => {
-    // Data loading is complete
-    this.isLoading = false;
-    }, 2700);}
+      this.isLoading = false;
+    }, 2700);
+  }
 
-  // Aikojen säätöjä muotoon YYYY-MM-DD
+  getAllEvents(searchText: string, pageNumber: number): void {
+    this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {
+      this.events = data;
+      this.filteredEvents = data.data;
+      this.totalPages = Math.ceil(data.meta.count / 20);
+      this.pages = this.getPaginationPages();
+    });
+  }
+
+  getAllEventsDate(searchDate: string, pageNumber: number): void {
+    this.http.getEventDate(searchDate, pageNumber).subscribe((data: any) => {
+      this.events = data;
+      this.filterEventsByDate(searchDate);
+      this.totalPages = Math.ceil(this.filteredEvents.length / 20);
+      this.pages = this.getPaginationPages();
+    });
+  }
+
+  filterEventsByDate(date: string): void {
+    this.filteredEvents = this.events.data.filter((event: any) => {
+      const eventDate = new Date(event.start_time).toISOString().split('T')[0];
+      return eventDate === date;
+    });
+  }
+
+  onPageChangePlus(): void {
+    this.newPageNumber++;
+    this.getAllEvents(this.searchText, this.newPageNumber);
+  }
+
+  onPageChangeMinus(): void {
+    if (this.newPageNumber > 1) {
+      this.newPageNumber--;
+      this.getAllEvents(this.searchText, this.newPageNumber);
+    }
+  }
+
+  onPageChangePlusDate(): void {
+    this.newPageNumber++;
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber);
+  }
+
+  onPageChangeMinusDate(): void {
+    if (this.newPageNumber > 1) {
+      this.newPageNumber--;
+      this.getAllEventsDate(this.searchTextDate, this.newPageNumber);
+    }
+  }
+
+  goToPage(page: number): void {
+    this.newPageNumber = page;
+    this.getAllEvents(this.searchText, this.newPageNumber);
+  }
+
+  changeToday() {
+    this.searchTextDate = this.getCurrentDate();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  }
+
+  changeToday1() {
+    this.searchTextDate = this.getTomorrowDate();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  }
+
+  changeToday2() {
+    this.searchTextDate = this.getDayAfterTomorrowDate();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  }
+
   getCurrentDate(): string {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -37,6 +124,7 @@ export class EventComponent implements OnInit {
     const day = currentDate.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
   getTomorrowDate(): string {
     const tomorrowDate = new Date();
     tomorrowDate.setDate(tomorrowDate.getDate() + 1);
@@ -45,6 +133,7 @@ export class EventComponent implements OnInit {
     const day = tomorrowDate.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
   getDayAfterTomorrowDate(): string {
     const dayAfterTomorrowDate = new Date();
     dayAfterTomorrowDate.setDate(dayAfterTomorrowDate.getDate() + 2);
@@ -53,146 +142,71 @@ export class EventComponent implements OnInit {
     const day = dayAfterTomorrowDate.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-  searchTextDate : string = "";
-  // today
-  changeToday(){
-    this.searchTextDate = this.getCurrentDate();
-    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
-  }
-  // huomenna
-  changeToday1() {
-    this.searchTextDate = this.getTomorrowDate();
-    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
-  }
-  // ylihuomenna
-  changeToday2() {
-    this.searchTextDate = this.getDayAfterTomorrowDate();
-    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
-  }
-  // päiväämärät localize FI muotoon
-  // Aikojen säätöjä
-  currentDate = new Date(); // tänään
-  today = new Date();
-  tomorrowDate = new Date(this.today.setDate(this.today.getDate() + 1)); // huomenna
-  tomorrow2Date = new Date(this.today.setDate(this.today.getDate() + 1)); // ylihuominen
 
-  
-  searchText : string = "";
-  pageNumber : number = 1;
-  events : any;
-  getAllEvents(searchText: string, pageNumber: number):void {
-    this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {     
-    this.events = data;
-    })
-  }
+  getPaginationPages(): number[] {
+    const totalPages = this.totalPages || 0;
+    const currentPage = this.newPageNumber;
+    const pages: number[] = [];
 
-  // avaa google mapsiin kohde
-  getGoogleMapsLink(latitude: number, longitude: number): string {
-    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
-    return encodeURI(url);
-  }
-  
-  getAllEventsDate(searchDate: string, pageNumber: number): void {
-    this.http.getEventDate(searchDate, pageNumber).subscribe((data: any) => {
-      this.events = data;
-      //this.EventsDateNextButtons();
-    })
-  }
-// search buttons methods
-  DoSearch() {
-    this.isLoading = true;
-    this.loadingDataWindow();
-    this.getAllEvents(this.searchText, this.newPageNumber = 1);
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 4) {
+        pages.push(1, 2, 3, 4, 5, -1, totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        pages.push(1, -1, totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, -1, currentPage - 1, currentPage, currentPage + 1, -1, totalPages);
+      }
     }
 
-  SearchStadion() {
-    this.isLoading = true;
-    this.loadingDataWindow();
-    this.getAllEvents(this.searchText = 'Stadion', this.newPageNumber = 1)
-  }
-  SearchLapset() {
-    this.isLoading = true;
-    this.loadingDataWindow();
-    this.getAllEvents(this.searchText = 'Lapset', this.newPageNumber = 1)
-  }
-  SearchHipHop() {
-    this.isLoading = true;
-    this.loadingDataWindow();
-    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1); 
-  }
-
-
-// Sivujen vaihdot by event
-newPageNumber = 1;
-onPageChangePlus(): any {
-  this.increasePageNumber();
-  this.getAllEvents(this.searchText, this.newPageNumber); 
-  }
-increasePageNumber(): void {
-  this.newPageNumber++;
-  }
-
-onPageChangeMinus(): any {
-  this.decreasePageNumber();
-  this.getAllEvents(this.searchText, this.newPageNumber);
-  }
-decreasePageNumber(): void {
-  if (this.newPageNumber > 1) {
-  this.newPageNumber--;
-  }
-  }
-  // Sivujen vaihdot by eventdate
-  onPageChangePlusDate(): any {
-    this.increasePageNumberDate();
-    this.getAllEventsDate(this.searchTextDate, this.newPageNumber); 
-    }
-  increasePageNumberDate(): void {
-    this.newPageNumber++;
-    }
-
-  onPageChangeMinusDate(): any {
-    this.decreasePageNumberDate();
-    this.getAllEventsDate(this.searchTextDate, this.newPageNumber);
-    }
-  decreasePageNumberDate(): void {
-    if (this.newPageNumber > 1) {
-    this.newPageNumber--;
-    }
-    }
-
-
-
-  // sorted by date
-  sortDate(isAsc: boolean) {
-    if (isAsc) {
-      this.events.data.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? 1 : ((b.start_time > a.start_time) ? -1 : 0)
-    )} else {
-      this.events.data.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? -1 : ((b.start_time > a.start_time) ? 1 : 0)
-    )}
-  }
-// DISABLING BUTTONS Functions see test buttons in HTML
-  button1Clicked = false;
-  button2Clicked = false;
-  button3Clicked = false;
-
-  onButton1Click() {
-    this.button1Clicked = false;
-    this.button2Clicked = true;
-    this.button3Clicked = false;
+    return pages;
   }
 
   onButton2Click() {
-    this.button1Clicked = false;
-    this.button2Clicked = false;
-    this.button3Clicked = true;
+    this.button2Clicked = !this.button2Clicked;
   }
 
-  onButton3Click() {
-    this.button1Clicked = false;
-    this.button2Clicked = false;
-    this.button3Clicked = true;
+  sortDate(isAsc: boolean) {
+    if (isAsc) {
+      this.filteredEvents.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? 1 : ((b.start_time > a.start_time) ? -1 : 0));
+    } else {
+      this.filteredEvents.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? -1 : ((b.start_time > a.start_time) ? 1 : 0));
+    }
   }
-  
+
+  getGoogleMapsLink(latitude: number, longitude: number): string {
+    return `https://www.google.com/maps?q=${latitude},${longitude}`;
+  }
+
+  // Use the imported search functions
+  DoSearch() {
+    DoSearch(this);
+  }
+
+  SearchStadion() {
+    SearchStadion(this);
+  }
+
+  SearchLapset() {
+    SearchLapset(this);
+  }
+
+  SearchHipHop() {
+    SearchHipHop(this);
+  }
+
+  SearchHIFK() {
+    SearchHIFK(this);
+  }
+
+  SearchJokerit() {
+    SearchJokerit(this);
+  }
+
+  SearchKonsertti() {
+    SearchKonsertti(this);
+  }
 }
-
-

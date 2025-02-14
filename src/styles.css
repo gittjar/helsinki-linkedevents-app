@@ -3,6 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
+body  
+{
+    font-family: 'Nunito', sans-serif;
+   
+  
+}
+
 .infoscreen {
     padding: 3%;
     width: 200px;
