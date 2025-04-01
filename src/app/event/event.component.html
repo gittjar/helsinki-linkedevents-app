@@ -84,10 +84,11 @@
 
             <aside class="cardtext">
               <h2>{{event?.name?.fi}}</h2>
+              <article class="event-start-time">Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</article>
+<br>
               <h3 *ngIf="event?.info_url?.fi?.length"><a href="{{event?.info_url?.fi}}">Liput ja lisätiedot <fa-icon [icon]="arrowUpRightFromBox"></fa-icon></a></h3>
               <ul>
                 <li>{{event?.short_description?.fi}}</li>
-                <li><span class="bg-emerald-200 ring-1 ring-green-600 p-0.5">Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</span></li>
                 <li>Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
                 <li>Osoite: {{event?.location?.street_address?.fi }}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}</li>
                 <li>

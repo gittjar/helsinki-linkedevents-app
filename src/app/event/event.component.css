@@ -19,12 +19,34 @@
 
 h2 {
   font-size: 1.7rem;
-  font-weight: 500;  
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  color: #000000;
+  text-align: center;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
+  border-bottom: 1px solid #f5f5f5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 h3 {
   font-size: 1.4;
   font-weight: 500;
+}
+
+.event-start-time {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #000000;
+  margin-top: 0.1rem !important;
+  margin-bottom: 0.1rem !important;
+  background-color: rgb(2, 226, 114);
+  padding: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ width: fit-content;
 }
 
 .search-button {
