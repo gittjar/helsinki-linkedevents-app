@@ -35,15 +35,54 @@
           <button class="search-button" (click)="onButton2Click(); DoSearch()">Search</button>
         </section>
       
-        <div class="button-group" role="group">
-          <button class="btn" (click)="onButton2Click(); SearchStadion()">Stadion<fa-icon [icon]="faArrowRight"></fa-icon></button>
-          <button class="btn" (click)="onButton2Click(); SearchLapset()">Lapset<fa-icon [icon]="faArrowRight"></fa-icon></button>
-          <button class="btn" (click)="onButton2Click(); SearchHipHop()">HipHop<fa-icon [icon]="faArrowRight"></fa-icon></button>
-          <button [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked"
-            type="button" class="btn" (click)="sortDate(true)">Vanhimmat<fa-icon [icon]="faArrowRight"></fa-icon></button>
-          <button [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked"
-            type="button" class="btn" (click)="sortDate(false)">Uusimmat<fa-icon [icon]="faArrowRight"></fa-icon></button>
-        </div>
+<div class="flex flex-wrap justify-center gap-2 my-4">
+  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
+    (click)="onButton2Click(); SearchStadion()">
+    Stadion <fa-icon [icon]="faArrowRight"></fa-icon>
+  </button>
+  
+  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
+    (click)="onButton2Click(); SearchLapset()">
+    Lapset <fa-icon [icon]="faArrowRight"></fa-icon>
+  </button>
+
+  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
+    (click)="onButton2Click(); SearchHipHop()">
+    HipHop <fa-icon [icon]="faArrowRight"></fa-icon>
+  </button>
+
+  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
+    (click)="onButton2Click(); SearchKonsertti()">
+    Konsertti <fa-icon [icon]="faArrowRight"></fa-icon>
+  </button>
+
+  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
+    (click)="onButton2Click(); SearchHIFK()">
+    HIFK <fa-icon [icon]="faArrowRight"></fa-icon>
+  </button>
+
+  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
+    (click)="onButton2Click(); SearchJokerit()">
+    Jokerit <fa-icon [icon]="faArrowRight"></fa-icon>
+  </button>
+
+  <button 
+    [ngClass]="{'opacity-50 cursor-not-allowed': button2Clicked}" 
+    [disabled]="button2Clicked"
+    class="px-4 py-2 font-semibold border-2 border-black bg-gray-200 hover:bg-gray-300 transition"
+    (click)="sortDate(true)">
+    Vanhimmat <fa-icon [icon]="faArrowRight"></fa-icon>
+  </button>
+
+  <button 
+    [ngClass]="{'opacity-50 cursor-not-allowed': button2Clicked}" 
+    [disabled]="button2Clicked"
+    class="px-4 py-2 font-semibold border-2 border-black bg-gray-200 hover:bg-gray-300 transition"
+    (click)="sortDate(false)">
+    Uusimmat <fa-icon [icon]="faArrowRight"></fa-icon>
+  </button>
+</div>
+
       </section>
 
       <hr>
@@ -99,7 +138,7 @@
               </ul>
             </aside>
 
-            <section class="liput bg-gradient-to-r from-indigo-500 to-indigo-800 text-stone-50">
+            <section class="liput bg-gradient-to-r from-green-200 to-green-100 text-stone-50">
               <h2>Lisätiedot</h2>
               <span *ngIf="event?.offers[0]?.is_free === true || false">Ilmaistapahtuma: {{event?.offers[0]?.is_free ? 'Kyllä' : 'Ei'}}<br></span>
               <span *ngIf="event?.offers[0]?.price?.fi.length">Liput: {{event?.offers[0]?.price?.fi}}<br></span>
