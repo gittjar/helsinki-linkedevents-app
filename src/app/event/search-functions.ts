@@ -40,3 +40,9 @@ export function DoSearch(component: any) {
     component.loadingDataWindow();
     component.getAllEvents(component.searchText = 'Konsertti', component.newPageNumber = 1);
   }
+
+  export function SearchDate(component: any) {
+    component.isLoading = true;
+    component.loadingDataWindow();
+    component.getAllEventsDate(component.searchTextDate, component.newPageNumber = 1);
+  }

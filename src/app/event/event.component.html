@@ -5,85 +5,50 @@
     </div>
 
     <div *ngIf="!isLoading">
-      <div class="button-group" role="group">
-        <button
-          [ngClass]="{'disabled-button': button1Clicked}" [disabled]="button1Clicked"
-          (click)="changeToday(); onButton2Click()"
-          type="button"
-          class="btn">
-          {{currentDate | date:'dd.MM.yyyy'}} Tänään
-        </button>
-        <button
-          [ngClass]="{'disabled-button': button1Clicked}" [disabled]="button1Clicked"
-          (click)="changeToday1(); onButton2Click()"
-          type="button"
-          class="btn">
-          {{tomorrowDate | date:'dd.MM.yyyy'}} Huomenna
-        </button>
-        <button
-          [ngClass]="{'disabled-button': button1Clicked}" [disabled]="button1Clicked"
-          (click)="changeToday2(); onButton2Click()"
-          type="button"
-          class="btn">
-          {{tomorrow2Date | date:'dd.MM.yyyy'}} Ylihuomenna
-        </button>
+<section class="search-group">
+  <form class="search-form" (ngSubmit)="DoSearch()" autocomplete="off">
+    <div class="search-fields">
+      <div class="search-field">
+        <label for="searchText" class="visually-hidden">Hakusana</label>
+        <input
+          id="searchText"
+          class="search-input"
+          type="text"
+          [(ngModel)]="searchText"
+          name="searchText"
+          placeholder="Hae tapahtumia"
+          autocomplete="off"
+        />
+        <button type="submit" class="search-button">Hae</button>
       </div>
+      <div class="search-field">
+        <label for="searchDate" class="visually-hidden">Päivämäärä</label>
+        <input
+          id="searchDate"
+          class="search-input"
+          type="date"
+          [(ngModel)]="searchTextDate"
+          name="searchTextDate"
+        />
+                <button type="button" class="search-button" (click)="SearchDate()">Hae päivällä</button>
 
-      <section class="search-group">
-        <section class="button-group" role="group">
-          <input class="search-input" type="text" [(ngModel)]="searchText" placeholder="Hae tapahtumia" (keyup.enter)="DoSearch()">
-          <button class="search-button" (click)="onButton2Click(); DoSearch()">Search</button>
-        </section>
+      </div>
+    </div>
+  </form>
+
+  <div class="quick-filters">
+    <button class="btn" (click)="onButton2Click(); SearchStadion()">Stadion <fa-icon [icon]="faArrowRight"></fa-icon></button>
+    <button class="btn" (click)="onButton2Click(); SearchLapset()">Lapset <fa-icon [icon]="faArrowRight"></fa-icon></button>
+    <button class="btn" (click)="onButton2Click(); SearchHipHop()">HipHop <fa-icon [icon]="faArrowRight"></fa-icon></button>
+    <button class="btn" (click)="onButton2Click(); SearchKonsertti()">Konsertti <fa-icon [icon]="faArrowRight"></fa-icon></button>
+    <button class="btn" (click)="onButton2Click(); SearchHIFK()">HIFK <fa-icon [icon]="faArrowRight"></fa-icon></button>
+    <button class="btn" (click)="onButton2Click(); SearchJokerit()">Jokerit <fa-icon [icon]="faArrowRight"></fa-icon></button>
+    <button class="btn" [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked" (click)="sortDate(true)">Vanhimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
+    <button class="btn" [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked" (click)="sortDate(false)">Uusimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
+  </div>
+</section>
+
       
-<div class="flex flex-wrap justify-center gap-2 my-4">
-  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
-    (click)="onButton2Click(); SearchStadion()">
-    Stadion <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-  
-  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
-    (click)="onButton2Click(); SearchLapset()">
-    Lapset <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-
-  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
-    (click)="onButton2Click(); SearchHipHop()">
-    HipHop <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-
-  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
-    (click)="onButton2Click(); SearchKonsertti()">
-    Konsertti <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-
-  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
-    (click)="onButton2Click(); SearchHIFK()">
-    HIFK <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-
-  <button class="px-4 py-2 font-semibold border-2 border-black bg-green-100 hover:bg-green-200 transition"
-    (click)="onButton2Click(); SearchJokerit()">
-    Jokerit <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-
-  <button 
-    [ngClass]="{'opacity-50 cursor-not-allowed': button2Clicked}" 
-    [disabled]="button2Clicked"
-    class="px-4 py-2 font-semibold border-2 border-black bg-gray-200 hover:bg-gray-300 transition"
-    (click)="sortDate(true)">
-    Vanhimmat <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-
-  <button 
-    [ngClass]="{'opacity-50 cursor-not-allowed': button2Clicked}" 
-    [disabled]="button2Clicked"
-    class="px-4 py-2 font-semibold border-2 border-black bg-gray-200 hover:bg-gray-300 transition"
-    (click)="sortDate(false)">
-    Uusimmat <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-</div>
-
-      </section>
 
       <hr>
 
@@ -122,19 +87,28 @@
             </figure>
 
             <aside class="cardtext">
-              <h2>{{event?.name?.fi}}</h2>
+              <h2 >{{event?.name?.fi}}</h2>
               <article class="event-start-time">Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</article>
 <br>
-              <h3 *ngIf="event?.info_url?.fi?.length"><a href="{{event?.info_url?.fi}}">Liput ja lisätiedot <fa-icon [icon]="arrowUpRightFromBox"></fa-icon></a></h3>
+              <h3 *ngIf="event?.info_url?.fi?.length" class="border-bottom"><a href="{{event?.info_url?.fi}}">Liput ja lisätiedot <fa-icon [icon]="arrowUpRightFromBox"></fa-icon></a></h3>
               <ul>
-                <li>{{event?.short_description?.fi}}</li>
-                <li>Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
-                <li>Osoite: {{event?.location?.street_address?.fi }}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}</li>
-                <li>
-                  <a [href]="getGoogleMapsLink(event?.location?.position?.coordinates[1], event?.location?.position?.coordinates[0])" target="_blank">Avaa Google Mapsiin
-                    <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
-                  </a>
-                </li>
+                <li class="border-bottom">{{event?.short_description?.fi}}</li>
+                <li class="border-bottom">Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
+              <ul>
+  <ng-container *ngIf="hasLocation(event); else noLocation">
+    <li class="border-bottom" *ngIf="event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi">
+      Osoite: {{event?.location?.street_address?.fi}}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}
+    </li>
+    <li *ngIf="hasValidCoordinates(event)">
+      <a [href]="getGoogleMapsLink(event?.location?.position?.coordinates[1], event?.location?.position?.coordinates[0])" target="_blank">
+        Avaa Google Mapsiin <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
+      </a>
+    </li>
+  </ng-container>
+  <ng-template #noLocation>
+    <li class="bg-gray-200">Ei ilmoitettuja paikkatietoja.</li>
+  </ng-template>
+</ul>
               </ul>
             </aside>
 

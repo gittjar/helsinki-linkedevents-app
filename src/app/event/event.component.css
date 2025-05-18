@@ -1,119 +1,142 @@
 .main {
-  margin-right: 25%;
-  margin-left: 25%;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 1rem;
 }
 
 .page-info {
-  margin-top: 0.5%;
-  margin-bottom: 0.5%;
+  margin: 0.5% 0;
   font-size: 1rem;
   font-weight: 600;
   border: #007bff 2px solid;
-  border-left: #007bff 10px solid;
+  border-left-width: 10px;
   border-radius: 3px;
   padding: 1%;
-  background-color: #f8f8f8;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: fit-content; 
+  background: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: fit-content;
 }
 
 h2 {
   font-size: 1.7rem;
   font-weight: 500;
-  margin: 0;
-  padding: 0;
-  color: #000000;
+  margin: 0.5% 0;
+  color: #000;
   text-align: center;
-  margin-top: 0.5%;
-  margin-bottom: 0.5%;
-  border-bottom: 1px solid #f5f5f5;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
 }
 
 h3 {
-  font-size: 1.4;
+  font-size: 1.2rem;
   font-weight: 500;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #727272;
+  padding-bottom: 0.5rem;
+}
+
+.search-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0 1rem 0;
+  width: 100%;
+}
+
+.search-form {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.search-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-field {
+  flex: 1 1 180px;
+  min-width: 140px;
+}
+
+.search-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-input[type="text"],
+.search-input[type="date"] {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f9fff5;
+  transition: border 0.2s;
+  margin-bottom: 0.4rem;
+}
+
+.search-input:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+.search-button, .btn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 700;
+  color: #161616;
+  background: linear-gradient(90deg, #f4f8f8 0%, #9cfabf 100%);
+  border: 1px solid #141414;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(34,211,238,0.08);
+  transition: background 0.2s, opacity 0.2s, box-shadow 0.2s;
+  margin: 0 0.2rem;
+}
+
+.search-button:hover, .btn:hover {
+    background: linear-gradient(90deg, #e6fcfc 0%, #43fa86 100%);
+}
+
+.disabled-button, .btn:disabled, .search-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #a8a8a9 !important;
+  color: #f9f8f8 !important;
+}
+
+.quick-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .event-start-time {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #000000;
-  margin-top: 0.1rem !important;
-  margin-bottom: 0.1rem !important;
-  background-color: rgb(2, 226, 114);
-  padding: 0.5rem;
+  color: #000;
+  margin: 0.1rem 0 !important;
+  background: #a7f3d0;
+  border: #22d3ee 2px solid;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
- width: fit-content;
+  padding: 0.5rem 1rem;
+  width: fit-content;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
-.search-button {
-  padding: 1%;
-  border-radius: 0px;
-  font-weight: 700;
-  color: black;
-  background-color: #84fc8a;
-  border-top: 2px solid #000000;
-  border-bottom: 2px solid #000000;
-  border-right: #000000 2px solid;
-  cursor: pointer;
-  margin: 0;
-}
-
-.btn {
-  padding: 1%;
-  border-radius: 0px;
-  font-weight: 700;
-  color: black;
-  background-color: #f8f8f8;
-  border: 2px solid #000000;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.btn:hover {
-  opacity: 0.85;
-}
-
-.inline-flex {
-  margin: 0.5%;
-}
-
-.disabled-button {
-  opacity: 0.2;
-  cursor: not-allowed;
-  color: #f9f8f8;
-  background-color: #a8a8a9;
-}
-
-a {
-  color: rgb(49, 49, 247);
-}
-
-a:hover {
-  opacity: 0.8;
-}
-
-.search-input {
-  width: 100%;
-  padding: 8px 12px;
-  margin: 0px;
-  display: inline-block;
-  background-color: #f9fff5;
-  border:#000000 2px solid;
-
-}
-
-/* LOADING DATA */
 .loading-message {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.6);
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255,255,255,0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,21 +144,20 @@ a:hover {
 }
 
 .loading-message p {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, sans-serif;
 }
 
 .keskiosa {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .korttilista {
   width: 100%;
 }
-
-/* CARDS */
 .eventcard {
   display: flex;
   align-items: stretch; /* Important: makes children equal height */
@@ -168,129 +190,137 @@ a:hover {
 .cardimage img:hover {
   opacity: 0.8;
 }
+.cardimage figcaption {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+  padding: 0.5rem;
+}
 
+.liput {
+  padding: 1%;
+  width: 20%;
+  min-width: 120px;
+  border-radius: 0 12px 12px 0;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-left: #666 2px solid;
+}
 
 .eventcard:hover {
-  background-color: #f0f0f0;
+  background: #f0f0f0;
 }
 
 .cardtext {
   margin: 0.5%;
   width: 60%;
+  min-width: 180px;
 }
 
 .smalltext {
-  font-size: 0.5;
+  font-size: 0.8rem;
   color: #a4a3a3;
 }
 
-
-/* Infowindow */
-.window {
-  position: fixed;
-  top: 5%;
-  left: 50%;
-  font-weight: 600;
-  transform: translateX(-50%);
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
-  animation: fadeOut 2s;
+li {
+  list-style: none;
+  padding: 0.3em 0;
 }
 
-/* LIPUT */
 .liput {
   padding: 1%;
   width: 20%;
-  border-radius: 0px 12px 12px 0px;
+  border-radius: 0 12px 12px 0;
   color: #000;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  border-left: #666 2px solid;
+  min-width: 120px;
 }
 
-
-/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
   list-style: none;
   padding: 0;
   margin: 20px 0;
+  gap: 0.5rem;
 }
 
 .page-item {
-  margin: 0 5px;
+  margin: 0;
 }
 
 .page-link {
   padding: 6px 12px;
-  border: 2px solid #000000;
-  color: black;
-  background-color: #f8f8f8;
+  border: 1px solid #007bff;
+  color: #007bff;
+  background: #f8f8f8;
   cursor: pointer;
   border-radius: 4px;
   text-decoration: none;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.2s, color 0.2s;
 }
 
 .page-link:hover {
-  opacity: 0.85;
+  background: #e0f2fe;
+  color: #0369a1;
 }
 
 .page-item.active .page-link {
-  background-color: #007bff;
-  color: white;
+  background: #007bff;
+  color: #fff;
   border-color: #007bff;
 }
 
 .page-item.disabled .page-link {
-  background-color: #cccccc;
-  color: #666666;
+  background: #cccccc;
+  color: #666;
   cursor: not-allowed;
 }
 
-.search-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0;
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
-.search-group .btn-group {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
+/* Responsive adjustments */
 
-.search-group .btn-group .btn {
-  margin: 0px;
-}
 
-/* Button Group */
-.button-group {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
+@media (max-width: 600px) {
+  .search-fields, .quick-filters { flex-direction: column; gap: 0.5rem; }
+  .main { padding: 0.5rem; }
+  .eventcard { margin-bottom: 1.5rem; }
 }
-
-.button-group .btn {
-  border-radius: 0;
-  margin: 0;
-}
-
-.button-group .btn:first-child {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-
-.button-group .btn:last-child {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-
-.button-group .btn:not(:last-child) {
-  border-right: none;
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .eventcard {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+  .cardimage, figure {
+    width: 100%;
+    border-right: none;
+    border-bottom: #666 2px solid;
+    border-radius: 12px 12px 0 0;
+  }
+  .cardimage img {
+    border-radius: 12px 12px 0 0;
+  }
+  .cardtext, .liput {
+    width: 100%;
+    min-width: 0;
+  }
+  .liput {
+    border-left: none;
+    border-top: #666 2px solid;
+    border-radius: 0 0 12px 12px;
+  }
 }

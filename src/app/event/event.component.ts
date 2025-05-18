@@ -181,6 +181,23 @@ export class EventComponent implements OnInit {
     return `https://www.google.com/maps?q=${latitude},${longitude}`;
   }
 
+  hasValidCoordinates(event: any): boolean {
+  const coords = event?.location?.position?.coordinates;
+  return Array.isArray(coords) &&
+    coords.length === 2 &&
+    coords[0] != null &&
+    coords[1] != null &&
+    this.getGoogleMapsLink(coords[1], coords[0]) !== 'https://www.google.com/maps?q=null,null';
+}
+
+hasLocation(event: any): boolean {
+  // Returns true if there is an address or valid coordinates
+  return (
+    (event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi) ||
+    this.hasValidCoordinates(event)
+  );
+}
+
   // Use the imported search functions
   DoSearch() {
     DoSearch(this);
@@ -208,5 +225,11 @@ export class EventComponent implements OnInit {
 
   SearchKonsertti() {
     SearchKonsertti(this);
+  }
+
+  SearchDate() {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
   }
 }
