@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 interface ImageResponse {
@@ -18,7 +18,17 @@ export class ImageService {
 
   constructor(private http: HttpClient) { }
 
-  getImages(page: number = 1, searchText: string = '', sort: string = ''): Observable<any> {
+  /**
+   * Fetch images with optional search and sorting.
+   * @param page Page number (default 1)
+   * @param searchText Search text (optional)
+   * @param sort Sort order: '-last_modified_time', 'last_modified_time', 'id', '-id', 'name', '-name'
+   */
+  getImages(
+    page: number = 1,
+    searchText: string = '',
+    sort: string = '-last_modified_time' // Default: descending by last_modified_time
+  ): Observable<any> {
     let url = `${this.IMGURL}?page=${page}`;
 
     if (searchText) {

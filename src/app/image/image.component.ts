@@ -14,12 +14,12 @@ export class ImageComponent implements OnInit {
   newPageNumber = 1;
   isLoading: boolean = true;
   copied: boolean = false;
-  sortOrder: string = '';
+  sortOrder: string = '-last_modified_time'; // Default sort by last modified descending
   searchTerm: string = '';
-  lastSearchTerm: string = ''; // Add this property
-  totalCount: number = 0; 
-  totalPages: number = 0; 
-  itemsPerPage: number = 10; 
+  lastSearchTerm: string = '';
+  totalCount: number = 0;
+  totalPages: number = 0;
+  itemsPerPage: number = 0; // Will be set dynamically
   showJumbotron: boolean = false;
   selectedImage: any = null;
 
@@ -36,20 +36,33 @@ export class ImageComponent implements OnInit {
     this.isLoading = true;
     this.imageService.getImages(page, searchText, this.sortOrder).subscribe((data: any) => {
       this.images = data;
-      this.totalCount = data.meta.count; 
+      this.totalCount = data.meta.count;
+      // Set itemsPerPage based on API response, fallback to 1 to avoid division by zero
+      this.itemsPerPage = (data.data && data.data.length) ? data.data.length : 1;
       this.totalPages = Math.ceil(this.totalCount / this.itemsPerPage);
+
+      // If the current page is out of range (e.g., after a search with fewer results), go to last valid page
+      if (this.newPageNumber > this.totalPages && this.totalPages > 0) {
+        this.newPageNumber = this.totalPages;
+        this.getImageData(this.newPageNumber, this.searchTerm);
+        return;
+      }
+
       this.isLoading = false;
     });
   }
 
   selectPage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
     this.newPageNumber = page;
     this.getImageData(this.newPageNumber, this.searchTerm);
   }
 
   onPageChangePlus(): void {
-    this.newPageNumber++;
-    this.getImageData(this.newPageNumber, this.searchTerm);
+    if (this.newPageNumber < this.totalPages) {
+      this.newPageNumber++;
+      this.getImageData(this.newPageNumber, this.searchTerm);
+    }
   }
 
   onPageChangeMinus(): void {
@@ -61,7 +74,7 @@ export class ImageComponent implements OnInit {
 
   searchImages(): void {
     this.newPageNumber = 1;
-    this.lastSearchTerm = this.searchTerm; // Update the last search term
+    this.lastSearchTerm = this.searchTerm;
     this.getImageData(this.newPageNumber, this.searchTerm);
   }
 
