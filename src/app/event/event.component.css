@@ -298,6 +298,9 @@ li {
   .search-fields, .quick-filters { flex-direction: column; gap: 0.5rem; }
   .main { padding: 0.5rem; }
   .eventcard { margin-bottom: 1.5rem; }
+  .pagination {
+    font-size: xx-small;
+  } 
 }
 /* Responsive adjustments */
 @media (max-width: 900px) {
