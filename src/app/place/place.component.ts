@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PlaceService } from '../place.service';
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { faMagnifyingGlassLocation } from '@fortawesome/free-solid-svg-icons';
-import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpRightFromSquare, faChevronRight, faMagnifyingGlassLocation, faRectangleXmark, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-place',
@@ -12,24 +8,13 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./place.component.css']
 })
 export class PlaceComponent implements OnInit {
+  ArrowUpRightIcon = faArrowUpRightFromSquare;
+  ChevronRight = faChevronRight;
+  MagnifyingGlassLocation = faMagnifyingGlassLocation;
+  RectangXmark = faRectangleXmark;
+  ChevronDown = faChevronDown;
 
-    // fontawesome
-    ArrowUpRightIcon = faArrowUpRightFromSquare;
-    ChevronRight = faChevronRight;
-    MagnifyingGlassLocation = faMagnifyingGlassLocation;
-    RectangXmark = faRectangleXmark;
-    ChevronDown = faChevronDown;
-   
-    // toggle button
-
-    toggleStates = new Map<string, boolean>(); // To track toggle states by place id
-
-    toggleInfo(placeId: string): void {
-      const currentState = this.toggleStates.get(placeId) || false;
-      this.toggleStates.set(placeId, !currentState);
-    }
-
-    // Google Maps API
+  toggleStates = new Map<string, boolean>();
 
   linkedEventsApiRoot: string = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/';
   mapLoaded!: boolean;
@@ -42,6 +27,9 @@ export class PlaceComponent implements OnInit {
     zoom: 12,
   };
   currentPage = 1;
+  totalPages = 1;
+  totalCount = 0;
+  pageSize = 20;
   nextPageUrl: string | null = null;
   previousPageUrl: string | null = null;
   markers = [] as any;
@@ -49,8 +37,7 @@ export class PlaceComponent implements OnInit {
   showWindow = false;
   ImageDetail: any = {};
   public loadedPlaces: any[] = [];
-
-
+  hoveredImageId: number | null = null;
 
   constructor(private placeservice: PlaceService) {}
 
@@ -65,23 +52,13 @@ export class PlaceComponent implements OnInit {
   }
 
   async showContent(textid: string, pageNumber: number): Promise<void> {
-    let url = `${this.linkedEventsApiRoot}place/?text=${textid}&page=${pageNumber}`;
+    console.log(`showContent called with textid="${textid}", pageNumber=${pageNumber}`);
+  let url = `${this.linkedEventsApiRoot}place/?page=${pageNumber}&text=${textid}`;
     this.placeservice.getPlacesByUrl(url).subscribe(async response => {
+      console.log(`API response for page ${pageNumber}:`, response);
       this.markers.forEach((marker: { setMap: (arg0: null) => any; }) => marker.setMap(null));
       this.markers = [];
-      this.loadedPlaces = [];
-
-      const placesWithImages = await Promise.all(response.data.map(async (place: any) => {
-        if (place.images && place.images.length > 0) {
-          const imageData = await this.placeservice.getPlaceImageById(place.images[0].id).toPromise();
-          if (imageData) {
-            place.imageUrl = imageData.url; // Assign the image URL to the place
-          }
-        }
-        return place;
-      }));
-
-      this.loadedPlaces = placesWithImages; // Update the loaded places with images
+      this.loadedPlaces = response.data || [];
 
       this.loadedPlaces.forEach((place: any) => {
         const marker = new google.maps.Marker({
@@ -111,56 +88,85 @@ export class PlaceComponent implements OnInit {
 
       this.nextPageUrl = response.meta.next || null;
       this.previousPageUrl = response.meta.previous || null;
+      this.totalCount = response.meta.count;
+      this.pageSize = response.meta.limit || 20;
+      this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+      this.currentPage = pageNumber;
+      console.log(`Updated currentPage: ${this.currentPage}, totalPages: ${this.totalPages}`);
     });
   }
 
-  // Methods for search, reset, and navigation
+  toggleInfo(placeId: string): void {
+    const currentState = this.toggleStates.get(placeId) || false;
+    this.toggleStates.set(placeId, !currentState);
+  }
+
   doSearch(): void {
+    this.currentPage = 1;
     this.showContent(this.textid, this.currentPage);
   }
 
   resetMap(): void {
     this.textid = '';
+    this.currentPage = 1;
     this.initMap();
   }
 
-// In the parent component from search-select.component.ts, add the following method:
-handleSearch(searchTerm: string): void {
-  this.textid = searchTerm;
-  this.showContent(this.textid, this.currentPage);
-}
-
-  // Add similar methods for Haaga, Ravintola, Kauppakeskus, Teatteri, Urheilu
-
-  hoveredImageId: number | null = null;
+  handleSearch(searchTerm: string): void {
+    this.textid = searchTerm;
+    this.currentPage = 1;
+    this.showContent(this.textid, this.currentPage);
+  }
 
   getImageById(imageId: number): void {
-    this.hoveredImageId = imageId; // Track the hovered image ID
+    this.hoveredImageId = imageId;
     this.placeservice.getPlaceImageById(imageId).subscribe((data: any) => {
       this.ImageDetail = data;
     });
   }
-  
+
   closeWindow(): void {
-    this.hoveredImageId = null; // Reset the hover state
+    this.hoveredImageId = null;
   }
 
   // Pagination methods
   nextPage(): void {
-    if (this.nextPageUrl) {
-      this.currentPage++; // Increment current page
+    if (this.currentPage < this.totalPages) {
+      console.log(`Next page clicked. Current: ${this.currentPage}, Going to: ${this.currentPage + 1}`);
+      this.currentPage++;
       this.showContent(this.textid, this.currentPage);
     }
   }
-  
+
   previousPage(): void {
-    if (this.previousPageUrl && this.currentPage > 1) {
-      this.currentPage--; // Decrement current page
+    if (this.currentPage > 1) {
+      console.log(`Previous page clicked. Current: ${this.currentPage}, Going to: ${this.currentPage - 1}`);
+      this.currentPage--;
       this.showContent(this.textid, this.currentPage);
     }
   }
 
   goToPage(pageNumber: number): void {
-    this.showContent(this.textid, pageNumber);
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      console.log(`goToPage clicked. Going to page: ${pageNumber}`);
+      this.currentPage = pageNumber;
+      this.showContent(this.textid, this.currentPage);
+    }
+  }
+
+  get pages(): number[] {
+    const pages: number[] = [];
+    if (this.totalPages <= 7) {
+      for (let i = 1; i <= this.totalPages; i++) pages.push(i);
+    } else {
+      if (this.currentPage <= 4) {
+        pages.push(1,2,3,4,5,-1,this.totalPages);
+      } else if (this.currentPage >= this.totalPages - 3) {
+        pages.push(1,-1,this.totalPages-4,this.totalPages-3,this.totalPages-2,this.totalPages-1,this.totalPages);
+      } else {
+        pages.push(1,-1,this.currentPage-1,this.currentPage,this.currentPage+1,-1,this.totalPages);
+      }
+    }
+    return pages;
   }
 }

@@ -116,6 +116,53 @@ h3 {
     color: rgb(13, 26, 1);
   }
 
+  /* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: 0.3em;
+}
+
+.page-item {
+  display: inline-block;
+  margin-right: 0.1rem;
+  background-color: #f8f8f8;
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.page-item:hover {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+
+.active-page {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.active-page:hover {
+  background-color: rgba(0,123,255,0.8);
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
+.active-page .page-link {
+  color: white;
+}
+
   .korttilista {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Creates 3 columns with equal width */
