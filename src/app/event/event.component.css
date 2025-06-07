@@ -1,9 +1,11 @@
+/* General Layout */
 .main {
   margin: 0 auto;
   max-width: 900px;
   padding: 1rem;
 }
 
+/* Info Box */
 .page-info {
   margin: 0.5% 0;
   font-size: 1rem;
@@ -17,6 +19,7 @@
   width: fit-content;
 }
 
+/* Headings */
 h2 {
   font-size: 1.7rem;
   font-weight: 500;
@@ -24,35 +27,32 @@ h2 {
   color: #000;
   text-align: center;
 }
-
 h3 {
   font-size: 1.2rem;
   font-weight: 500;
 }
 
+/* Links */
 a:hover {
   text-decoration: none;
   color: #007bff;
 }
 
+/* Borders */
 .border-bottom {
   border-bottom: 1px solid #727272;
   padding-bottom: 0.5rem;
 }
 
+/* Search */
 .search-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 0 1rem 0;
-  width: 100%;
-}
-
-.search-form {
-  width: 100%;
   margin-bottom: 1rem;
+  width: 100%;
 }
-
+.search-form { width: 100%; margin-bottom: 1rem; }
 .search-fields {
   display: flex;
   flex-wrap: wrap;
@@ -60,17 +60,8 @@ a:hover {
   align-items: center;
   justify-content: center;
 }
-
-.search-field {
-  flex: 1 1 180px;
-  min-width: 140px;
-}
-
-.search-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
+.search-field { flex: 1 1 180px; min-width: 140px; }
+.search-actions { display: flex; gap: 0.5rem; }
 .search-input[type="text"],
 .search-input[type="date"] {
   width: 100%;
@@ -82,12 +73,10 @@ a:hover {
   transition: border 0.2s;
   margin-bottom: 0.4rem;
 }
-
 .search-input:focus {
   border-color: #0056b3;
   outline: none;
 }
-
 .search-button, .btn {
   padding: 0.5rem 1.2rem;
   border-radius: 6px;
@@ -100,11 +89,9 @@ a:hover {
   transition: background 0.2s, opacity 0.2s, box-shadow 0.2s;
   margin: 0 0.2rem;
 }
-
 .search-button:hover, .btn:hover {
-    background: linear-gradient(90deg, #e6fcfc 0%, #43fa86 100%);
+  background: linear-gradient(90deg, #e6fcfc 0%, #43fa86 100%);
 }
-
 .disabled-button, .btn:disabled, .search-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -112,6 +99,7 @@ a:hover {
   color: #f9f8f8 !important;
 }
 
+/* Quick Filters */
 .quick-filters {
   display: flex;
   flex-wrap: wrap;
@@ -120,6 +108,7 @@ a:hover {
   margin-top: 1rem;
 }
 
+/* Event Start Time */
 .event-start-time {
   font-size: 0.8rem;
   font-weight: 600;
@@ -133,6 +122,7 @@ a:hover {
   box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
+/* Loading */
 .loading-message {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -142,61 +132,54 @@ a:hover {
   justify-content: center;
   z-index: 9999;
 }
-
 .loading-message p {
   font-size: 1.5rem;
   font-weight: 600;
   font-family: system-ui, sans-serif;
 }
 
-.keskiosa {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
+/* Layout */
+.keskiosa { display: flex; flex-direction: row; width: 100%; }
+.korttilista { width: 100%; }
 
-.korttilista {
-  width: 100%;
-}
+/* Event Card */
 .eventcard {
   display: flex;
-  align-items: stretch; /* Important: makes children equal height */
-  border: #666666 2px solid;
+  align-items: stretch;
+  border: #666 2px solid;
   border-radius: 12px;
-  background-color: #f7f3f3;
-  margin: 0.2%;
-  margin-bottom: 1%;
+  background: #f7f3f3;
+  margin: 0.2% 0 1% 0.2%;
   overflow: hidden;
 }
-
+.eventcard:hover { background: #f0f0f0; }
 .cardimage, figure {
   width: 35%;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  height: auto;
-  align-self: stretch; /* Take full parent height */
+  align-self: stretch;
 }
-
 .cardimage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   border-radius: 12px 0 0 12px;
-  background-color: #e0e0e0;
+  background: #e0e0e0;
 }
-.cardimage img:hover {
-  opacity: 0.8;
-}
+.cardimage img:hover { opacity: 0.8; }
 .cardimage figcaption {
   font-size: 0.8rem;
   color: #666;
   text-align: center;
   padding: 0.5rem;
 }
+.cardtext { margin: 0.5%; width: 60%; min-width: 180px; }
+.smalltext { font-size: 0.8rem; color: #a4a3a3; }
 
+/* Ticket Section */
 .liput {
   padding: 1%;
   width: 20%;
@@ -209,38 +192,10 @@ a:hover {
   border-left: #666 2px solid;
 }
 
-.eventcard:hover {
-  background: #f0f0f0;
-}
+/* List */
+li { list-style: none; padding: 0.3em 0; }
 
-.cardtext {
-  margin: 0.5%;
-  width: 60%;
-  min-width: 180px;
-}
-
-.smalltext {
-  font-size: 0.8rem;
-  color: #a4a3a3;
-}
-
-li {
-  list-style: none;
-  padding: 0.3em 0;
-}
-
-.liput {
-  padding: 1%;
-  width: 20%;
-  border-radius: 0 12px 12px 0;
-  color: #000;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  border-left: #666 2px solid;
-  min-width: 120px;
-}
-
+/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
@@ -249,11 +204,7 @@ li {
   margin: 20px 0;
   gap: 0.5rem;
 }
-
-.page-item {
-  margin: 0;
-}
-
+.page-item { margin: 0; }
 .page-link {
   padding: 6px 12px;
   border: 1px solid #007bff;
@@ -264,24 +215,22 @@ li {
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
 }
-
 .page-link:hover {
   background: #e0f2fe;
   color: #0369a1;
 }
-
 .page-item.active .page-link {
   background: #007bff;
   color: #fff;
   border-color: #007bff;
 }
-
 .page-item.disabled .page-link {
-  background: #cccccc;
+  background: #ccc;
   color: #666;
   cursor: not-allowed;
 }
 
+/* Accessibility */
 .visually-hidden {
   position: absolute;
   left: -10000px;
@@ -291,36 +240,23 @@ li {
   overflow: hidden;
 }
 
-/* Responsive adjustments */
-
-
+/* Responsive */
 @media (max-width: 600px) {
   .search-fields, .quick-filters { flex-direction: column; gap: 0.5rem; }
   .main { padding: 0.5rem; }
   .eventcard { margin-bottom: 1.5rem; }
-  .pagination {
-    font-size: xx-small;
-  } 
+  .pagination { font-size: xx-small; }
 }
-/* Responsive adjustments */
 @media (max-width: 900px) {
-  .eventcard {
-    flex-direction: column;
-    flex-wrap: wrap;
-  }
+  .eventcard { flex-direction: column; flex-wrap: wrap; }
   .cardimage, figure {
     width: 100%;
     border-right: none;
     border-bottom: #666 2px solid;
     border-radius: 12px 12px 0 0;
   }
-  .cardimage img {
-    border-radius: 12px 12px 0 0;
-  }
-  .cardtext, .liput {
-    width: 100%;
-    min-width: 0;
-  }
+  .cardimage img { border-radius: 12px 12px 0 0; }
+  .cardtext, .liput { width: 100%; min-width: 0; }
   .liput {
     border-left: none;
     border-top: #666 2px solid;
