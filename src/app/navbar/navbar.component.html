@@ -2,14 +2,16 @@
     <section class="upnavi bg-slate-900 h-20 flex justify-between items-center">
       <!-- Hamburger Menu Button -->
       <button (click)="toggleMenu()" class="hamburger-menu m-10">
-        <!-- Hamburger Icon -->
-        <svg *ngIf="!menuVisible" class="w-6 h-6 hamburger-animate" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"></path>
-        </svg>
-        <!-- "X" Icon -->
-        <svg *ngIf="menuVisible" class="w-6 h-6 x-animate" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
+          <!-- Hamburger Icon: 2 lines, bigger -->
+          <svg *ngIf="!menuVisible" class="w-8 h-8 hamburger-animate" fill="none" stroke="currentColor" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <line x1="6" y1="10" x2="26" y2="10" stroke-width="3" stroke-linecap="round"/>
+            <line x1="6" y1="22" x2="26" y2="22" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <!-- "X" Icon (unchanged, but bigger) -->
+          <svg *ngIf="menuVisible" class="w-8 h-8 x-animate" fill="none" stroke="currentColor" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <line x1="8" y1="8" x2="24" y2="24" stroke-width="3" stroke-linecap="round"/>
+            <line x1="24" y1="8" x2="8" y2="24" stroke-width="3" stroke-linecap="round"/>
+          </svg>
       </button>
   
       <!-- Always Visible Text -->

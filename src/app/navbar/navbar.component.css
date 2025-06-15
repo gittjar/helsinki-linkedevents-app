@@ -73,14 +73,11 @@ h3 {
     margin-bottom: 0.5rem;
     padding-right: 1rem;
     border-radius: 5%;
+    border: #192231 solid 2px;
 }
 
 .gray-back:hover {
-    background-color: #f5f4f4 !important;
-    width: fit-content  !important;
-    margin-left: 1rem;
-    padding-right: 1rem;
-    border-radius: 5%;
+    border-left: #cacaca solid 2px;
 }
 
 

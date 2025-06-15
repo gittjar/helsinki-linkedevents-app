@@ -5,6 +5,8 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 # push to common branch will trigger deploy
+# NOT IN USE
+# This pipeline is used to build and deploy the Helsinki Linked Events application to Azure App Service.
 trigger:
 - common
 
