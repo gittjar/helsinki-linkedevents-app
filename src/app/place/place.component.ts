@@ -53,7 +53,29 @@ export class PlaceComponent implements OnInit {
 
   async showContent(textid: string, pageNumber: number): Promise<void> {
     console.log(`showContent called with textid="${textid}", pageNumber=${pageNumber}`);
-  let url = `${this.linkedEventsApiRoot}place/?page=${pageNumber}&text=${textid}`;
+    
+    // Properly encode the search term and construct the URL with correct parameter order
+    const encodedTextid = encodeURIComponent(textid.trim());
+    let url = `${this.linkedEventsApiRoot}place/`;
+    
+    // Build parameters array to ensure correct order
+    const params: string[] = [];
+    
+    // Add text parameter first if there's a search term
+    if (encodedTextid) {
+      params.push(`text=${encodedTextid}`);
+    }
+    
+    // Add page parameter
+    params.push(`page=${pageNumber}`);
+    
+    // Combine all parameters
+    if (params.length > 0) {
+      url += `?${params.join('&')}`;
+    }
+    
+    console.log('API URL:', url);
+    
     this.placeservice.getPlacesByUrl(url).subscribe(async response => {
       console.log(`API response for page ${pageNumber}:`, response);
       this.markers.forEach((marker: { setMap: (arg0: null) => any; }) => marker.setMap(null));
@@ -93,6 +115,9 @@ export class PlaceComponent implements OnInit {
       this.totalPages = Math.ceil(this.totalCount / this.pageSize);
       this.currentPage = pageNumber;
       console.log(`Updated currentPage: ${this.currentPage}, totalPages: ${this.totalPages}`);
+    }, error => {
+      console.error('Error in showContent:', error);
+      // Handle error - maybe show a user-friendly message
     });
   }
 
@@ -102,6 +127,7 @@ export class PlaceComponent implements OnInit {
   }
 
   doSearch(): void {
+    console.log('doSearch called with textid:', this.textid);
     this.currentPage = 1;
     this.showContent(this.textid, this.currentPage);
   }

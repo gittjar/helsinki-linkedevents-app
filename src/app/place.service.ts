@@ -7,8 +7,9 @@ import { catchError, map, switchMap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class PlaceService {
-  getPlace(textid: string): any {
-    throw new Error('Method not implemented.');
+  // Method for searching places (used by samplemap component)
+  getPlace(textid: string): Observable<any> {
+    return this.searchPlaces(textid, 1);
   }
   private linkedEventsApiRoot = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/';
 
@@ -51,5 +52,24 @@ export class PlaceService {
         return of({ url: 'https://placehold.co/600x400' }); // Return fallback URL on error
       })
     );
+  }
+
+  // Method for searching places by text
+  public searchPlaces(searchTerm: string, page: number = 1): Observable<any> {
+    const encodedSearchTerm = encodeURIComponent(searchTerm.trim());
+    let url = `${this.linkedEventsApiRoot}place/`;
+    
+    const params = [];
+    if (encodedSearchTerm) {
+      params.push(`text=${encodedSearchTerm}`);
+    }
+    params.push(`page=${page}`);
+    
+    if (params.length > 0) {
+      url += '?' + params.join('&');
+    }
+    
+    console.log('PlaceService - searching with URL:', url);
+    return this.getPlacesByUrl(url);
   }
 }

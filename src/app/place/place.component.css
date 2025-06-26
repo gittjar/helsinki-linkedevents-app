@@ -1,7 +1,7 @@
 
 .place-container {
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -179,7 +179,7 @@ h3 {
 
 .korttilista {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: 1fr 1fr 1fr; /* Mobile: 1 card per row */
     gap: 1rem;
     padding: 1rem;
     margin-top: 1rem;
@@ -248,12 +248,12 @@ figure img {
     }
     
     .search-controls {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr; /* Keep column layout for tablet */
         gap: 1.5rem;
     }
     
     .weather-and-map {
-        flex-direction: row;
+        flex-direction: column;
         gap: 1.5rem;
     }
     
@@ -263,7 +263,7 @@ figure img {
     }
     
     .korttilista {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Tablet: 2 cards per row */
         gap: 1.5rem;
     }
     
@@ -360,6 +360,9 @@ figure img {
     .place-container {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+        display: flex;
+        flex-direction: column ;
+
     }
     
     h1 {
