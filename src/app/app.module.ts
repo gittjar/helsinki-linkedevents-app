@@ -25,6 +25,12 @@ import { SearchSelectComponent } from './search-select/search-select.component';
 
 import { environment } from '../environment/environment';
 
+// Firebase imports
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+
 
 @NgModule({
   declarations: [
@@ -48,6 +54,11 @@ import { environment } from '../environment/environment';
     BrowserAnimationsModule,
     FontAwesomeModule,
     GalleryModule,
+    // Firebase modules
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule,
   ],
   providers: [
     {
