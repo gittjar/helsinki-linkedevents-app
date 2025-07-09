@@ -9,21 +9,95 @@
 
 <section class="search-controls">
   <article class="search-input">
-
     <h1 class="ml-3">Hae paikkoja</h1>
-    <input class="text-input" type="text" [(ngModel)]="textid" placeholder="Search places..."><br>
-    <button class="ml-2 rounded-md bg-green-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-400" (click)="doSearch()">Etsi  <fa-icon [icon]="ChevronRight"></fa-icon></button>
-    <button class="ml-2 rounded-md bg-white-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400" (click)="resetMap()">Tyhjennä  <fa-icon [icon]="RectangXmark"></fa-icon></button> 
+    
+    <!-- Text Search -->
+    <div class="search-field">
+      <label for="textSearch">Hae tekstillä:</label>
+      <input 
+        id="textSearch"
+        class="text-input" 
+        type="text" 
+        [(ngModel)]="textid" 
+        placeholder="Esim. töölö, keskusta, kirjasto..."
+        [disabled]="isSearching"
+      >
+      <button 
+        class="ml-2 rounded-md bg-green-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-400" 
+        (click)="doSearch()"
+        [disabled]="isSearching"
+      >
+        {{isSearching ? 'Etsitään...' : 'Etsi'}} <fa-icon [icon]="ChevronRight"></fa-icon>
+      </button>
+    </div>
+    
+    <!-- Division Search -->
+    <div class="search-field">
+      <label for="divisionSearch">Hae kaupunginosalla:</label>
+      <input 
+        id="divisionSearch"
+        class="text-input" 
+        type="text" 
+        [(ngModel)]="division" 
+        placeholder="Esim. malmi, kallio, punavuori..."
+        [disabled]="isSearching"
+      >
+      <button 
+        class="ml-2 rounded-md bg-blue-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-blue-400" 
+        (click)="doSearchByDivision()"
+        [disabled]="isSearching"
+      >
+        {{isSearching ? 'Etsitään...' : 'Etsi alueelta'}} <fa-icon [icon]="ChevronRight"></fa-icon>
+      </button>
+    </div>
+    
+    <!-- Combined Search -->
+    <div class="search-field" *ngIf="textid && division">
+      <button 
+        class="ml-2 rounded-md bg-purple-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-purple-400" 
+        (click)="doSearch()"
+        [disabled]="isSearching"
+      >
+        {{isSearching ? 'Etsitään...' : 'Etsi tekstillä ja alueelta'}} <fa-icon [icon]="ChevronRight"></fa-icon>
+      </button>
+    </div>
+    
+    <!-- Reset Button -->
+    <button 
+      class="ml-2 rounded-md bg-gray-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400" 
+      (click)="resetMap()"
+      [disabled]="isSearching"
+    >
+      Tyhjennä <fa-icon [icon]="RectangXmark"></fa-icon>
+    </button>
+    
     <br>
     
-    <p class="ml-3">Kartalla näytetään {{loadedPlaces.length}} kohdetta.</p>
-   
+    <!-- Results Info -->
+    <div class="results-info">
+      <p class="ml-3">
+        <span *ngIf="isSearching">Etsitään paikkoja...</span>
+        <span *ngIf="!isSearching">
+          Kartalla näytetään {{loadedPlaces.length}} kohdetta
+          <span *ngIf="totalCount > 0"> (yhteensä {{totalCount}} tulosta)</span>
+        </span>
+      </p>
+      
+      <!-- Search Tips -->
+      <div class="search-tips">
+        <p><strong>Vinkkejä hakuun:</strong></p>
+        <ul>
+          <li><strong>Teksti:</strong> Hae paikkojen nimillä (esim. "kirjasto", "museo", "puisto")</li>
+          <li><strong>Kaupunginosa:</strong> Hae Helsinki-alueilla (esim. "malmi", "kallio", "töölö")</li>
+          <li><strong>Yhdistelmä:</strong> Käytä molempia hakuehtoja tarkemmille tuloksille</li>
+        </ul>
+      </div>
+    </div>
   </article>
 
   <article class="search-input">
-  <app-search-select (search)="handleSearch($event)"></app-search-select>
-</article>
-
+    <app-search-select (search)="handleSearch($event)"></app-search-select>
+  </article>
 </section>
 
 

@@ -34,10 +34,12 @@ export class PlaceComponent implements OnInit {
   previousPageUrl: string | null = null;
   markers = [] as any;
   textid: string = "";
+  division: string = "";
   showWindow = false;
   ImageDetail: any = {};
   public loadedPlaces: any[] = [];
   hoveredImageId: number | null = null;
+  isSearching = false;
 
   constructor(private placeservice: PlaceService) {}
 
@@ -51,42 +53,67 @@ export class PlaceComponent implements OnInit {
     this.showContent(this.textid, this.currentPage);
   }
 
-  async showContent(textid: string, pageNumber: number): Promise<void> {
-    console.log(`showContent called with textid="${textid}", pageNumber=${pageNumber}`);
+  async showContent(textid: string, pageNumber: number, division?: string): Promise<void> {
+    console.log(`showContent called with textid="${textid}", division="${division}", pageNumber=${pageNumber}`);
     
-    // Properly encode the search term and construct the URL with correct parameter order
-    const encodedTextid = encodeURIComponent(textid.trim());
-    let url = `${this.linkedEventsApiRoot}place/`;
+    this.isSearching = true;
     
-    // Build parameters array to ensure correct order
-    const params: string[] = [];
-    
-    // Add text parameter first if there's a search term
-    if (encodedTextid) {
-      params.push(`text=${encodedTextid}`);
-    }
-    
-    // Add page parameter
-    params.push(`page=${pageNumber}`);
-    
-    // Combine all parameters
-    if (params.length > 0) {
-      url += `?${params.join('&')}`;
-    }
-    
-    console.log('API URL:', url);
-    
-    this.placeservice.getPlacesByUrl(url).subscribe(async response => {
+    try {
+      let response;
+      
+      if (division && division.trim()) {
+        // Search by division (with optional text)
+        response = await this.placeservice.searchPlacesAdvanced(textid, division, pageNumber).toPromise();
+      } else if (textid && textid.trim()) {
+        // Search by text only
+        response = await this.placeservice.searchPlaces(textid, pageNumber).toPromise();
+      } else {
+        // Default search (all places)
+        response = await this.placeservice.searchPlaces('', pageNumber).toPromise();
+      }
+      
       console.log(`API response for page ${pageNumber}:`, response);
+      
+      // Clear existing markers
       this.markers.forEach((marker: { setMap: (arg0: null) => any; }) => marker.setMap(null));
       this.markers = [];
+      
+      // Update places data
       this.loadedPlaces = response.data || [];
+      
+      // Update pagination info
+      this.nextPageUrl = response.meta?.next || null;
+      this.previousPageUrl = response.meta?.previous || null;
+      this.totalCount = response.meta?.count || 0;
+      this.pageSize = response.meta?.limit || 20;
+      this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+      this.currentPage = pageNumber;
+      
+      console.log(`Updated currentPage: ${this.currentPage}, totalPages: ${this.totalPages}`);
+      
+      // Only process places with valid position data
+      const validPlaces = this.loadedPlaces.filter(place => 
+        place.position && 
+        place.position.coordinates && 
+        place.position.coordinates.length >= 2 &&
+        place.name && 
+        (place.name.fi || place.name.sv || place.name.en)
+      );
+      
+      console.log(`Processing ${validPlaces.length} valid places out of ${this.loadedPlaces.length} total places`);
 
-      this.loadedPlaces.forEach((place: any) => {
+      // Add markers for valid places
+      validPlaces.forEach((place: any) => {
         const marker = new google.maps.Marker({
           position: { lat: place.position.coordinates[1], lng: place.position.coordinates[0] },
-          label: { text: place.name.fi, color: 'black', fontWeight: '700', fontFamily: 'Verdana', fontSize: '13px' },
-          title: place.street_address.fi + ', ' + place.address_locality.fi,
+          label: { 
+            text: place.name.fi || place.name.sv || place.name.en || 'Unknown', 
+            color: 'black', 
+            fontWeight: '700', 
+            fontFamily: 'Verdana', 
+            fontSize: '13px' 
+          },
+          title: this.getPlaceTitle(place),
           animation: google.maps.Animation.DROP,
           icon: { url: '/assets/locationpin.png' },
           map: this.map
@@ -94,11 +121,14 @@ export class PlaceComponent implements OnInit {
 
         this.markers.push(marker);
 
-        const infoUrl = place.info_url && place.info_url.fi ? `<a href="${place.info_url.fi}">Lue lisää ></a>` : "No additional information available";
+        const infoUrl = place.info_url && place.info_url.fi 
+          ? `<a href="${place.info_url.fi}" target="_blank" rel="noopener noreferrer">Lue lisää ></a>` 
+          : "Ei lisätietoja saatavilla";
+          
         const markerContent = `<div class="map-infowindow">
-          <div class="map-infowindow-title">${place.name.fi}</div>
-          <div class="map-infowindow-content">${place.street_address.fi}</div>
-          <div class="map-infowindow-content">${place.postal_code}, ${place.address_locality.fi}</div>
+          <div class="map-infowindow-title">${place.name.fi || place.name.sv || place.name.en || 'Unknown'}</div>
+          <div class="map-infowindow-content">${this.getPlaceAddress(place)}</div>
+          <div class="map-infowindow-content">${place.postal_code || ''} ${place.address_locality?.fi || place.address_locality?.sv || place.address_locality?.en || ''}</div>
           <div class="map-infowindow-content">${infoUrl}</div>
         </div>`;
 
@@ -107,18 +137,37 @@ export class PlaceComponent implements OnInit {
           this.infoWindow.open(this.map, marker);
         });
       });
-
-      this.nextPageUrl = response.meta.next || null;
-      this.previousPageUrl = response.meta.previous || null;
-      this.totalCount = response.meta.count;
-      this.pageSize = response.meta.limit || 20;
-      this.totalPages = Math.ceil(this.totalCount / this.pageSize);
-      this.currentPage = pageNumber;
-      console.log(`Updated currentPage: ${this.currentPage}, totalPages: ${this.totalPages}`);
-    }, error => {
+      
+      // Center map on first valid place if available
+      if (validPlaces.length > 0) {
+        const firstPlace = validPlaces[0];
+        this.map.setCenter({ 
+          lat: firstPlace.position.coordinates[1], 
+          lng: firstPlace.position.coordinates[0] 
+        });
+        this.map.setZoom(13);
+      }
+      
+    } catch (error) {
       console.error('Error in showContent:', error);
-      // Handle error - maybe show a user-friendly message
-    });
+      this.loadedPlaces = [];
+      this.totalPages = 1;
+      this.totalCount = 0;
+    } finally {
+      this.isSearching = false;
+    }
+  }
+
+  private getPlaceTitle(place: any): string {
+    const name = place.name?.fi || place.name?.sv || place.name?.en || 'Unknown';
+    const address = this.getPlaceAddress(place);
+    return `${name} - ${address}`;
+  }
+
+  private getPlaceAddress(place: any): string {
+    const street = place.street_address?.fi || place.street_address?.sv || place.street_address?.en || '';
+    const locality = place.address_locality?.fi || place.address_locality?.sv || place.address_locality?.en || '';
+    return `${street}${street && locality ? ', ' : ''}${locality}`;
   }
 
   toggleInfo(placeId: string): void {
@@ -127,13 +176,20 @@ export class PlaceComponent implements OnInit {
   }
 
   doSearch(): void {
-    console.log('doSearch called with textid:', this.textid);
+    console.log('doSearch called with textid:', this.textid, 'division:', this.division);
     this.currentPage = 1;
-    this.showContent(this.textid, this.currentPage);
+    this.showContent(this.textid, this.currentPage, this.division);
+  }
+
+  doSearchByDivision(): void {
+    console.log('doSearchByDivision called with division:', this.division);
+    this.currentPage = 1;
+    this.showContent('', this.currentPage, this.division);
   }
 
   resetMap(): void {
     this.textid = '';
+    this.division = '';
     this.currentPage = 1;
     this.initMap();
   }
@@ -141,7 +197,7 @@ export class PlaceComponent implements OnInit {
   handleSearch(searchTerm: string): void {
     this.textid = searchTerm;
     this.currentPage = 1;
-    this.showContent(this.textid, this.currentPage);
+    this.showContent(this.textid, this.currentPage, this.division);
   }
 
   getImageById(imageId: number): void {
@@ -160,7 +216,7 @@ export class PlaceComponent implements OnInit {
     if (this.currentPage < this.totalPages) {
       console.log(`Next page clicked. Current: ${this.currentPage}, Going to: ${this.currentPage + 1}`);
       this.currentPage++;
-      this.showContent(this.textid, this.currentPage);
+      this.showContent(this.textid, this.currentPage, this.division);
     }
   }
 
@@ -168,7 +224,7 @@ export class PlaceComponent implements OnInit {
     if (this.currentPage > 1) {
       console.log(`Previous page clicked. Current: ${this.currentPage}, Going to: ${this.currentPage - 1}`);
       this.currentPage--;
-      this.showContent(this.textid, this.currentPage);
+      this.showContent(this.textid, this.currentPage, this.division);
     }
   }
 
@@ -176,7 +232,7 @@ export class PlaceComponent implements OnInit {
     if (pageNumber >= 1 && pageNumber <= this.totalPages) {
       console.log(`goToPage clicked. Going to page: ${pageNumber}`);
       this.currentPage = pageNumber;
-      this.showContent(this.textid, this.currentPage);
+      this.showContent(this.textid, this.currentPage, this.division);
     }
   }
 
