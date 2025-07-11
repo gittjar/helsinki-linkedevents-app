@@ -1,13 +1,84 @@
 <section class="weather-container">
-<div *ngFor="let forecast of forecastData" class="weather-card">
-  <div class="weathertime">
-    <p class="date">   <fa-icon [icon]="Calendar"></fa-icon> {{ forecast.time  | date: 'dd.MM' }}</p>
-    <p class="asteluku">   <fa-icon [icon]="Clock"></fa-icon> {{ forecast.time  | date: 'HH:mm' }}</p>
-   
-    <hr>
-    <p class="asteluku"> <fa-icon [icon]="Temperature"></fa-icon>  {{ forecast.temp_c }}°C</p>
-    <hr>
-    <img [src]="forecast.condition.icon" alt="Weather Icon" class="weather-icon">
+  <div class="weather-header">
+    <h3 class="weather-title">
+      <fa-icon [icon]="Clock"></fa-icon>
+      24 tunnin sääennuste Helsinkiin
+    </h3>
+    <p class="weather-subtitle">Vieritä nähdäksesi koko ennusteen</p>
   </div>
-</div>
+  
+  <div class="weather-scroll-container">
+    <div class="weather-timeline">
+      <div class="forecast-item" 
+           *ngFor="let forecast of forecastData; let i = index"
+           [class.new-day]="forecast.isNewDay"
+           [style.background]="getCardGradient(forecast)">
+        
+        <!-- Date separator for new day -->
+        <div class="day-separator" *ngIf="forecast.isNewDay && i > 0">
+          <div class="separator-line"></div>
+          <div class="separator-badge">
+            <fa-icon [icon]="Calendar"></fa-icon>
+            <span>{{ forecast.time | date: 'dd.MM' }}</span>
+          </div>
+          <div class="separator-line"></div>
+        </div>
+
+        <!-- Time indicator -->
+        <div class="time-indicator">
+          <div class="time-dot" [class.current-hour]="forecast.hourNumber === currentTime.getHours()"></div>
+          <div class="time-label" [style.color]="getTextColor(forecast)">
+            <fa-icon [icon]="Clock"></fa-icon>
+            {{ forecast.time | date: 'HH:mm' }}
+          </div>
+        </div>
+
+        <!-- Weather icon -->
+        <div class="weather-icon-container">
+          <img [src]="forecast.condition.icon" 
+               alt="{{ forecast.condition.text }}" 
+               class="weather-icon"
+               [title]="forecast.condition.text">
+        </div>
+
+        <!-- Temperature -->
+        <div class="temperature-container">
+          <div class="temperature-value" 
+               [style.color]="getTemperatureColor(forecast.temp_c)">
+            <fa-icon [icon]="Temperature"></fa-icon>
+            {{ forecast.temp_c }}°
+          </div>
+          <div class="temperature-details">
+            <span class="feels-like" [style.color]="getSecondaryTextColor(forecast)">Tuntuu {{ forecast.feelslike_c }}°</span>
+            <span class="humidity" [style.color]="getSecondaryTextColor(forecast)">💧 {{ forecast.humidity }}%</span>
+          </div>
+        </div>
+
+        <!-- Weather condition -->
+        <div class="condition-text" [style.color]="getTextColor(forecast)">
+          {{ forecast.condition.text }}
+        </div>
+
+        <!-- Wind info -->
+        <div class="wind-info">
+          <span class="wind-speed" [style.color]="getSecondaryTextColor(forecast)">🌬️ {{ forecast.wind_kph }} km/h</span>
+          <span class="wind-direction" [style.color]="getSecondaryTextColor(forecast)">{{ forecast.wind_dir }}</span>
+        </div>
+
+        <!-- Day indicator -->
+        <div class="day-indicator" 
+             [class.today]="forecast.isToday"
+             [class.tomorrow]="forecast.isTomorrow">
+          {{ forecast.isToday ? 'Tänään' : 'Huomenna' }}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scroll indicators -->
+  <div class="scroll-indicators">
+    <div class="scroll-hint">
+      <span>← Vieritä katsellaksesi →</span>
+    </div>
+  </div>
 </section>
