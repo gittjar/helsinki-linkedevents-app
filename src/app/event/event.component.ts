@@ -28,6 +28,10 @@ export class EventComponent implements OnInit {
   button1Clicked: boolean = false;
   button2Clicked: boolean = false;
 
+  // Image modal properties
+  showImageModal: boolean = false;
+  modalImageUrl: string = '';
+
   constructor(private http: EventService) {}
 
   ngOnInit(): void {
@@ -231,5 +235,28 @@ hasLocation(event: any): boolean {
     this.isLoading = true;
     this.loadingDataWindow();
     this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  }
+
+  // Image modal methods
+  openImageModal(imageUrl: string): void {
+    this.modalImageUrl = imageUrl;
+    this.showImageModal = true;
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeImageModal(): void {
+    this.showImageModal = false;
+    this.modalImageUrl = '';
+    // Restore body scrolling
+    document.body.style.overflow = 'auto';
+  }
+
+  // Check if event has ticket information to display
+  hasTicketInfo(event: any): boolean {
+    return event?.offers?.[0]?.is_free !== undefined ||
+           event?.offers?.[0]?.price?.fi ||
+           event?.audience_min_age ||
+           event?.audience_max_age;
   }
 }

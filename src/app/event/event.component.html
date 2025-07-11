@@ -80,48 +80,87 @@
             <figure class="cardimage">
               <ng-container *ngIf="event?.images && event?.images?.length > 0; else placeholder">
                 <img src="{{ event?.images[0]?.url }}" title="lisenssi: {{event?.images[0]?.license }}, kuvaaja: {{event?.images[0]?.photographer_name}}">
+                <button class="image-view-button" (click)="openImageModal(event?.images[0]?.url)" title="Näytä kuva suurempana">
+                  🔍
+                </button>
               </ng-container>
               <ng-template #placeholder>
                 <img src="https://picsum.photos/640/360">
+                <button class="image-view-button" (click)="openImageModal('https://picsum.photos/640/360')" title="Näytä kuva suurempana">
+                  🔍
+                </button>
               </ng-template>
             </figure>
 
             <aside class="cardtext">
-              <h2 >{{event?.name?.fi}}</h2>
-              <article class="event-start-time">Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</article>
-<br>
-              <h3 *ngIf="event?.info_url?.fi?.length" class="border-bottom"><a href="{{event?.info_url?.fi}}">Liput ja lisätiedot <fa-icon [icon]="arrowUpRightFromBox"></fa-icon></a></h3>
-              <ul>
-                <li class="border-bottom">{{event?.short_description?.fi}}</li>
-                <li class="border-bottom">Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
-              <ul>
-  <ng-container *ngIf="hasLocation(event); else noLocation">
-    <li class="border-bottom" *ngIf="event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi">
-      Osoite: {{event?.location?.street_address?.fi}}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}
-    </li>
-    <li *ngIf="hasValidCoordinates(event)">
-      <a [href]="getGoogleMapsLink(event?.location?.position?.coordinates[1], event?.location?.position?.coordinates[0])" target="_blank">
-        Avaa Google Mapsiin <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
-      </a>
-    </li>
-  </ng-container>
-  <ng-template #noLocation>
-    <li class="bg-gray-200">Ei ilmoitettuja paikkatietoja.</li>
-  </ng-template>
-</ul>
-              </ul>
+
+              <div class="event-name">{{event?.name?.fi}}</div>
+              <div class="event-start-time">
+                Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</div>
+              
+              <div class="event-details">
+                <div class="event-info" *ngIf="event?.short_description?.fi">
+                  {{event?.short_description?.fi}}
+                </div>
+                
+                <div class="event-info">
+                  Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}
+                </div>
+                
+                <div class="event-location" *ngIf="hasLocation(event); else noLocation">
+                  <div *ngIf="event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi">
+                    📍 {{event?.location?.street_address?.fi}}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}
+                  </div>
+                  <div *ngIf="hasValidCoordinates(event)">
+                    <a [href]="getGoogleMapsLink(event?.location?.position?.coordinates[1], event?.location?.position?.coordinates[0])" target="_blank">
+                      🗺️ Avaa Google Mapsiin <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
+                    </a>
+                  </div>
+                </div>
+                <ng-template #noLocation>
+                  <div class="event-location">📍 Ei ilmoitettuja paikkatietoja</div>
+                </ng-template>
+                
+                <div class="event-links" *ngIf="event?.info_url?.fi?.length">
+                  <a href="{{event?.info_url?.fi}}" target="_blank">
+                    🎫 Liput ja lisätiedot <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
+                  </a>
+                </div>
+
+                                        <!-- Ticket information at bottom of card - only show if there's data -->
+            <section class="liput" *ngIf="hasTicketInfo(event)">
+              <h3>Lisätiedot</h3>
+              <div *ngIf="event?.offers[0]?.is_free === true || event?.offers[0]?.is_free === false">
+                💰 Ilmaistapahtuma: {{event?.offers[0]?.is_free ? 'Kyllä' : 'Ei'}}
+              </div>
+              <div *ngIf="event?.offers[0]?.price?.fi?.length">
+                💳 Liput: {{event?.offers[0]?.price?.fi}}
+              </div>
+              <div *ngIf="event?.audience_min_age?.length">
+                👶 Alaikäraja: {{event?.audience_min_age}}
+              </div>
+              <div *ngIf="event?.audience_max_age?.length">
+                👴 Yläikäraja: {{event?.audience_max_age}}
+              </div>
+            </section>
+              </div>
+
+
+
             </aside>
 
-            <section class="liput bg-gradient-to-r from-green-200 to-green-100 text-stone-50">
-              <h2>Lisätiedot</h2>
-              <span *ngIf="event?.offers[0]?.is_free === true || false">Ilmaistapahtuma: {{event?.offers[0]?.is_free ? 'Kyllä' : 'Ei'}}<br></span>
-              <span *ngIf="event?.offers[0]?.price?.fi.length">Liput: {{event?.offers[0]?.price?.fi}}<br></span>
-              <span *ngIf="event?.audience_min_age?.length">Alaikäraja: {{event?.audience_min_age}}<br></span>
-              <span *ngIf="event?.audience_max_age?.length">Yläikäraja: {{event?.audience_max_age}}</span>
-            </section>
+  
           </article>
         </aside>
       </section>
     </div>
   </section>
 </section>
+
+<!-- Image Modal -->
+<div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
+  <div class="image-modal-content" (click)="$event.stopPropagation()">
+    <img [src]="modalImageUrl" alt="Event image">
+    <button class="image-modal-close" (click)="closeImageModal()">×</button>
+  </div>
+</div>
