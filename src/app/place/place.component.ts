@@ -251,4 +251,34 @@ export class PlaceComponent implements OnInit {
     }
     return pages;
   }
+
+  // Image loading handlers
+  onImageError(event: any): void {
+    console.log('Image loading failed:', event.target.src);
+    
+    // Hide the broken image
+    event.target.style.display = 'none';
+    
+    // Show the broken image placeholder
+    const imageContainer = event.target.closest('.image-container');
+    if (imageContainer) {
+      const placeholder = imageContainer.querySelector('.broken-image-placeholder');
+      if (placeholder) {
+        (placeholder as HTMLElement).style.display = 'block';
+      }
+    }
+  }
+
+  onImageLoad(event: any): void {
+    console.log('Image loaded successfully:', event.target.src);
+    
+    // Hide the broken image placeholder if it's visible
+    const imageContainer = event.target.closest('.image-container');
+    if (imageContainer) {
+      const placeholder = imageContainer.querySelector('.broken-image-placeholder');
+      if (placeholder) {
+        (placeholder as HTMLElement).style.display = 'none';
+      }
+    }
+  }
 }

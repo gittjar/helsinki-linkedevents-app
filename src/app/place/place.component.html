@@ -108,46 +108,94 @@
   <button (click)="nextPage()" [disabled]="!nextPageUrl">Next</button>
 </div>
 -->
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" *ngIf="totalPages > 1">
   <ul class="pagination">
-    <li class="page-item" [class.disabled]="currentPage === 1">
+    <li class="page-item" *ngIf="currentPage > 1" [class.disabled]="currentPage === 1">
       <a class="page-link" href="#" (click)="previousPage(); $event.preventDefault()">Previous</a>
     </li>
     <li class="page-item"
         *ngFor="let page of pages"
         [class.active]="page === currentPage"
         [class.disabled]="page === -1">
-      <a class="page-link" href="#" *ngIf="page !== -1" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
-      <span class="page-link" *ngIf="page === -1">...</span>
+      <a class="page-link" 
+         href="#" 
+         *ngIf="page !== -1" 
+         [class.active-page]="page === currentPage"
+         (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
+      <span class="page-link ellipsis" *ngIf="page === -1">...</span>
     </li>
-    <li class="page-item" [class.disabled]="currentPage === totalPages">
+    <li class="page-item" *ngIf="currentPage < totalPages" [class.disabled]="currentPage === totalPages">
       <a class="page-link" href="#" (click)="nextPage(); $event.preventDefault()">Next</a>
     </li>
   </ul>
 </nav>
 
+<!-- Show simple info when only 1 page -->
+<div class="single-page-info" *ngIf="totalPages <= 1 && totalCount > 0">
+  <p class="results-summary">
+    Näytetään kaikki {{totalCount}} tulosta
+  </p>
+</div>
+
 <section class="korttilista">
   <section *ngFor="let place of loadedPlaces">
     <div class="kortti">
       <h1 class="mx-2 mb-1">{{ place.name.fi }}</h1>
-      <!-- Display this place's image if available -->
-      <div *ngIf="place.imageUrl" class="image-container">
-        <img [src]="place.imageUrl">
+      
+      <!-- Display this place's image with broken image handling -->
+      <div class="image-container">
+        <img *ngIf="place.imageUrl && !place.imageUrl.includes('Ei+Kuvaa')" 
+             [src]="place.imageUrl" 
+             [alt]="place.name.fi"
+             (error)="onImageError($event)"
+             (load)="onImageLoad($event)">
+        
+        <div *ngIf="!place.imageUrl || place.imageUrl.includes('Ei+Kuvaa')" class="image-placeholder">
+          <div class="placeholder-content">
+            <i class="placeholder-icon">📍</i>
+            <span class="placeholder-text">Ei kuvaa saatavilla</span>
+          </div>
+        </div>
+        
+        <!-- Broken image placeholder -->
+        <div class="broken-image-placeholder" style="display: none;">
+          <div class="broken-screen-effect">
+            <div class="crack-line crack-1"></div>
+            <div class="crack-line crack-2"></div>
+            <div class="crack-line crack-3"></div>
+            <div class="crack-line crack-4"></div>
+            <div class="broken-content">
+              <i class="broken-icon">💔</i>
+              <span class="broken-text">Kuva ei lataudu</span>
+              <span class="broken-subtext">Linkki rikki</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div>{{ place.street_address.fi }}</div>
-      <div>{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
-      <button (click)="toggleInfo(place.id)" class="btn bg-indigo-700 hover:bg-indigo-800 text-white font-bold rounded">Lisätiedot <fa-icon [icon]="ChevronDown"></fa-icon></button> <!-- Add a button to toggle the info -->
+      <div class="address-info">
+        <div class="street-address">{{ place.street_address.fi }}</div>
+        <div class="postal-address">{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
+        
+        <!-- Telephone information -->
+        <div *ngIf="place.telephone && place.telephone.fi" class="telephone-info">
+          <i class="phone-icon">📞</i>
+          <a href="tel:{{ place.telephone.fi }}" class="phone-link">{{ place.telephone.fi }}</a>
+        </div>
+      </div>
+      
+      <button (click)="toggleInfo(place.id)" class="btn bg-indigo-700 hover:bg-indigo-800 text-white font-bold rounded">
+        Lisätiedot <fa-icon [icon]="ChevronDown"></fa-icon>
+      </button>
 
       <!-- Wrap the togglable content in a div and use *ngIf to check the toggle state -->
       <div *ngIf="toggleStates.get(place.id)" class="mt-2 mb-2">
-        <div *ngIf="place.description && place.description.fi">{{ place.description.fi }}</div>
-        <div *ngIf="place.info_url && place.info_url.fi">
-          <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpRightIcon"></fa-icon>
-          </a>
+        <div *ngIf="place.description && place.description.fi" class="description">{{ place.description.fi }}</div>
+        <div *ngIf="place.info_url && place.info_url.fi" class="website-link">
+          <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpRightIcon"></fa-icon></a>
         </div>
-        <div *ngIf="!place.info_url">No additional information available</div>
-       <div class="text-xs">Kohdetta päivitetty: {{ place.last_modified_time | date: 'dd.MM.yyyy'}}</div>
+        <div *ngIf="!place.info_url" class="no-info">Ei lisätietoja saatavilla</div>
+        <div class="last-modified">Kohdetta päivitetty: {{ place.last_modified_time | date: 'dd.MM.yyyy'}}</div>
       </div>
     </div>
   </section>
