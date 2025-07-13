@@ -77,26 +77,26 @@
       <section class="keskiosa">
         <aside class="korttilista">
           <article *ngFor="let event of filteredEvents" class="eventcard">
+            <!-- Event Name Header -->
+            <header class="event-header">
+              <div class="event-name">{{event?.name?.fi}}</div>
+            </header>
+
+            <!-- Event Image -->
             <figure class="cardimage">
               <ng-container *ngIf="event?.images && event?.images?.length > 0; else placeholder">
                 <img src="{{ event?.images[0]?.url }}" title="lisenssi: {{event?.images[0]?.license }}, kuvaaja: {{event?.images[0]?.photographer_name}}">
-                <button class="image-view-button" (click)="openImageModal(event?.images[0]?.url)" title="Näytä kuva suurempana">
-                  🔍
-                </button>
               </ng-container>
               <ng-template #placeholder>
                 <img src="https://picsum.photos/640/360">
-                <button class="image-view-button" (click)="openImageModal('https://picsum.photos/640/360')" title="Näytä kuva suurempana">
-                  🔍
-                </button>
               </ng-template>
             </figure>
 
-            <aside class="cardtext">
-
-              <div class="event-name">{{event?.name?.fi}}</div>
+            <!-- Event Content -->
+            <section class="cardtext">
               <div class="event-start-time">
-                Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</div>
+                📅 Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}
+              </div>
               
               <div class="event-details">
                 <div class="event-info" *ngIf="event?.short_description?.fi">
@@ -104,7 +104,7 @@
                 </div>
                 
                 <div class="event-info">
-                  Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}
+                  ⏰ Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}
                 </div>
                 
                 <div class="event-location" *ngIf="hasLocation(event); else noLocation">
@@ -126,30 +126,27 @@
                     🎫 Liput ja lisätiedot <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
                   </a>
                 </div>
-
-                                        <!-- Ticket information at bottom of card - only show if there's data -->
-            <section class="liput" *ngIf="hasTicketInfo(event)">
-              <h3>Lisätiedot</h3>
-              <div *ngIf="event?.offers[0]?.is_free === true || event?.offers[0]?.is_free === false">
-                💰 Ilmaistapahtuma: {{event?.offers[0]?.is_free ? 'Kyllä' : 'Ei'}}
-              </div>
-              <div *ngIf="event?.offers[0]?.price?.fi?.length">
-                💳 Liput: {{event?.offers[0]?.price?.fi}}
-              </div>
-              <div *ngIf="event?.audience_min_age?.length">
-                👶 Alaikäraja: {{event?.audience_min_age}}
-              </div>
-              <div *ngIf="event?.audience_max_age?.length">
-                👴 Yläikäraja: {{event?.audience_max_age}}
               </div>
             </section>
+
+            <!-- Ticket Information Footer -->
+            <footer class="liput" *ngIf="hasTicketInfo(event)">
+              <h3>Lisätiedot</h3>
+              <div class="ticket-info">
+                <div *ngIf="event?.offers[0]?.is_free === true || event?.offers[0]?.is_free === false">
+                  💰 Ilmaistapahtuma: {{event?.offers[0]?.is_free ? 'Kyllä' : 'Ei'}}
+                </div>
+                <div *ngIf="event?.offers[0]?.price?.fi">
+                  💳 Liput: {{event?.offers[0]?.price?.fi}}
+                </div>
+                <div *ngIf="event?.audience_min_age">
+                  👶 Alaikäraja: {{event?.audience_min_age}}
+                </div>
+                <div *ngIf="event?.audience_max_age">
+                  👴 Yläikäraja: {{event?.audience_max_age}}
+                </div>
               </div>
-
-
-
-            </aside>
-
-  
+            </footer>
           </article>
         </aside>
       </section>
