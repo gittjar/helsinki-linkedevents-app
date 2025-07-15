@@ -1,4 +1,56 @@
 <section class="place-container">
+  <!-- Breadcrumb Navigation -->
+  <nav class="breadcrumb-nav">
+    <div class="breadcrumb-container">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/mainpage">
+            <svg class="breadcrumb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9,22 9,12 15,12 15,22"></polyline>
+            </svg>
+            Etusivu
+          </a>
+        </li>
+        <li class="breadcrumb-separator">
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+            <path d="M3 1L6 4L3 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </li>
+        <li class="breadcrumb-item active">
+          <span>
+            <svg class="breadcrumb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Paikat
+          </span>
+        </li>
+      </ol>
+      
+      <!-- Quick Navigation Links -->
+      <div class="quick-nav">
+        <a routerLink="/event" class="quick-nav-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Tapahtumat
+        </a>
+        <a routerLink="/image" class="quick-nav-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21,15 16,10 5,21"></polyline>
+          </svg>
+          Kuvat
+        </a>
+      </div>
+    </div>
+  </nav>
+
   <h1 class="ml-3">Helsinki LinkedEvents</h1>
   <p class="ml-3">Tervetuloa Helsinki LinkedEvents -sovellukseen. Täältä löydät tietoa Helsingin tapahtumista ja paikoista.</p>
 

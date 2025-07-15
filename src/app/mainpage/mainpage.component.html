@@ -1,7 +1,55 @@
-<gallery 
-  [items]="images" 
-  [autoPlay]="true"
-  [playerInterval]="3000"
-  [thumb]="false"
-  [imageSize]="'contain'"
-></gallery>
+<!-- Image Carousel with Overlay -->
+<div class="carousel-container">
+  <gallery 
+    [items]="images" 
+    [autoPlay]="true"
+    [playerInterval]="3000"
+    [thumb]="false"
+    [imageSize]="'contain'"
+  ></gallery>
+  
+  <!-- Stylish Overlay Text Box -->
+  <div class="hero-overlay">
+    <div class="hero-text-box">
+      <h1 class="hero-title">
+        <span class="title-gradient">Helsinki</span>
+        <span class="title-accent">LinkedEvents</span>
+      </h1>
+      <p class="hero-subtitle">
+        Löydä Helsingin parhaat tapahtumat ja paikat
+      </p>
+      <div class="hero-description">
+        <p>Tervetuloa tutkimaan Helsingin elävää kulttuuritarjontaa</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">1000+</span>
+            <span class="stat-label">Tapahtumaa</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">500+</span>
+            <span class="stat-label">Paikkaa</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-buttons">
+        <a routerLink="/event" class="hero-btn primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Selaa Tapahtumia
+        </a>
+        <a routerLink="/place" class="hero-btn secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          Tutustu Paikkoihin
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
