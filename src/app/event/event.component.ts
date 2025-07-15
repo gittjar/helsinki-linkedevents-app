@@ -259,4 +259,78 @@ hasLocation(event: any): boolean {
            event?.audience_min_age ||
            event?.audience_max_age;
   }
+
+  // Helper method to check if event is past
+  isEventPast(event: any): boolean {
+    if (!event.start_time) return false;
+    const eventDate = new Date(event.start_time);
+    const now = new Date();
+    return eventDate < now;
+  }
+
+  // Helper method to check if event is happening today
+  isEventToday(event: any): boolean {
+    if (!event.start_time) return false;
+    const eventDate = new Date(event.start_time);
+    const today = new Date();
+    return eventDate.toDateString() === today.toDateString();
+  }
+
+  // Helper method to check if event is happening tomorrow
+  isEventTomorrow(event: any): boolean {
+    if (!event.start_time) return false;
+    const eventDate = new Date(event.start_time);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return eventDate.toDateString() === tomorrow.toDateString();
+  }
+
+  // Helper method to get event status
+  getEventStatus(event: any): string {
+    if (!event.event_status) return '';
+    
+    switch (event.event_status) {
+      case 'EventScheduled':
+        return 'Suunniteltu';
+      case 'EventRescheduled':
+        return 'Siirretty';
+      case 'EventCancelled':
+        return 'Peruttu';
+      case 'EventPostponed':
+        return 'Lykätty';
+      default:
+        return event.event_status;
+    }
+  }
+
+  // Helper method to get event type
+  getEventType(event: any): string {
+    if (!event.super_event_type) return '';
+    
+    switch (event.super_event_type) {
+      case 'recurring':
+        return 'Toistuva tapahtuma';
+      case 'umbrella':
+        return 'Sateenvarjotapahtuma';
+      default:
+        return event.super_event_type;
+    }
+  }
+
+  // Helper method to check if event has capacity info
+  hasCapacityInfo(event: any): boolean {
+    return event.maximum_attendee_capacity !== null || event.minimum_attendee_capacity !== null;
+  }
+
+  // Helper method to get audience info
+  getAudienceInfo(event: any): string {
+    if (event.audience_min_age && event.audience_max_age) {
+      return `${event.audience_min_age}-${event.audience_max_age} vuotta`;
+    } else if (event.audience_min_age) {
+      return `${event.audience_min_age}+ vuotta`;
+    } else if (event.audience_max_age) {
+      return `alle ${event.audience_max_age} vuotta`;
+    }
+    return '';
+  }
 }

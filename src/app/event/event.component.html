@@ -76,10 +76,37 @@
 
       <section class="keskiosa">
         <aside class="korttilista">
-          <article *ngFor="let event of filteredEvents" class="eventcard">
+          <article *ngFor="let event of filteredEvents" class="eventcard"
+                   [ngClass]="{
+                     'past-event': isEventPast(event),
+                     'today-event': isEventToday(event),
+                     'tomorrow-event': isEventTomorrow(event)
+                   }">
             <!-- Event Name Header -->
             <header class="event-header">
               <div class="event-name">{{event?.name?.fi}}</div>
+              
+              <!-- Event Status Indicators -->
+              <div class="event-status-indicators">
+                <span *ngIf="isEventPast(event)" class="status-badge past-event">
+                  ⏰ Tämä tapahtuma on mennyt!
+                </span>
+                <span *ngIf="isEventToday(event)" class="status-badge today-event">
+                  🔴 Tänään
+                </span>
+                <span *ngIf="isEventTomorrow(event)" class="status-badge tomorrow-event">
+                  ⭐ Huomenna
+                </span>
+                <span *ngIf="getEventStatus(event) === 'Siirretty'" class="status-badge rescheduled-event">
+                  📅 Siirretty
+                </span>
+                <span *ngIf="getEventStatus(event) === 'Peruttu'" class="status-badge cancelled-event">
+                  ❌ Peruttu
+                </span>
+                <span *ngIf="getEventType(event)" class="status-badge recurring-event">
+                  🔄 {{getEventType(event)}}
+                </span>
+              </div>
             </header>
 
             <!-- Event Image -->
@@ -106,6 +133,28 @@
                 <div class="event-info">
                   ⏰ Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}
                 </div>
+
+                <!-- Additional Event Information -->
+                <div class="event-info" *ngIf="event?.provider?.fi">
+                  🏢 Järjestäjä: {{event?.provider?.fi}}
+                </div>
+
+                <div class="event-info" *ngIf="getAudienceInfo(event)">
+                  👥 Kohderyhmä: {{getAudienceInfo(event)}}
+                </div>
+
+                <div class="event-info" *ngIf="hasCapacityInfo(event)">
+                  <span *ngIf="event?.maximum_attendee_capacity">
+                    📊 Enintään {{event?.maximum_attendee_capacity}} henkeä
+                  </span>
+                  <span *ngIf="event?.minimum_attendee_capacity">
+                    📊 Vähintään {{event?.minimum_attendee_capacity}} henkeä
+                  </span>
+                </div>
+
+                <div class="event-info" *ngIf="event?.location_extra_info?.fi">
+                  📍 Lisätietoja paikasta: {{event?.location_extra_info?.fi}}
+                </div>
                 
                 <div class="event-location" *ngIf="hasLocation(event); else noLocation">
                   <div *ngIf="event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi">
@@ -131,13 +180,21 @@
 
             <!-- Ticket Information Footer -->
             <footer class="liput" *ngIf="hasTicketInfo(event)">
-              <h3>Lisätiedot</h3>
+              <h3>Liput ja hinnat</h3>
               <div class="ticket-info">
                 <div *ngIf="event?.offers[0]?.is_free === true || event?.offers[0]?.is_free === false">
                   💰 Ilmaistapahtuma: {{event?.offers[0]?.is_free ? 'Kyllä' : 'Ei'}}
                 </div>
                 <div *ngIf="event?.offers[0]?.price?.fi">
                   💳 Liput: {{event?.offers[0]?.price?.fi}}
+                </div>
+                <div *ngIf="event?.offers[0]?.description?.fi">
+                  📝 {{event?.offers[0]?.description?.fi}}
+                </div>
+                <div *ngIf="event?.offers[0]?.info_url?.fi">
+                  <a href="{{event?.offers[0]?.info_url?.fi}}" target="_blank">
+                    🎫 Osta liput <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
+                  </a>
                 </div>
                 <div *ngIf="event?.audience_min_age">
                   👶 Alaikäraja: {{event?.audience_min_age}}

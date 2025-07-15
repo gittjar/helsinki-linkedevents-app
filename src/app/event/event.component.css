@@ -593,6 +593,27 @@ a:hover {
   gap: 0.5rem;
 }
 
+/* Ticket Info Links */
+.ticket-info a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: #e7f3ff;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  border: 1px solid #007bff;
+}
+
+.ticket-info a:hover {
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+}
+
 .cardtext a:hover {
   color: #0056b3;
   text-decoration: underline;
@@ -948,7 +969,7 @@ a:hover {
   }
 }
 
-/* Apple-Style Responsive Design */
+
 @media (max-width: 768px) {
   .korttilista {
     grid-template-columns: 1fr;
@@ -1033,4 +1054,95 @@ a:hover {
     padding: 16px;
     gap: 12px;
   }
+}
+
+/* Event Status Indicators */
+.event-status-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 1;
+}
+
+.past-event {
+  background: #dc3545;
+  color: white;
+  animation: pulse 20s infinite;
+}
+
+.today-event {
+  background: #28a745;
+  color: white;
+  animation: pulse 20s infinite;
+}
+
+.tomorrow-event {
+  background: #ffc107;
+  color: #212529;
+}
+
+.rescheduled-event {
+  background: #17a2b8;
+  color: white;
+}
+
+.cancelled-event {
+  background: #6c757d;
+  color: white;
+}
+
+.recurring-event {
+  background: #007bff;
+  color: white;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Past Event Styling */
+.eventcard.past-event {
+  opacity: 0.8;
+  filter: grayscale(0.3);
+}
+
+.eventcard.past-event .event-header {
+  background: #6c757d;
+}
+
+.eventcard.past-event .event-start-time {
+  background: #dc3545;
+  color: white;
+}
+
+/* Today Event Styling */
+.eventcard.today-event {
+  border: 2px solid #28a745;
+  box-shadow: 0 0 20px rgba(40, 167, 69, 0.2);
+}
+
+.eventcard.today-event .event-header {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+/* Tomorrow Event Styling */
+.eventcard.tomorrow-event {
+  border: 2px solid #ffc107;
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.2);
+}
+
+.eventcard.tomorrow-event .event-header {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+  color: #212529;
 }
