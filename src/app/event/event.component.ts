@@ -28,6 +28,19 @@ export class EventComponent implements OnInit {
   button1Clicked: boolean = false;
   button2Clicked: boolean = false;
 
+  // Sorting properties
+  currentSort: string = 'default';
+  showOnlyFutureEvents: boolean = false;
+  searchType: 'text' | 'date' = 'text'; // Track search type for loading message
+  availableSorts = [
+    { key: 'default', label: 'Oletusjärjestys' },
+    { key: 'coming-soon', label: 'Tulevat ensin' },
+    { key: 'date-desc', label: 'Uusimmat ensin' },
+    { key: 'date-asc', label: 'Vanhimmat ensin' },
+    { key: 'alphabetical', label: 'Aakkosjärjestys' },
+    { key: 'free-first', label: 'Ilmaiset ensin' }
+  ];
+
   // Image modal properties
   showImageModal: boolean = false;
   modalImageUrl: string = '';
@@ -53,20 +66,30 @@ export class EventComponent implements OnInit {
   }
 
   getAllEvents(searchText: string, pageNumber: number): void {
+    this.searchType = 'text';
     this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {
       this.events = data;
       this.filteredEvents = data.data;
       this.totalPages = Math.ceil(data.meta.count / 20);
       this.pages = this.getPaginationPages();
+      
+      // Reset sort and filter to default when new search is performed
+      this.currentSort = 'default';
+      this.showOnlyFutureEvents = false;
     });
   }
 
   getAllEventsDate(searchDate: string, pageNumber: number): void {
+    this.searchType = 'date';
     this.http.getEventDate(searchDate, pageNumber).subscribe((data: any) => {
       this.events = data;
       this.filterEventsByDate(searchDate);
       this.totalPages = Math.ceil(this.filteredEvents.length / 20);
       this.pages = this.getPaginationPages();
+      
+      // Reset sort and filter to default when new search is performed
+      this.currentSort = 'default';
+      this.showOnlyFutureEvents = false;
     });
   }
 
@@ -173,68 +196,119 @@ export class EventComponent implements OnInit {
     this.button2Clicked = !this.button2Clicked;
   }
 
-  sortDate(isAsc: boolean) {
-    if (isAsc) {
-      this.filteredEvents.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? 1 : ((b.start_time > a.start_time) ? -1 : 0));
-    } else {
-      this.filteredEvents.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? -1 : ((b.start_time > a.start_time) ? 1 : 0));
+  // Enhanced sorting methods
+  sortEvents(sortType: string) {
+    this.currentSort = sortType;
+    this.applySortAndFilter();
+  }
+
+  // Toggle future events filter
+  toggleFutureEventsFilter() {
+    this.showOnlyFutureEvents = !this.showOnlyFutureEvents;
+    this.applySortAndFilter();
+  }
+
+  // Apply both sorting and filtering
+  applySortAndFilter() {
+    // Start with all events or filtered events (depending on whether we're searching)
+    let eventsToWork = [...this.events?.data || this.filteredEvents];
+    
+    // Apply the future events filter if enabled
+    if (this.showOnlyFutureEvents) {
+      eventsToWork = this.filterFutureEvents(eventsToWork);
     }
+    
+    // Then apply sorting
+    switch (this.currentSort) {
+      case 'coming-soon':
+        eventsToWork = this.sortByComingSoon(eventsToWork);
+        break;
+      case 'date-desc':
+        eventsToWork = this.sortByDate(eventsToWork, false);
+        break;
+      case 'date-asc':
+        eventsToWork = this.sortByDate(eventsToWork, true);
+        break;
+      case 'alphabetical':
+        eventsToWork = this.sortAlphabetically(eventsToWork);
+        break;
+      case 'free-first':
+        eventsToWork = this.sortByFreeFirst(eventsToWork);
+        break;
+      default:
+        // Keep original order
+        break;
+    }
+    
+    this.filteredEvents = eventsToWork;
   }
 
-  getGoogleMapsLink(latitude: number, longitude: number): string {
-    return `https://www.google.com/maps?q=${latitude},${longitude}`;
+  // Filter to show only future events
+  filterFutureEvents(events: any[]): any[] {
+    const now = new Date();
+    return events.filter((event: any) => {
+      const eventDate = new Date(event.start_time);
+      return eventDate >= now;
+    });
   }
 
-  hasValidCoordinates(event: any): boolean {
-  const coords = event?.location?.position?.coordinates;
-  return Array.isArray(coords) &&
-    coords.length === 2 &&
-    coords[0] != null &&
-    coords[1] != null &&
-    this.getGoogleMapsLink(coords[1], coords[0]) !== 'https://www.google.com/maps?q=null,null';
-}
-
-hasLocation(event: any): boolean {
-  // Returns true if there is an address or valid coordinates
-  return (
-    (event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi) ||
-    this.hasValidCoordinates(event)
-  );
-}
-
-  // Use the imported search functions
-  DoSearch() {
-    DoSearch(this);
+  // Updated sorting methods that work with filtered arrays
+  sortByComingSoon(events: any[] = this.filteredEvents): any[] {
+    const now = new Date();
+    return events.sort((a: any, b: any) => {
+      const aDate = new Date(a.start_time);
+      const bDate = new Date(b.start_time);
+      
+      // First, separate future and past events
+      const aIsFuture = aDate >= now;
+      const bIsFuture = bDate >= now;
+      
+      if (aIsFuture && !bIsFuture) return -1;
+      if (!aIsFuture && bIsFuture) return 1;
+      
+      // If both are future or both are past, sort by date
+      if (aIsFuture && bIsFuture) {
+        return aDate.getTime() - bDate.getTime(); // Nearest future first
+      } else {
+        return bDate.getTime() - aDate.getTime(); // Most recent past first
+      }
+    });
   }
 
-  SearchStadion() {
-    SearchStadion(this);
+  sortByDate(events: any[] = this.filteredEvents, isAsc: boolean): any[] {
+    return events.sort((a: any, b: any) => {
+      const aDate = new Date(a.start_time);
+      const bDate = new Date(b.start_time);
+      return isAsc ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime();
+    });
   }
 
-  SearchLapset() {
-    SearchLapset(this);
+  sortAlphabetically(events: any[] = this.filteredEvents): any[] {
+    return events.sort((a: any, b: any) => {
+      const aName = (a.name?.fi || a.name?.en || '').toLowerCase();
+      const bName = (b.name?.fi || b.name?.en || '').toLowerCase();
+      return aName.localeCompare(bName);
+    });
   }
 
-  SearchHipHop() {
-    SearchHipHop(this);
+  sortByFreeFirst(events: any[] = this.filteredEvents): any[] {
+    return events.sort((a: any, b: any) => {
+      const aIsFree = a.offers?.[0]?.is_free === true;
+      const bIsFree = b.offers?.[0]?.is_free === true;
+      
+      if (aIsFree && !bIsFree) return -1;
+      if (!aIsFree && bIsFree) return 1;
+      
+      // If both are free or both are paid, sort by date (coming soon)
+      const aDate = new Date(a.start_time);
+      const bDate = new Date(b.start_time);
+      return aDate.getTime() - bDate.getTime();
+    });
   }
 
-  SearchHIFK() {
-    SearchHIFK(this);
-  }
-
-  SearchJokerit() {
-    SearchJokerit(this);
-  }
-
-  SearchKonsertti() {
-    SearchKonsertti(this);
-  }
-
-  SearchDate() {
-    this.isLoading = true;
-    this.loadingDataWindow();
-    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  // Legacy method for backwards compatibility
+  sortDate(isAsc: boolean) {
+    this.filteredEvents = this.sortByDate(this.filteredEvents, isAsc);
   }
 
   // Image modal methods
@@ -332,5 +406,171 @@ hasLocation(event: any): boolean {
       return `alle ${event.audience_max_age} vuotta`;
     }
     return '';
+  }
+
+  // Helper method to format date for display
+  getFormattedSearchDate(): string {
+    if (this.searchTextDate) {
+      const [year, month, day] = this.searchTextDate.split('-');
+      return `${day}.${month}.${year}`;
+    }
+    return '';
+  }
+
+  // Handle image loading errors
+  onImageError(event: any): void {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = this.getPlaceholderImageUrl();
+    imgElement.onerror = null; // Prevent infinite loop
+  }
+
+  // Get placeholder image URL
+  getPlaceholderImageUrl(): string {
+    // Create a nice SVG placeholder
+    const svg = `
+      <svg width="640" height="360" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#e2e8f0;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#cbd5e1;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="640" height="360" fill="url(#grad)"/>
+        <g transform="translate(320, 180)">
+          <circle cx="0" cy="-20" r="40" fill="#94a3b8" opacity="0.6"/>
+          <rect x="-60" y="10" width="120" height="80" rx="8" fill="#94a3b8" opacity="0.4"/>
+          <polygon points="-20,40 -10,25 10,35 20,20 30,30 30,70 -30,70" fill="#64748b" opacity="0.5"/>
+          <text x="0" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#64748b" opacity="0.7">
+            Ei kuvaa saatavilla
+          </text>
+        </g>
+      </svg>
+    `;
+    return 'data:image/svg+xml;base64,' + btoa(svg);
+  }
+
+  // Handle modal image errors
+  onModalImageError(event: any): void {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = this.getPlaceholderImageUrl();
+    imgElement.onerror = null; // Prevent infinite loop
+  }
+
+  // Check if image URL is valid
+  hasValidImage(event: any): boolean {
+    return event?.images && event?.images?.length > 0 && event?.images[0]?.url;
+  }
+
+  // Get safe image URL with fallback
+  getSafeImageUrl(event: any): string {
+    if (this.hasValidImage(event)) {
+      return event.images[0].url;
+    }
+    return this.getPlaceholderImageUrl();
+  }
+
+  // Get image title with fallback
+  getImageTitle(event: any): string {
+    if (this.hasValidImage(event)) {
+      const image = event.images[0];
+      const license = image.license ? `lisenssi: ${image.license}` : '';
+      const photographer = image.photographer_name ? `kuvaaja: ${image.photographer_name}` : '';
+      return [license, photographer].filter(Boolean).join(', ');
+    }
+    return 'Kuva ei saatavilla';
+  }
+
+  // Location helper methods
+  hasLocation(event: any): boolean {
+    return event?.location?.name?.fi || event?.location?.name?.en || event?.location?.street_address?.fi;
+  }
+
+  hasValidCoordinates(event: any): boolean {
+    return event?.location?.position?.coordinates && 
+           event.location.position.coordinates.length === 2 &&
+           event.location.position.coordinates[0] !== null &&
+           event.location.position.coordinates[1] !== null;
+  }
+
+  getGoogleMapsLink(latitude: number, longitude: number): string {
+    return `https://www.google.com/maps?q=${latitude},${longitude}`;
+  }
+
+  // Helper method to get language name from language object or code
+  getLanguageName(language: any): string {
+    if (typeof language === 'string') {
+      // If it's just a language code
+      const languageMap: { [key: string]: string } = {
+        'fi': 'Suomi',
+        'sv': 'Svenska',
+        'en': 'English',
+        'de': 'Deutsch',
+        'fr': 'Français',
+        'es': 'Español',
+        'ru': 'Русский'
+      };
+      return languageMap[language] || language;
+    } else if (language?.name) {
+      // If it's a language object with name property
+      return language.name?.fi || language.name?.en || language.name?.sv || language.id;
+    } else if (language?.id) {
+      // If it's a language object with id
+      return this.getLanguageName(language.id);
+    }
+    return 'Tuntematon kieli';
+  }
+
+  // Check if sorting controls should be shown
+  shouldShowSortControls(): boolean {
+    return this.totalPages !== undefined && this.totalPages > 1;
+  }
+
+  // Search methods
+  DoSearch(): void {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEvents(this.searchText, this.newPageNumber = 1);
+  }
+
+  SearchDate(): void {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEventsDate(this.searchTextDate, this.newPageNumber = 1);
+  }
+
+  SearchStadion(): void {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEvents(this.searchText = 'Stadion', this.newPageNumber = 1);
+  }
+
+  SearchLapset(): void {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEvents(this.searchText = 'Lapset', this.newPageNumber = 1);
+  }
+
+  SearchHipHop(): void {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEvents(this.searchText = 'Hiphop', this.newPageNumber = 1);
+  }
+
+  SearchHIFK(): void {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEvents(this.searchText = 'HIFK', this.newPageNumber = 1);
+  }
+
+  SearchJokerit(): void {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEvents(this.searchText = 'Jokerit', this.newPageNumber = 1);
+  }
+
+  SearchKonsertti(): void {
+    this.isLoading = true;
+    this.loadingDataWindow();
+    this.getAllEvents(this.searchText = 'Konsertti', this.newPageNumber = 1);
   }
 }

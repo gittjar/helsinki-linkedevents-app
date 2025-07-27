@@ -14,6 +14,7 @@ export class ImageComponent implements OnInit {
   newPageNumber = 1;
   isLoading: boolean = true;
   copied: boolean = false;
+  copiedImageId: string | null = null; // Track which specific image was copied
   sortOrder: string = '-last_modified_time'; // Default sort by last modified descending
   searchTerm: string = '';
   lastSearchTerm: string = '';
@@ -78,12 +79,17 @@ export class ImageComponent implements OnInit {
     this.getImageData(this.newPageNumber, this.searchTerm);
   }
 
-  copyURLToClipboard(url: string): void {
-    this.clipboard.copy(url);
-    this.copied = true;
+  copyURLToClipboard(image: any): void {
+    this.clipboard.copy(image.url);
+    this.copiedImageId = image.id;
     setTimeout(() => {
-      this.copied = false;
+      this.copiedImageId = null;
     }, 2000);
+  }
+
+  // Helper method to check if a specific image was copied
+  isImageCopied(imageId: string): boolean {
+    return this.copiedImageId === imageId;
   }
 
   openJumbotron(image: any): void {

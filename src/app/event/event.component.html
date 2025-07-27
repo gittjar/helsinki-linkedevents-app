@@ -53,7 +53,8 @@
 
   <section class="main">
     <div *ngIf="isLoading" class="loading-message">
-      <p>Ladataan tietoja hakusanalla {{searchText}} rajapinnasta...odota</p>
+      <p *ngIf="searchType === 'text'">Ladataan tietoja hakusanalla "{{searchText}}" rajapinnasta...odota</p>
+      <p *ngIf="searchType === 'date'">Ladataan tapahtumia päivälle {{getFormattedSearchDate()}}...odota</p>
     </div>
 
     <div *ngIf="!isLoading">
@@ -98,6 +99,46 @@
     <button class="btn" [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked" (click)="sortDate(true)">Vanhimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
     <button class="btn" [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked" (click)="sortDate(false)">Uusimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
   </div>
+
+  <!-- Sorting Controls - Only show when multiple pages exist -->
+  <div class="sort-controls" *ngIf="shouldShowSortControls()">
+    <div class="sort-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 6h18M7 12h10M10 18h4"/>
+      </svg>
+      <span>Järjestä tulokset:</span>
+    </div>
+    <div class="sort-buttons">
+      <button 
+        *ngFor="let sort of availableSorts" 
+        class="sort-btn" 
+        [class.active]="currentSort === sort.key"
+        (click)="sortEvents(sort.key)"
+      >
+        {{ sort.label }}
+        <span class="sort-indicator" *ngIf="currentSort === sort.key">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20,6 9,17 4,12"></polyline>
+          </svg>
+        </span>
+      </button>
+    </div>
+    
+    <!-- Future Events Filter Toggle -->
+    <div class="filter-toggle">
+      <button 
+        class="future-events-toggle" 
+        [class.active]="showOnlyFutureEvents"
+        (click)="toggleFutureEventsFilter()"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12,6 12,12 16,14"></polyline>
+        </svg>
+        <span>{{ showOnlyFutureEvents ? 'Näytä kaikki tapahtumat' : 'Näytä vain tulevat tapahtumat' }}</span>
+      </button>
+    </div>
+  </div>
 </section>
 
       
@@ -132,7 +173,9 @@
                    [ngClass]="{
                      'past-event': isEventPast(event),
                      'today-event': isEventToday(event),
-                     'tomorrow-event': isEventTomorrow(event)
+                     'tomorrow-event': isEventTomorrow(event),
+                     'free-event': event?.offers?.[0]?.is_free === true,
+                     'paid-event': event?.offers?.[0]?.is_free === false
                    }">
             <!-- Event Name Header -->
             <header class="event-header">
@@ -163,12 +206,15 @@
 
             <!-- Event Image -->
             <figure class="cardimage">
-              <ng-container *ngIf="event?.images && event?.images?.length > 0; else placeholder">
-                <img src="{{ event?.images[0]?.url }}" title="lisenssi: {{event?.images[0]?.license }}, kuvaaja: {{event?.images[0]?.photographer_name}}">
-              </ng-container>
-              <ng-template #placeholder>
-                <img src="https://picsum.photos/640/360">
-              </ng-template>
+              <img 
+                [src]="getSafeImageUrl(event)" 
+                [title]="getImageTitle(event)"
+                [alt]="event?.name?.fi || event?.name?.en || 'Tapahtuman kuva'"
+                (error)="onImageError($event)"
+                (click)="hasValidImage(event) ? openImageModal(event.images[0].url) : null"
+                [class.clickable]="hasValidImage(event)"
+                loading="lazy"
+              >
             </figure>
 
             <!-- Event Content -->
@@ -206,6 +252,26 @@
 
                 <div class="event-info" *ngIf="event?.location_extra_info?.fi">
                   📍 Lisätietoja paikasta: {{event?.location_extra_info?.fi}}
+                </div>
+                
+                <!-- Enhanced Event Information -->
+                <div class="event-info event-environmental" *ngIf="event?.environmental_certificate">
+                  🌱 Ympäristötodistus: {{event?.environmental_certificate}}
+                </div>
+                
+                <div class="event-info event-language" *ngIf="event?.in_language && event?.in_language.length > 0">
+                  🗣️ Kieli: 
+                  <span *ngFor="let lang of event?.in_language; let last = last">
+                    {{getLanguageName(lang)}}{{!last ? ', ' : ''}}
+                  </span>
+                </div>
+                
+                <div class="event-info event-video" *ngIf="event?.videos && event?.videos.length > 0">
+                  🎥 <a [href]="event?.videos[0]?.url" target="_blank">Katso video</a>
+                </div>
+                
+                <div class="event-info event-links" *ngIf="event?.external_links && event?.external_links.length > 0">
+                  🔗 <a [href]="event?.external_links[0]?.link" target="_blank">{{event?.external_links[0]?.name || 'Lisätietoja'}}</a>
                 </div>
                 
                 <div class="event-location" *ngIf="hasLocation(event); else noLocation">
@@ -266,7 +332,12 @@
 <!-- Image Modal -->
 <div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
   <div class="image-modal-content" (click)="$event.stopPropagation()">
-    <img [src]="modalImageUrl" alt="Event image">
+    <img 
+      [src]="modalImageUrl" 
+      alt="Event image"
+      (error)="onModalImageError($event)"
+      loading="lazy"
+    >
     <button class="image-modal-close" (click)="closeImageModal()">×</button>
   </div>
 </div>
