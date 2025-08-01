@@ -1,60 +1,7 @@
 <section class="bg-stone-50">
-  <!-- Breadcrumb Navigation -->
-  <nav class="breadcrumb-nav">
-    <div class="breadcrumb-container">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a routerLink="/mainpage">
-            <svg class="breadcrumb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9,22 9,12 15,12 15,22"></polyline>
-            </svg>
-            Etusivu
-          </a>
-        </li>
-        <li class="breadcrumb-separator">
-          <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-            <path d="M3 1L6 4L3 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
-        </li>
-        <li class="breadcrumb-item active">
-          <span>
-            <svg class="breadcrumb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            Tapahtumat
-          </span>
-        </li>
-      </ol>
-      
-      <!-- Quick Navigation Links -->
-      <div class="quick-nav">
-        <a routerLink="/place" class="quick-nav-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
-          </svg>
-          Paikat
-        </a>
-        <a routerLink="/image" class="quick-nav-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21,15 16,10 5,21"></polyline>
-          </svg>
-          Kuvat
-        </a>
-      </div>
-    </div>
-  </nav>
-
   <section class="main">
     <div *ngIf="isLoading" class="loading-message">
-      <p *ngIf="searchType === 'text'">Ladataan tietoja hakusanalla "{{searchText}}" rajapinnasta...odota</p>
-      <p *ngIf="searchType === 'date'">Ladataan tapahtumia päivälle {{getFormattedSearchDate()}}...odota</p>
+      <p>Ladataan tietoja hakusanalla {{searchText}} rajapinnasta...odota</p>
     </div>
 
     <div *ngIf="!isLoading">
@@ -99,46 +46,6 @@
     <button class="btn" [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked" (click)="sortDate(true)">Vanhimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
     <button class="btn" [ngClass]="{'disabled-button': button2Clicked}" [disabled]="button2Clicked" (click)="sortDate(false)">Uusimmat <fa-icon [icon]="faArrowRight"></fa-icon></button>
   </div>
-
-  <!-- Sorting Controls - Only show when multiple pages exist -->
-  <div class="sort-controls" *ngIf="shouldShowSortControls()">
-    <div class="sort-header">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 6h18M7 12h10M10 18h4"/>
-      </svg>
-      <span>Järjestä tulokset:</span>
-    </div>
-    <div class="sort-buttons">
-      <button 
-        *ngFor="let sort of availableSorts" 
-        class="sort-btn" 
-        [class.active]="currentSort === sort.key"
-        (click)="sortEvents(sort.key)"
-      >
-        {{ sort.label }}
-        <span class="sort-indicator" *ngIf="currentSort === sort.key">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20,6 9,17 4,12"></polyline>
-          </svg>
-        </span>
-      </button>
-    </div>
-    
-    <!-- Future Events Filter Toggle -->
-    <div class="filter-toggle">
-      <button 
-        class="future-events-toggle" 
-        [class.active]="showOnlyFutureEvents"
-        (click)="toggleFutureEventsFilter()"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12,6 12,12 16,14"></polyline>
-        </svg>
-        <span>{{ showOnlyFutureEvents ? 'Näytä kaikki tapahtumat' : 'Näytä vain tulevat tapahtumat' }}</span>
-      </button>
-    </div>
-  </div>
 </section>
 
       
@@ -169,175 +76,128 @@
 
       <section class="keskiosa">
         <aside class="korttilista">
-          <article *ngFor="let event of filteredEvents" class="eventcard"
+          <article *ngFor="let event of filteredEvents" 
+                   class="eventcard"
                    [ngClass]="{
+                     'free-event': event?.offers?.[0]?.is_free === true && !isEventPast(event),
+                     'paid-event': event?.offers?.[0]?.is_free === false && !isEventPast(event),
                      'past-event': isEventPast(event),
-                     'today-event': isEventToday(event),
-                     'tomorrow-event': isEventTomorrow(event),
-                     'free-event': event?.offers?.[0]?.is_free === true,
-                     'paid-event': event?.offers?.[0]?.is_free === false
+                     'event-today': isEventToday(event) && !isEventPast(event),
+                     'event-tomorrow': isEventTomorrow(event) && !isEventPast(event)
                    }">
-            <!-- Event Name Header -->
-            <header class="event-header">
-              <div class="event-name">{{event?.name?.fi}}</div>
-              
-              <!-- Event Status Indicators -->
-              <div class="event-status-indicators">
-                <span *ngIf="isEventPast(event)" class="status-badge past-event">
-                  ⏰ Tämä tapahtuma on mennyt!
-                </span>
-                <span *ngIf="isEventToday(event)" class="status-badge today-event">
-                  🔴 Tänään
-                </span>
-                <span *ngIf="isEventTomorrow(event)" class="status-badge tomorrow-event">
-                  ⭐ Huomenna
-                </span>
-                <span *ngIf="getEventStatus(event) === 'Siirretty'" class="status-badge rescheduled-event">
-                  📅 Siirretty
-                </span>
-                <span *ngIf="getEventStatus(event) === 'Peruttu'" class="status-badge cancelled-event">
-                  ❌ Peruttu
-                </span>
-                <span *ngIf="getEventType(event)" class="status-badge recurring-event">
-                  🔄 {{getEventType(event)}}
-                </span>
-              </div>
-            </header>
-
-            <!-- Event Image -->
+            
+            <!-- Past Event Indicator -->
+            <div *ngIf="isEventPast(event)" class="past-event-indicator">
+              <strong>Tämä tapahtuma on mennyt!</strong>
+            </div>
+            
+            <!-- Today Event Indicator -->
+            <div *ngIf="isEventToday(event) && !isEventPast(event)" class="today-event-indicator">
+              <strong>🎉 Tapahtuma on tänään!</strong>
+            </div>
+            
+            <!-- Tomorrow Event Indicator -->
+            <div *ngIf="isEventTomorrow(event) && !isEventPast(event)" class="tomorrow-event-indicator">
+              <strong>⭐ Tapahtuma on huomenna!</strong>
+            </div>
             <figure class="cardimage">
-              <img 
-                [src]="getSafeImageUrl(event)" 
-                [title]="getImageTitle(event)"
-                [alt]="event?.name?.fi || event?.name?.en || 'Tapahtuman kuva'"
-                (error)="onImageError($event)"
-                (click)="hasValidImage(event) ? openImageModal(event.images[0].url) : null"
-                [class.clickable]="hasValidImage(event)"
-                loading="lazy"
-              >
+              <ng-container *ngIf="event?.images && event?.images?.length > 0; else placeholder">
+                <img src="{{ event?.images[0]?.url }}" title="lisenssi: {{event?.images[0]?.license }}, kuvaaja: {{event?.images[0]?.photographer_name}}">
+              </ng-container>
+              <ng-template #placeholder>
+                <img src="https://picsum.photos/640/360">
+              </ng-template>
             </figure>
 
-            <!-- Event Content -->
-            <section class="cardtext">
-              <div class="event-start-time">
-                📅 Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}
-              </div>
-              
-              <div class="event-details">
-                <div class="event-info" *ngIf="event?.short_description?.fi">
-                  {{event?.short_description?.fi}}
-                </div>
-                
-                <div class="event-info">
-                  ⏰ Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}
-                </div>
+            <aside class="cardtext">
+              <h2 >{{event?.name?.fi}}</h2>
+              <article class="event-start-time">Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</article>
+<br>
+              <h3 *ngIf="event?.info_url?.fi?.length" class="border-bottom"><a href="{{event?.info_url?.fi}}">Liput ja lisätiedot <fa-icon [icon]="arrowUpRightFromBox"></fa-icon></a></h3>
+              <ul>
+                <li class="border-bottom">{{event?.short_description?.fi}}</li>
+                <li class="border-bottom">Loppuu: {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}</li>
+              <ul>
+  <ng-container *ngIf="hasLocation(event); else noLocation">
+    <li class="border-bottom" *ngIf="event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi">
+      Osoite: {{event?.location?.street_address?.fi}}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}
+    </li>
+    <li *ngIf="hasValidCoordinates(event)">
+      <a [href]="getGoogleMapsLink(event?.location?.position?.coordinates[1], event?.location?.position?.coordinates[0])" target="_blank">
+        Avaa Google Mapsiin <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
+      </a>
+    </li>
+  </ng-container>
+  <ng-template #noLocation>
+    <li class="bg-gray-200">Ei ilmoitettuja paikkatietoja.</li>
+  </ng-template>
+</ul>
+              </ul>
+            </aside>
 
-                <!-- Additional Event Information -->
-                <div class="event-info" *ngIf="event?.provider?.fi">
-                  🏢 Järjestäjä: {{event?.provider?.fi}}
-                </div>
-
-                <div class="event-info" *ngIf="getAudienceInfo(event)">
-                  👥 Kohderyhmä: {{getAudienceInfo(event)}}
-                </div>
-
-                <div class="event-info" *ngIf="hasCapacityInfo(event)">
-                  <span *ngIf="event?.maximum_attendee_capacity">
-                    📊 Enintään {{event?.maximum_attendee_capacity}} henkeä
-                  </span>
-                  <span *ngIf="event?.minimum_attendee_capacity">
-                    📊 Vähintään {{event?.minimum_attendee_capacity}} henkeä
-                  </span>
-                </div>
-
-                <div class="event-info" *ngIf="event?.location_extra_info?.fi">
-                  📍 Lisätietoja paikasta: {{event?.location_extra_info?.fi}}
-                </div>
-                
-                <!-- Enhanced Event Information -->
-                <div class="event-info event-environmental" *ngIf="event?.environmental_certificate">
-                  🌱 Ympäristötodistus: {{event?.environmental_certificate}}
-                </div>
-                
-                <div class="event-info event-language" *ngIf="event?.in_language && event?.in_language.length > 0">
-                  🗣️ Kieli: 
-                  <span *ngFor="let lang of event?.in_language; let last = last">
-                    {{getLanguageName(lang)}}{{!last ? ', ' : ''}}
-                  </span>
-                </div>
-                
-                <div class="event-info event-video" *ngIf="event?.videos && event?.videos.length > 0">
-                  🎥 <a [href]="event?.videos[0]?.url" target="_blank">Katso video</a>
-                </div>
-                
-                <div class="event-info event-links" *ngIf="event?.external_links && event?.external_links.length > 0">
-                  🔗 <a [href]="event?.external_links[0]?.link" target="_blank">{{event?.external_links[0]?.name || 'Lisätietoja'}}</a>
-                </div>
-                
-                <div class="event-location" *ngIf="hasLocation(event); else noLocation">
-                  <div *ngIf="event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi">
-                    📍 {{event?.location?.street_address?.fi}}, {{event?.location?.postal_code}}, {{event?.location?.address_locality?.fi}}
+            <!-- Additional Information Section - Always Show -->
+            <section class="liput">
+              <!-- Show when there's additional information -->
+              <div *ngIf="hasAdditionalInfo(event)">
+                <h2>Lisätiedot</h2>
+                <div class="ticket-info">
+                  <div *ngIf="event?.offers[0]?.is_free === true || event?.offers[0]?.is_free === false">
+                    <strong>Tapahtuma:</strong> {{event?.offers[0]?.is_free ? 'Ilmaistapahtuma' : 'Maksullinen tapahtuma'}}
                   </div>
-                  <div *ngIf="hasValidCoordinates(event)">
-                    <a [href]="getGoogleMapsLink(event?.location?.position?.coordinates[1], event?.location?.position?.coordinates[0])" target="_blank">
-                      🗺️ Avaa Google Mapsiin <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
+                  <div *ngIf="event?.offers[0]?.price?.fi">
+                    <strong>Hintatiedot:</strong> {{event?.offers[0]?.price?.fi}}
+                  </div>
+                  <div *ngIf="getAudienceInfo(event)">
+                    <strong>Ikäsuositus:</strong> {{getAudienceInfo(event)}}
+                  </div>
+                  <div *ngIf="hasCapacityInfo(event)">
+                    <strong>Kapasiteetti:</strong> 
+                    <span *ngIf="event.minimum_attendee_capacity && event.maximum_attendee_capacity">
+                      {{event.minimum_attendee_capacity}} - {{event.maximum_attendee_capacity}} henkilöä
+                    </span>
+                    <span *ngIf="event.maximum_attendee_capacity && !event.minimum_attendee_capacity">
+                      Enintään {{event.maximum_attendee_capacity}} henkilöä
+                    </span>
+                    <span *ngIf="event.minimum_attendee_capacity && !event.maximum_attendee_capacity">
+                      Vähintään {{event.minimum_attendee_capacity}} henkilöä
+                    </span>
+                  </div>
+                  <div *ngIf="event?.provider?.fi">
+                    <strong>Järjestäjä:</strong> {{event.provider.fi}}
+                  </div>
+                  <div *ngIf="getEventStatus(event)">
+                    <strong>Tapahtuman tila:</strong> {{getEventStatus(event)}}
+                  </div>
+                  <div *ngIf="getEventType(event)">
+                    <strong>Tapahtumatyyppi:</strong> {{getEventType(event)}}
+                  </div>
+                  <div *ngIf="event?.offers[0]?.info_url?.fi">
+                    <a [href]="event.offers[0].info_url.fi" target="_blank" rel="noopener noreferrer">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                      </svg>
+                      Osta liput
                     </a>
                   </div>
                 </div>
-                <ng-template #noLocation>
-                  <div class="event-location">📍 Ei ilmoitettuja paikkatietoja</div>
-                </ng-template>
-                
-                <div class="event-links" *ngIf="event?.info_url?.fi?.length">
-                  <a href="{{event?.info_url?.fi}}" target="_blank">
-                    🎫 Liput ja lisätiedot <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
-                  </a>
+              </div>
+              
+              <!-- Show when there's no additional information -->
+              <div *ngIf="!hasAdditionalInfo(event)" class="no-additional-info">
+                <h2>Lisätiedot</h2>
+                <div class="no-info-message">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                  </svg>
+                  <span>Ei lisätietoja saatavilla</span>
                 </div>
               </div>
             </section>
-
-            <!-- Ticket Information Footer -->
-            <footer class="liput" *ngIf="hasTicketInfo(event)">
-              <h3>Liput ja hinnat</h3>
-              <div class="ticket-info">
-                <div *ngIf="event?.offers[0]?.is_free === true || event?.offers[0]?.is_free === false">
-                  💰 Ilmaistapahtuma: {{event?.offers[0]?.is_free ? 'Kyllä' : 'Ei'}}
-                </div>
-                <div *ngIf="event?.offers[0]?.price?.fi">
-                  💳 Liput: {{event?.offers[0]?.price?.fi}}
-                </div>
-                <div *ngIf="event?.offers[0]?.description?.fi">
-                  📝 {{event?.offers[0]?.description?.fi}}
-                </div>
-                <div *ngIf="event?.offers[0]?.info_url?.fi">
-                  <a href="{{event?.offers[0]?.info_url?.fi}}" target="_blank">
-                    🎫 Osta liput <fa-icon [icon]="arrowUpRightFromBox"></fa-icon>
-                  </a>
-                </div>
-                <div *ngIf="event?.audience_min_age">
-                  👶 Alaikäraja: {{event?.audience_min_age}}
-                </div>
-                <div *ngIf="event?.audience_max_age">
-                  👴 Yläikäraja: {{event?.audience_max_age}}
-                </div>
-              </div>
-            </footer>
           </article>
         </aside>
       </section>
     </div>
   </section>
 </section>
-
-<!-- Image Modal -->
-<div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
-  <div class="image-modal-content" (click)="$event.stopPropagation()">
-    <img 
-      [src]="modalImageUrl" 
-      alt="Event image"
-      (error)="onModalImageError($event)"
-      loading="lazy"
-    >
-    <button class="image-modal-close" (click)="closeImageModal()">×</button>
-  </div>
-</div>
