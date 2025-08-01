@@ -13,7 +13,7 @@ export class ImageComponent implements OnInit {
   images: any;
   newPageNumber = 1;
   isLoading: boolean = true;
-  copied: boolean = false;
+  copiedImages: Set<any> = new Set(); // Track which images have been copied
   sortOrder: string = '-last_modified_time'; // Default sort by last modified descending
   searchTerm: string = '';
   lastSearchTerm: string = '';
@@ -78,12 +78,33 @@ export class ImageComponent implements OnInit {
     this.getImageData(this.newPageNumber, this.searchTerm);
   }
 
-  copyURLToClipboard(url: string): void {
-    this.clipboard.copy(url);
-    this.copied = true;
-    setTimeout(() => {
-      this.copied = false;
-    }, 2000);
+  copyURLToClipboard(image: any): void {
+    if (image && image.url) {
+      this.clipboard.copy(image.url);
+      this.copiedImages.add(image);
+      setTimeout(() => {
+        this.copiedImages.delete(image);
+      }, 3000);
+    }
+  }
+
+  isImageCopied(image: any): boolean {
+    return this.copiedImages.has(image);
+  }
+
+  shouldShowPage(pageNumber: number): boolean {
+    if (this.totalPages <= 12) {
+      return pageNumber !== 1 && pageNumber !== this.totalPages;
+    }
+    return pageNumber >= this.newPageNumber - 5 && 
+           pageNumber <= this.newPageNumber + 5 && 
+           pageNumber !== 1 && 
+           pageNumber !== this.totalPages;
+  }
+
+  onImageError(event: any): void {
+    // Handle image loading errors
+    event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiIHN0cm9rZT0iIzk5OTk5OSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSIjZjVmNWY1Ii8+CjxjaXJjbGUgY3g9IjguNSIgY3k9IjguNSIgcj0iMS41IiBzdHJva2U9IiM5OTk5OTkiIHN0cm9rZS13aWR0aD0iMiIvPgo8cG9seWxpbmUgcG9pbnRzPSIyMSwxNSAxNiwxMCA1LDIxIiBzdHJva2U9IiM5OTk5OTkiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K';
   }
 
   openJumbotron(image: any): void {
