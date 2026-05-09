@@ -10,12 +10,12 @@
   margin: 0.5% 0;
   font-size: 1rem;
   font-weight: 600;
-  border: #007bff 2px solid;
+  border: #c2185b 2px solid;
   border-left-width: 10px;
   border-radius: 3px;
   padding: 1%;
-  background: #f8f8f8;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #fafafa;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
   width: fit-content;
 }
 
@@ -35,7 +35,7 @@ h3 {
 /* Links */
 a:hover {
   text-decoration: none;
-  color: #007bff;
+  color: #c2185b;
 }
 
 /* Borders */
@@ -85,9 +85,9 @@ a:hover {
 }
 
 .search-input:focus {
-  border-color: #0056b3;
+  border-color: #c2185b;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(194, 24, 91, 0.12);
 }
 
 /* Enhanced Button Styles */
@@ -137,10 +137,10 @@ a:hover {
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 0.75rem;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: var(--gray-100, #f5f5f5);
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--gray-200, #e5e5e5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .quick-filters .btn {
@@ -170,11 +170,11 @@ a:hover {
 }
 
 .quick-filters .btn:hover {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  border-color: #2563eb;
+  background: linear-gradient(135deg, #c2185b 0%, #880e4f 100%);
+  border-color: #c2185b;
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 6px 20px rgba(194, 24, 91, 0.3);
 }
 
 .quick-filters .btn:hover fa-icon {
@@ -643,26 +643,26 @@ li { list-style: none; padding: 0.3em 0; }
 .page-item { margin: 0; }
 .page-link {
   padding: 6px 12px;
-  border: 1px solid #007bff;
-  color: #007bff;
-  background: #f8f8f8;
+  border: 1px solid #c2185b;
+  color: #c2185b;
+  background: #fafafa;
   cursor: pointer;
   border-radius: 4px;
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
 }
 .page-link:hover {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: rgba(194, 24, 91, 0.08);
+  color: #880e4f;
 }
 .page-item.active .page-link {
-  background: #007bff;
+  background: #c2185b;
   color: #fff;
-  border-color: #007bff;
+  border-color: #c2185b;
 }
 .page-item.disabled .page-link {
-  background: #ccc;
-  color: #666;
+  background: #e5e5e5;
+  color: #9e9e9e;
   cursor: not-allowed;
 }
 

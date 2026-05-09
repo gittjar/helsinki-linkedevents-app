@@ -7,15 +7,16 @@
   overflow: hidden;
 }
 
+/* Footer Top accent line */
 .app-footer::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #ffffff, transparent);
-  opacity: 0.3;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c2185b, transparent);
+  opacity: 1;
 }
 
 .footer-container {
@@ -74,18 +75,19 @@
 }
 
 .tech-badge {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   transition: all 0.2s ease;
 }
 
 .tech-badge:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(194, 24, 91, 0.3);
+  border-color: #c2185b;
   transform: translateY(-1px);
 }
 
@@ -101,14 +103,15 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(194, 24, 91, 0.08);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(194, 24, 91, 0.2);
   transition: all 0.3s ease;
 }
 
 .ai-badge:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(194, 24, 91, 0.15);
+  border-color: #c2185b;
   transform: translateY(-2px);
 }
 
@@ -164,7 +167,7 @@
 
 .footer-link:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(194, 24, 91, 0.12);
   transform: translateX(4px);
 }
 

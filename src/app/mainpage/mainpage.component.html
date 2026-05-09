@@ -1,7 +1,21 @@
-<gallery 
-  [items]="images" 
-  [autoPlay]="true"
-  [playerInterval]="3000"
-  [thumb]="false"
-  [imageSize]="'contain'"
-></gallery>
+<div class="hero-wrapper">
+  <gallery
+    [items]="images"
+    [autoPlay]="true"
+    [playerInterval]="3500"
+    [thumb]="false"
+    [imageSize]="'cover'"
+  ></gallery>
+
+  <div class="hero-overlay">
+    <div class="hero-content">
+      <span class="hero-label">Avoin data · Helsinki</span>
+      <h1 class="hero-title">Helsinki<span class="accent">.</span></h1>
+      <p class="hero-subtitle">Tapahtumat &middot; Paikat &middot; Kuvat</p>
+      <div class="hero-actions">
+        <a routerLink="/event" class="hero-btn primary">Selaa tapahtumia</a>
+        <a routerLink="/place" class="hero-btn secondary">L&ouml;yd&auml; paikkoja</a>
+      </div>
+    </div>
+  </div>
+</div>

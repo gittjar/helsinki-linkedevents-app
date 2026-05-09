@@ -22,14 +22,9 @@ import { ImageComponent } from './image/image.component';
 import { EventComponent } from './event/event.component';
 import { WeatherComponent } from './weather/weather.component';
 import { SearchSelectComponent } from './search-select/search-select.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { environment } from '../environment/environment';
-
-// Firebase imports
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 
 @NgModule({
@@ -54,11 +49,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     BrowserAnimationsModule,
     FontAwesomeModule,
     GalleryModule,
-    // Firebase modules
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    AngularFireStorageModule,
+    ClipboardModule,
   ],
   providers: [
     {

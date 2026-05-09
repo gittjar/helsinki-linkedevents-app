@@ -1,15 +1,125 @@
+/* Hero wrapper */
+.hero-wrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 5rem);
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
 gallery {
-    width: 100%;
-    height: 100vh; /* Full viewport height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(255, 255, 255);
-    margin-top: -1rem ;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Dark gradient overlay */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(194, 24, 91, 0.12) 55%,
+    rgba(0, 0, 0, 0.50) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 4rem;
+  pointer-events: none;
+}
+
+.hero-content {
+  pointer-events: all;
+  max-width: 640px;
+}
+
+.hero-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title {
+  font-size: 5.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 0.95;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.04em;
+}
+
+.accent {
+  color: #c2185b;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 2.5rem 0;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-btn {
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: all 0.25s ease;
+  display: inline-block;
+}
+
+.hero-btn.primary {
+  background: #c2185b;
+  color: #ffffff;
+  border: 2px solid #c2185b;
+}
+
+.hero-btn.primary:hover {
+  background: #880e4f;
+  border-color: #880e4f;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(194, 24, 91, 0.45);
+}
+
+.hero-btn.secondary {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+}
+
+.hero-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .hero-overlay {
+    padding: 2rem 1.5rem;
   }
-  
-  gallery img {
-    width: 100%;
-    height: auto;
-    object-fit: cover; /* Ensure the image covers the container without distortion */
+  .hero-title {
+    font-size: 3.25rem;
   }
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  .hero-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
