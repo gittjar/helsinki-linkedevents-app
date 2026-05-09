@@ -1,3 +1,15 @@
 gallery {
-    height: 100%;
-}
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    margin-top: -1rem ;
+  }
+  
+  gallery img {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Ensure the image covers the container without distortion */
+  }

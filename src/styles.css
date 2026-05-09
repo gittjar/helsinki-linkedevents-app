@@ -3,11 +3,23 @@
 @tailwind components;
 @tailwind utilities;
 
+body  
+{
+    font-family: 'Nunito', sans-serif;
+   
+  
+}
+
 .infoscreen {
     padding: 3%;
     width: 200px;
     height: 100px;
 
+}
+
+.g-dot {
+  width: 30px !important; /* Adjust as needed */
+  height: 30px !important; /* Adjust as needed */
 }
 
 

@@ -2,7 +2,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.<br>
 
-- Working webapp: https://linkedevents.azurewebsites.net <br>
+- Working webapp: https://helsinki.web.app <br>
 - Data based to Helsinki Linked Events: https://dev.hel.fi/apis/linkedevents <br>
 - API location: https://api.hel.fi/linkedevents/v1/ <br>
 
@@ -22,4 +22,18 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 }
 ```
 
-- Design, development and layout by gittjar
+- Search and sort data
+
+--
+
+#### Clone repository
+```
+$ git clone https://github.com/gittjar/helsinki-linkedevents-app
+$ npm install
+$ ng s -o
+```
+
+#### Deploy
+```
+$ firebase deploy
+```

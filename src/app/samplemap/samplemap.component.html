@@ -1,42 +1,58 @@
-<!-- google-maps-demo.component.html -->
-<!--
-<google-map height="400px"
-            width="750px"
-            [center]="center"
-            [zoom]="zoom"
-            (mapClick)="addMarker($event)">
-  <map-marker #marker="mapMarker"
-              *ngFor="let markerPosition of markerPositions"
-              [position]="markerPosition"
-              (mapClick)="openInfoWindow(marker)"></map-marker>
-  <map-info-window>Info Window content</map-info-window>
-</google-map>
--->
 <section class="main">
+  <!-- Search Controls -->
+  <div class="search-controls">
+    <div class="search-input">
+      <label for="search">Hae paikkoja:</label>
+      <input id="search" [(ngModel)]="textid" placeholder="Kirjoita hakusana...">
+      <div class="button-group">
+        <button class="btn btn-primary" (click)="DoSearch()">Hae {{textid}}</button>
+        <button class="btn btn-secondary" (click)="resetMap()">Tyhjennä kartta</button>
+      </div>
+    </div>
+  </div>
 
+  <!-- Main Content Columns -->
+  <div class="content-columns">
+    <!-- Map and Places -->
+    <div class="map-and-places">
+      <div id="map"></div>
+      
+      <div class="places-section" *ngIf="pleissi?.data?.length > 0">
+        <h3>Löydetyt paikat ({{pleissi.data.length}})</h3>
+        <div class="list" *ngFor="let x of pleissi?.data"> 
+          {{x?.name?.fi}} 
+          <br><small>{{x?.address_locality?.fi}}</small>
+        </div>
+      </div>
+    </div>
 
-  <aside>
-    <!--
-      <button class="btn place" (click)="showContent('places')">Places</button>
-    -->
-      Enter text: 
-      <input [(ngModel)]="textid" placeholder="Enter a value"><br>
-      <button class="btn place" (click)="DoSearch()">Search {{textid}}</button>
-      <button class="btn place" (click)="resetMap()">Reset map</button>
-    
-    
-    
-    
-        <div class="list" *ngFor="let x of pleissi?.data"> {{x?.name?.fi}} and {{x.position?.coordinates[1]}} and {{x.position?.coordinates[0]}}</div>
-    </aside>
-    
-
-    <div id="map"></div>
-    <!--
-    <article class="places d-flex align-content-center">
-        
-   
-    </article>
-    -->
-
-  </section>
+    <!-- Weather Section -->
+    <div class="weather-section">
+      <div class="weather-header">
+        <h3>Sää Helsingissä</h3>
+        <button class="btn btn-weather" (click)="loadMoreWeather()">
+          {{showExtendedWeather ? 'Näytä vähemmän' : 'Näytä lisää'}}
+        </button>
+      </div>
+      
+      <div class="weather-grid">
+        <div *ngFor="let forecast of getCurrentWeatherData()" class="weather-card">
+          <div class="weather-time">
+            {{ forecast.time | date: 'dd.MM HH:mm' }}
+          </div>
+          <div class="weather-temp">
+            {{ forecast.temp_c }}°C
+          </div>
+          <img [src]="forecast.condition.icon" alt="Weather Icon" class="weather-icon">
+          <div class="weather-desc">
+            {{ forecast.condition.text }}
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="getCurrentWeatherData().length === 0" class="weather-loading">
+        Ladataan säätietoja...
+      </div>
+    </div>
+  </div>
+</section>

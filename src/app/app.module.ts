@@ -12,14 +12,25 @@ import { PlaceService } from './place.service';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MainpageComponent } from './mainpage/mainpage.component'
+import { MainpageComponent } from './mainpage/mainpage.component';
 
-import { GalleryModule } from  'ng-gallery';
+import { GalleryModule } from 'ng-gallery';
 import { GALLERY_CONFIG } from 'ng-gallery';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ImageComponent } from './image/image.component';
 import { EventComponent } from './event/event.component';
+import { WeatherComponent } from './weather/weather.component';
+import { SearchSelectComponent } from './search-select/search-select.component';
+
+import { environment } from '../environment/environment';
+
+// Firebase imports
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+
 
 @NgModule({
   declarations: [
@@ -30,9 +41,12 @@ import { EventComponent } from './event/event.component';
     MainpageComponent,
     ImageComponent,
     EventComponent,
+    WeatherComponent,
+    SearchSelectComponent,
   ],
   imports: [
     BrowserModule,
+    environment.production ? [] : [],
     AppRoutingModule,
     HttpClientModule,
     GoogleMapsModule,
@@ -40,16 +54,21 @@ import { EventComponent } from './event/event.component';
     BrowserAnimationsModule,
     FontAwesomeModule,
     GalleryModule,
-    
+    // Firebase modules
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule,
   ],
-  providers: [    {
-    provide: GALLERY_CONFIG,
-    useValue: {
-      dots: true,
-      imageSize: 'cover'
+  providers: [
+    {
+      provide: GALLERY_CONFIG,
+      useValue: {
+        dots: true,
+        imageSize: 'cover'
+      }
     }
-    
-  }],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

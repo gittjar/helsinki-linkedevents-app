@@ -1,214 +1,284 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { Component, OnInit } from '@angular/core';
 import { PlaceService } from '../place.service';
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { faClockFour } from '@fortawesome/free-solid-svg-icons';
-import { faMagnifyingGlassLocation } from '@fortawesome/free-solid-svg-icons';
-import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
-import { Collapse } from 'tw-elements';
-import { Modal, initTE, Chip, ChipsInput } from "tw-elements";
-import { Ripple, Toast } from "tw-elements";
-import { SlicePipe } from '@angular/common';
-import { WeatherService } from '../weather.service';
-
-
-
-
+import { faArrowUpRightFromSquare, faChevronRight, faMagnifyingGlassLocation, faRectangleXmark, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-place',
   templateUrl: './place.component.html',
   styleUrls: ['./place.component.css']
 })
-export class PlaceComponent implements OnInit{
-
-  // fontawesome
+export class PlaceComponent implements OnInit {
   ArrowUpRightIcon = faArrowUpRightFromSquare;
   ChevronRight = faChevronRight;
   MagnifyingGlassLocation = faMagnifyingGlassLocation;
   RectangXmark = faRectangleXmark;
-  Clock = faClockFour;
+  ChevronDown = faChevronDown;
 
-  // googlemaps
+  toggleStates = new Map<string, boolean>();
+
+  linkedEventsApiRoot: string = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/';
   mapLoaded!: boolean;
   map!: google.maps.Map;
   geocoder = new google.maps.Geocoder();
   infoWindow!: google.maps.InfoWindow;
   options: google.maps.MapOptions = {
-   // mapTypeId: google.maps.MapTypeId.ROADMAP,
     scrollwheel: true,
-  //  disableDefaultUI: true,
-  //  disableDoubleClickZoom: true,
-    center: {
-      lat: 60.16833266,
-      lng: 24.951496394,
-    },
+    center: { lat: 60.16833266, lng: 24.951496394 },
     zoom: 12,
   };
+  currentPage = 1;
+  totalPages = 1;
+  totalCount = 0;
+  pageSize = 20;
+  nextPageUrl: string | null = null;
+  previousPageUrl: string | null = null;
+  markers = [] as any;
+  textid: string = "";
+  division: string = "";
+  showWindow = false;
+  ImageDetail: any = {};
+  public loadedPlaces: any[] = [];
+  hoveredImageId: number | null = null;
+  isSearching = false;
 
-  // weather
-  helsinkiforecastweather : any;
+  constructor(private placeservice: PlaceService) {}
 
-  
-ngOnInit() {
-  this.map = new google.maps.Map(
-    document.getElementById("map")!,
-    this.options
-  );
-  this.infoWindow = new google.maps.InfoWindow();
-  this.showContent('MyText'); 
- // this.getImageById(this.placeservice.);
-
- initTE({ Modal, Ripple, Collapse, Toast });
- initTE({ Chip, ChipsInput });
-
- this.getForecastHelsinki();
-}
-
-markers = [] as any;
-
-constructor(private placeservice: PlaceService, private weatherservice : WeatherService) {} 
-
-  // Weather Forecast Helsinki
-  getForecastHelsinki(): void {
-    this.weatherservice.getHelsinkiForecastData().subscribe ((data: any) =>{
-      this.helsinkiforecastweather = data;
-    })
-  }  
-
-pleissi?: any;
-textid : string = "";
-
-DoSearch() {
-  this.textid;
-  this.showContent('MyText');
+  ngOnInit() {
+    this.initMap();
   }
 
-  resetMap() {
-   this.textid = '';
-   this.ngOnInit();
+  initMap(): void {
+    this.map = new google.maps.Map(document.getElementById("map")!, this.options);
+    this.infoWindow = new google.maps.InfoWindow();
+    this.showContent(this.textid, this.currentPage);
   }
 
-  SearchPasila() {
-    this.textid = 'Pasila';
-    this.showContent('MyText');
-  }
-
-  SearchHaaga() {
-    this.textid = 'Haaga';
-    this.showContent('MyText');
-  }
-  SearchRavintola() {
-    this.textid = 'Ravintola';
-    this.showContent('MyText');
-  }
-
-  SearchKauppakeskus(){
-    this.textid = 'Kauppakeskus';
-    this.showContent('MyText');
-  }
-  SearchTeatteri(){
-    this.textid = 'Teatteri';
-    this.showContent('MyText');
-  }
-  SearchUrheilu(){
-    this.textid = 'Urheilu';
-    this.showContent('MyText');
-  }
-
-
-   // ReadMore:boolean = true
-   // visible:boolean = false
-
-   // HOVER OVER KUVA> näyttää paikan kuvan
-    ImageDetail : any = {};
-    showWindow = false;
-    getImageById(imageid: number) :void {
-      this.placeservice.getPlaceImageById(imageid).subscribe((data: any) =>{
-        this.ImageDetail = data;
-      })
-
-     // this.ReadMore = !this.ReadMore; //not equal to condition
-     // this.visible = !this.visible
-
-     /* INFOBOX WITH BUTTON
-      let win = window.open('', 'Kohteen kuva', 'width=300,height=200');
-      win?.document.write(`<figure class="picture"><img  style="width:100%" src=${this.ImageDetail.url}></figure>`);
-      win?.document.write(`<p>${this.ImageDetail.last_modified_time}</p>`)
-      win?.document.write(`<button class="btn" onclick="window.close()">Close Window</button>`);
-
-      setTimeout(() => {
-        win?.close();
-      }, 10000);
-      */
-      this.showWindow = true;
-    }
-    closeWindow() {
-      this.showWindow = false;
-    }
-
-  
-
-  // CONTENT FOR MAP AND MAP LOADING DATA
-showContent(contentType: string) {
-
-  this.markers = []
-
-  let content: any = null
-
-
-  // getPlace in placeservice is configured to show text and it changes here what user gives.
-  if(contentType === "MyText") {
-    content = this.placeservice.getPlace(this.textid);
-  }
-  else {
-    console.error("unknown content type");
-    return
-  }
-
-  console.log("click")
-
-  content.subscribe((response: any) => {
+  async showContent(textid: string, pageNumber: number, division?: string): Promise<void> {
+    console.log(`showContent called with textid="${textid}", division="${division}", pageNumber=${pageNumber}`);
     
-      let arr = response.data as Array<any>
+    this.isSearching = true;
+    
+    try {
+      let response;
+      
+      if (division && division.trim()) {
+        // Search by division (with optional text)
+        response = await this.placeservice.searchPlacesAdvanced(textid, division, pageNumber).toPromise();
+      } else if (textid && textid.trim()) {
+        // Search by text only
+        response = await this.placeservice.searchPlaces(textid, pageNumber).toPromise();
+      } else {
+        // Default search (all places)
+        response = await this.placeservice.searchPlaces('', pageNumber).toPromise();
+      }
+      
+      console.log(`API response for page ${pageNumber}:`, response);
+      
+      // Clear existing markers
+      this.markers.forEach((marker: { setMap: (arg0: null) => any; }) => marker.setMap(null));
+      this.markers = [];
+      
+      // Update places data
+      this.loadedPlaces = response.data || [];
+      
+      // Update pagination info
+      this.nextPageUrl = response.meta?.next || null;
+      this.previousPageUrl = response.meta?.previous || null;
+      this.totalCount = response.meta?.count || 0;
+      this.pageSize = response.meta?.limit || 20;
+      this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+      this.currentPage = pageNumber;
+      
+      console.log(`Updated currentPage: ${this.currentPage}, totalPages: ${this.totalPages}`);
+      
+      // Only process places with valid position data
+      const validPlaces = this.loadedPlaces.filter(place => 
+        place.position && 
+        place.position.coordinates && 
+        place.position.coordinates.length >= 2 &&
+        place.name && 
+        (place.name.fi || place.name.sv || place.name.en)
+      );
+      
+      console.log(`Processing ${validPlaces.length} valid places out of ${this.loadedPlaces.length} total places`);
 
-      arr.forEach((place: any) => {
-        this.pleissi = response;
-        
-        let marker = new google.maps.Marker({
-          position: {
-            lat: place?.position?.coordinates[1],
-            lng: place?.position?.coordinates[0],
+      // Add markers for valid places
+      validPlaces.forEach((place: any) => {
+        const marker = new google.maps.Marker({
+          position: { lat: place.position.coordinates[1], lng: place.position.coordinates[0] },
+          label: { 
+            text: place.name.fi || place.name.sv || place.name.en || 'Unknown', 
+            color: 'black', 
+            fontWeight: '700', 
+            fontFamily: 'Verdana', 
+            fontSize: '13px' 
           },
-          label : {text: place?.name?.fi, color: 'black', fontWeight: '700', fontFamily: 'Verdana', fontSize: '13px' },
-          title : place?.street_address?.fi + ', ' + place?.address_locality?.fi,
-          animation : google.maps.Animation.DROP,
-          icon: {url: '/assets/locationpin.png'},
+          title: this.getPlaceTitle(place),
+          animation: google.maps.Animation.DROP,
+          icon: { url: '/assets/locationpin.png' },
+          map: this.map
         });
-        
-        let markerContent = '<div class="map-infowindow">' +
-                           `<div class="map-infowindow-title">${place.name.fi}</div>` + 
-                           `<div class="map-infowindow-content">${place?.street_address?.fi}</div>` + 
-                           `<div class="map-infowindow-content">${place?.postal_code}, ${place?.address_locality?.fi}</div>` + 
-                           `<div class="map-infowindow-content"><a href="${place?.info_url?.fi}">Lue lisää ></a></div>
-                           ` + 
 
-                           `<hr>` + `<br>`+ 
-                           `<div class="map-infowindow-content">${place?.description?.fi.lenght!}</div>` + 
+        this.markers.push(marker);
 
-                            '</div>'
-                           
-        // To add the marker to the map, call setMap();
-        marker.setMap(this.map);
-        google.maps.event.addListener(marker, "click", () => {
-         let infowindow = new google.maps.InfoWindow();
-          infowindow.setContent(markerContent)
-          infowindow.open(this.map, marker);    
+        const infoUrl = place.info_url && place.info_url.fi 
+          ? `<a href="${place.info_url.fi}" target="_blank" rel="noopener noreferrer">Lue lisää ></a>` 
+          : "Ei lisätietoja saatavilla";
+          
+        const markerContent = `<div class="map-infowindow">
+          <div class="map-infowindow-title">${place.name.fi || place.name.sv || place.name.en || 'Unknown'}</div>
+          <div class="map-infowindow-content">${this.getPlaceAddress(place)}</div>
+          <div class="map-infowindow-content">${place.postal_code || ''} ${place.address_locality?.fi || place.address_locality?.sv || place.address_locality?.en || ''}</div>
+          <div class="map-infowindow-content">${infoUrl}</div>
+        </div>`;
+
+        marker.addListener("click", () => {
+          this.infoWindow.setContent(markerContent);
+          this.infoWindow.open(this.map, marker);
         });
       });
-    }); 
-}
+      
+      // Center map on first valid place if available
+      if (validPlaces.length > 0) {
+        const firstPlace = validPlaces[0];
+        this.map.setCenter({ 
+          lat: firstPlace.position.coordinates[1], 
+          lng: firstPlace.position.coordinates[0] 
+        });
+        this.map.setZoom(13);
+      }
+      
+    } catch (error) {
+      console.error('Error in showContent:', error);
+      this.loadedPlaces = [];
+      this.totalPages = 1;
+      this.totalCount = 0;
+    } finally {
+      this.isSearching = false;
+    }
+  }
+
+  private getPlaceTitle(place: any): string {
+    const name = place.name?.fi || place.name?.sv || place.name?.en || 'Unknown';
+    const address = this.getPlaceAddress(place);
+    return `${name} - ${address}`;
+  }
+
+  private getPlaceAddress(place: any): string {
+    const street = place.street_address?.fi || place.street_address?.sv || place.street_address?.en || '';
+    const locality = place.address_locality?.fi || place.address_locality?.sv || place.address_locality?.en || '';
+    return `${street}${street && locality ? ', ' : ''}${locality}`;
+  }
+
+  toggleInfo(placeId: string): void {
+    const currentState = this.toggleStates.get(placeId) || false;
+    this.toggleStates.set(placeId, !currentState);
+  }
+
+  doSearch(): void {
+    console.log('doSearch called with textid:', this.textid, 'division:', this.division);
+    this.currentPage = 1;
+    this.showContent(this.textid, this.currentPage, this.division);
+  }
+
+  doSearchByDivision(): void {
+    console.log('doSearchByDivision called with division:', this.division);
+    this.currentPage = 1;
+    this.showContent('', this.currentPage, this.division);
+  }
+
+  resetMap(): void {
+    this.textid = '';
+    this.division = '';
+    this.currentPage = 1;
+    this.initMap();
+  }
+
+  handleSearch(searchTerm: string): void {
+    this.textid = searchTerm;
+    this.currentPage = 1;
+    this.showContent(this.textid, this.currentPage, this.division);
+  }
+
+  getImageById(imageId: number): void {
+    this.hoveredImageId = imageId;
+    this.placeservice.getPlaceImageById(imageId).subscribe((data: any) => {
+      this.ImageDetail = data;
+    });
+  }
+
+  closeWindow(): void {
+    this.hoveredImageId = null;
+  }
+
+  // Pagination methods
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      console.log(`Next page clicked. Current: ${this.currentPage}, Going to: ${this.currentPage + 1}`);
+      this.currentPage++;
+      this.showContent(this.textid, this.currentPage, this.division);
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      console.log(`Previous page clicked. Current: ${this.currentPage}, Going to: ${this.currentPage - 1}`);
+      this.currentPage--;
+      this.showContent(this.textid, this.currentPage, this.division);
+    }
+  }
+
+  goToPage(pageNumber: number): void {
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      console.log(`goToPage clicked. Going to page: ${pageNumber}`);
+      this.currentPage = pageNumber;
+      this.showContent(this.textid, this.currentPage, this.division);
+    }
+  }
+
+  get pages(): number[] {
+    const pages: number[] = [];
+    if (this.totalPages <= 7) {
+      for (let i = 1; i <= this.totalPages; i++) pages.push(i);
+    } else {
+      if (this.currentPage <= 4) {
+        pages.push(1,2,3,4,5,-1,this.totalPages);
+      } else if (this.currentPage >= this.totalPages - 3) {
+        pages.push(1,-1,this.totalPages-4,this.totalPages-3,this.totalPages-2,this.totalPages-1,this.totalPages);
+      } else {
+        pages.push(1,-1,this.currentPage-1,this.currentPage,this.currentPage+1,-1,this.totalPages);
+      }
+    }
+    return pages;
+  }
+
+  // Image loading handlers
+  onImageError(event: any): void {
+    console.log('Image loading failed:', event.target.src);
+    
+    // Hide the broken image
+    event.target.style.display = 'none';
+    
+    // Show the broken image placeholder
+    const imageContainer = event.target.closest('.image-container');
+    if (imageContainer) {
+      const placeholder = imageContainer.querySelector('.broken-image-placeholder');
+      if (placeholder) {
+        (placeholder as HTMLElement).style.display = 'block';
+      }
+    }
+  }
+
+  onImageLoad(event: any): void {
+    console.log('Image loaded successfully:', event.target.src);
+    
+    // Hide the broken image placeholder if it's visible
+    const imageContainer = event.target.closest('.image-container');
+    if (imageContainer) {
+      const placeholder = imageContainer.querySelector('.broken-image-placeholder');
+      if (placeholder) {
+        (placeholder as HTMLElement).style.display = 'none';
+      }
+    }
+  }
 }

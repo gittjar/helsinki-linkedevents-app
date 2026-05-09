@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "helsinki",
+    "public": "dist/helsinki-linkedevents-app",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
