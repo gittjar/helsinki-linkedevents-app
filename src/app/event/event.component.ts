@@ -27,6 +27,7 @@ export class EventComponent implements OnInit {
   pages: number[] = [];
   button1Clicked: boolean = false;
   button2Clicked: boolean = false;
+  expandedCards = new Set<string>();
 
   constructor(private http: EventService) {}
 
@@ -313,5 +314,17 @@ hasLocation(event: any): boolean {
       default:
         return event.super_event_type;
     }
+  }
+
+  toggleCard(id: string): void {
+    if (this.expandedCards.has(id)) {
+      this.expandedCards.delete(id);
+    } else {
+      this.expandedCards.add(id);
+    }
+  }
+
+  isCardExpanded(id: string): boolean {
+    return this.expandedCards.has(id);
   }
 }
