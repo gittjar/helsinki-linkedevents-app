@@ -28,6 +28,7 @@ export class EventComponent implements OnInit {
   button1Clicked: boolean = false;
   button2Clicked: boolean = false;
   expandedCards = new Set<string>();
+  expandedOccurrences = new Set<string>();
 
   constructor(private http: EventService) {}
 
@@ -52,25 +53,52 @@ export class EventComponent implements OnInit {
   getAllEvents(searchText: string, pageNumber: number): void {
     this.http.getEvent(searchText, pageNumber).subscribe((data: any) => {
       this.events = data;
-      this.filteredEvents = data.data;
+      this.filteredEvents = this.groupEventsByOccurrence(data.data);
       this.totalPages = Math.ceil(data.meta.count / 20);
       this.pages = this.getPaginationPages();
     });
   }
 
+  groupEventsByOccurrence(events: any[]): any[] {
+    if (!events) return [];
+    const groups = new Map<string, any>();
+    for (const event of events) {
+      const name = event?.name?.fi?.trim();
+      if (!name) {
+        groups.set(event.id, { ...event, occurrences: [event] });
+        continue;
+      }
+      const locationId = event?.location?.id || '';
+      const key = `${name}__${locationId}`;
+      if (groups.has(key)) {
+        groups.get(key).occurrences.push(event);
+      } else {
+        groups.set(key, { ...event, occurrences: [event] });
+      }
+    }
+    const result: any[] = [];
+    for (const group of groups.values()) {
+      group.occurrences.sort((a: any, b: any) =>
+        new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+      );
+      result.push(group);
+    }
+    return result;
+  }
+
+  getNextOccurrence(event: any): any {
+    const occs: any[] = event?.occurrences;
+    if (!occs || occs.length <= 1) return event;
+    const now = new Date();
+    return occs.find(o => new Date(o.start_time) >= now) || occs[occs.length - 1];
+  }
+
   getAllEventsDate(searchDate: string, pageNumber: number): void {
     this.http.getEventDate(searchDate, pageNumber).subscribe((data: any) => {
       this.events = data;
-      this.filterEventsByDate(searchDate);
-      this.totalPages = Math.ceil(this.filteredEvents.length / 20);
+      this.filteredEvents = this.groupEventsByOccurrence(data.data);
+      this.totalPages = Math.ceil(data.meta.count / 20);
       this.pages = this.getPaginationPages();
-    });
-  }
-
-  filterEventsByDate(date: string): void {
-    this.filteredEvents = this.events.data.filter((event: any) => {
-      const eventDate = new Date(event.start_time).toISOString().split('T')[0];
-      return eventDate === date;
     });
   }
 
@@ -171,10 +199,11 @@ export class EventComponent implements OnInit {
   }
 
   sortDate(isAsc: boolean) {
+    const getTime = (event: any) => new Date(this.getNextOccurrence(event).start_time).getTime();
     if (isAsc) {
-      this.filteredEvents.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? 1 : ((b.start_time > a.start_time) ? -1 : 0));
+      this.filteredEvents.sort((a: any, b: any) => getTime(a) - getTime(b));
     } else {
-      this.filteredEvents.sort((a: { start_time: string; }, b: { start_time: string; }) => (a.start_time > b.start_time) ? -1 : ((b.start_time > a.start_time) ? 1 : 0));
+      this.filteredEvents.sort((a: any, b: any) => getTime(b) - getTime(a));
     }
   }
 
@@ -242,29 +271,35 @@ hasLocation(event: any): boolean {
            (event?.audience_max_age?.length > 0);
   }
 
-  // Helper method to check if event is past
+  // Helper method to check if event is past (all occurrences past)
   isEventPast(event: any): boolean {
-    if (!event.start_time) return false;
-    const eventDate = new Date(event.start_time);
-    const now = new Date();
-    return eventDate < now;
+    const rep = this.getNextOccurrence(event);
+    if (!rep?.start_time) return false;
+    return new Date(rep.start_time) < new Date();
   }
 
-  // Helper method to check if event is happening today
+  // Helper method to check if event is happening today (next occurrence)
   isEventToday(event: any): boolean {
-    if (!event.start_time) return false;
-    const eventDate = new Date(event.start_time);
-    const today = new Date();
-    return eventDate.toDateString() === today.toDateString();
+    const rep = this.getNextOccurrence(event);
+    if (!rep?.start_time) return false;
+    return new Date(rep.start_time).toDateString() === new Date().toDateString();
   }
 
-  // Helper method to check if event is happening tomorrow
+  // Helper method to check if event is happening tomorrow (next occurrence)
   isEventTomorrow(event: any): boolean {
-    if (!event.start_time) return false;
-    const eventDate = new Date(event.start_time);
+    const rep = this.getNextOccurrence(event);
+    if (!rep?.start_time) return false;
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    return eventDate.toDateString() === tomorrow.toDateString();
+    return new Date(rep.start_time).toDateString() === tomorrow.toDateString();
+  }
+
+  isOccurrencePast(occ: any): boolean {
+    return new Date(occ.start_time) < new Date();
+  }
+
+  isOccurrenceToday(occ: any): boolean {
+    return new Date(occ.start_time).toDateString() === new Date().toDateString();
   }
 
   // Helper method to get audience info
@@ -326,5 +361,17 @@ hasLocation(event: any): boolean {
 
   isCardExpanded(id: string): boolean {
     return this.expandedCards.has(id);
+  }
+
+  toggleOccurrences(id: string): void {
+    if (this.expandedOccurrences.has(id)) {
+      this.expandedOccurrences.delete(id);
+    } else {
+      this.expandedOccurrences.add(id);
+    }
+  }
+
+  isOccurrencesExpanded(id: string): boolean {
+    return this.expandedOccurrences.has(id);
   }
 }

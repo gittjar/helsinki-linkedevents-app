@@ -163,7 +163,35 @@
 
             <aside class="cardtext">
               <h2>{{event?.name?.fi}}</h2>
-              <div class="event-start-time">Alkaa: {{event?.start_time | date : 'd.M.yyyy klo: H:mm'}}</div>
+              <div class="event-start-time">Alkaa: {{getNextOccurrence(event)?.start_time | date : 'd.M.yyyy klo: H:mm'}}</div>
+
+              <!-- Multiple occurrences: badge + expandable times list -->
+              <ng-container *ngIf="event.occurrences?.length > 1">
+                <button class="occurrence-badge"
+                        (click)="toggleOccurrences(event?.id)"
+                        [attr.aria-expanded]="isOccurrencesExpanded(event?.id)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  {{ event.occurrences.length }} ajankohtaa
+                  <svg class="occ-chevron" [class.rotated]="isOccurrencesExpanded(event?.id)" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                  </svg>
+                </button>
+                <div class="occurrences-panel" [class.is-open]="isOccurrencesExpanded(event?.id)">
+                  <div *ngFor="let occ of event.occurrences" class="occ-item"
+                       [class.occ-past]="isOccurrencePast(occ)"
+                       [class.occ-today]="isOccurrenceToday(occ)">
+                    <span class="occ-dot"></span>
+                    <span class="occ-time">{{occ.start_time | date : 'd.M. klo H:mm'}}</span>
+                    <span *ngIf="isOccurrenceToday(occ)" class="occ-tag occ-today-tag">tänään</span>
+                    <span *ngIf="!isOccurrenceToday(occ) && isOccurrencePast(occ)" class="occ-tag occ-past-tag">mennyt</span>
+                  </div>
+                </div>
+              </ng-container>
               <p *ngIf="event?.short_description?.fi" class="card-description">{{event?.short_description?.fi}}</p>
               <div *ngIf="event?.location?.address_locality?.fi" class="card-location-compact">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -186,8 +214,8 @@
             <!-- Expandable details section -->
             <section class="card-expanded" [class.is-open]="isCardExpanded(event?.id)">
               <div class="expanded-inner">
-                <div *ngIf="event?.end_time" class="expanded-row">
-                  <strong>Loppuu:</strong> {{event?.end_time | date : 'd.M.yyyy klo: H:mm'}}
+                <div *ngIf="getNextOccurrence(event)?.end_time" class="expanded-row">
+                  <strong>Loppuu:</strong> {{getNextOccurrence(event)?.end_time | date : 'd.M.yyyy klo: H:mm'}}
                 </div>
                 <ng-container *ngIf="hasLocation(event); else noLocationExp">
                   <div class="expanded-row" *ngIf="event?.location?.street_address?.fi && event?.location?.postal_code && event?.location?.address_locality?.fi">

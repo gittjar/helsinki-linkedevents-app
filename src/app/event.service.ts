@@ -8,28 +8,26 @@ import { Observable } from 'rxjs';
 export class EventService {
 
   constructor(private eventHTTP: HttpClient) { }
-// free text search
-  PAGEURL = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/event/?text='
 
-  BASEURL ='https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/event/?include=location,keywords&text='
+  private readonly PROXY = 'https://api.codetabs.com/v1/proxy/?quest=';
+  private proxyUrl(targetUrl: string): string {
+    return this.PROXY + encodeURIComponent(targetUrl);
+  }
 
   getEvent(searchText: string, pageNumber: number): any {
-    const events = this.eventHTTP.get(this.BASEURL+searchText+'&page='+pageNumber);
-    return events;  
-    }
+    const target = `https://api.hel.fi/linkedevents/v1/event/?include=location,keywords&text=${encodeURIComponent(searchText)}&page=${pageNumber}`;
+    return this.eventHTTP.get(this.proxyUrl(target));
+  }
 
-    getEventId(id: string): any {
-      const product = this.eventHTTP.get('https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/event/?include=location,keywords&text=' + id);
-      return product;
-      } 
-// search by date
+  getEventId(id: string): any {
+    const target = `https://api.hel.fi/linkedevents/v1/event/?include=location,keywords&text=${encodeURIComponent(id)}`;
+    return this.eventHTTP.get(this.proxyUrl(target));
+  }
 
-    PAGEURL_Date = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/event/?start='
- 
-    getEventDate(searchDate: string, pageNumber: number): any {
-      const events = this.eventHTTP.get(this.PAGEURL_Date+searchDate+'&end='+searchDate+'&page='+pageNumber);
-      return events;  
-      }
+  getEventDate(searchDate: string, pageNumber: number): any {
+    const target = `https://api.hel.fi/linkedevents/v1/event/?start=${searchDate}&end=${searchDate}&page=${pageNumber}`;
+    return this.eventHTTP.get(this.proxyUrl(target));
+  }
 
 
 }
