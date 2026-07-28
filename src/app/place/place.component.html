@@ -51,17 +51,19 @@
     </div>
   </nav>
 
-  <h1 class="ml-3">Helsinki LinkedEvents</h1>
-  <p class="ml-3">Tervetuloa Helsinki LinkedEvents -sovellukseen. Täältä löydät tietoa Helsingin tapahtumista ja paikoista.</p>
+  <header class="page-hero">
+    <h1>Helsinki LinkedEvents</h1>
+    <p>Tervetuloa Helsinki LinkedEvents -sovellukseen. Täältä löydät tietoa Helsingin tapahtumista ja paikoista.</p>
+  </header>
 
 <section class="weather-and-map">
-  <div id="map" ></div>
+  <div id="map"></div>
   <app-weather></app-weather>
 </section>
 
 <section class="search-controls">
-  <article class="search-input">
-    <h1 class="ml-3">Hae paikkoja</h1>
+  <article class="search-input search-main">
+    <h2>Hae paikkoja</h2>
     
     <!-- Text Search -->
     <div class="search-field">
@@ -74,8 +76,8 @@
         placeholder="Esim. töölö, keskusta, kirjasto..."
         [disabled]="isSearching"
       >
-      <button 
-        class="ml-2 rounded-md bg-green-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-400" 
+      <button
+        class="action-btn action-btn-primary"
         (click)="doSearch()"
         [disabled]="isSearching"
       >
@@ -94,8 +96,8 @@
         placeholder="Esim. malmi, kallio, punavuori..."
         [disabled]="isSearching"
       >
-      <button 
-        class="ml-2 rounded-md bg-blue-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-blue-400" 
+      <button
+        class="action-btn action-btn-secondary"
         (click)="doSearchByDivision()"
         [disabled]="isSearching"
       >
@@ -104,30 +106,29 @@
     </div>
     
     <!-- Combined Search -->
-    <div class="search-field" *ngIf="textid && division">
-      <button 
-        class="ml-2 rounded-md bg-purple-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-purple-400" 
+    <div class="search-actions">
+      <button
+        class="action-btn action-btn-mixed"
+        *ngIf="textid && division"
         (click)="doSearch()"
         [disabled]="isSearching"
       >
         {{isSearching ? 'Etsitään...' : 'Etsi tekstillä ja alueelta'}} <fa-icon [icon]="ChevronRight"></fa-icon>
       </button>
+
+      <!-- Reset Button -->
+      <button
+        class="action-btn action-btn-reset"
+        (click)="resetMap()"
+        [disabled]="isSearching"
+      >
+        Tyhjennä <fa-icon [icon]="RectangXmark"></fa-icon>
+      </button>
     </div>
-    
-    <!-- Reset Button -->
-    <button 
-      class="ml-2 rounded-md bg-gray-500 px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-400" 
-      (click)="resetMap()"
-      [disabled]="isSearching"
-    >
-      Tyhjennä <fa-icon [icon]="RectangXmark"></fa-icon>
-    </button>
-    
-    <br>
     
     <!-- Results Info -->
     <div class="results-info">
-      <p class="ml-3">
+      <p>
         <span *ngIf="isSearching">Etsitään paikkoja...</span>
         <span *ngIf="!isSearching">
           Kartalla näytetään {{loadedPlaces.length}} kohdetta
@@ -147,7 +148,7 @@
     </div>
   </article>
 
-  <article class="search-input">
+  <article class="search-input search-side">
     <app-search-select (search)="handleSearch($event)"></app-search-select>
   </article>
 </section>
@@ -190,9 +191,9 @@
 </div>
 
 <section class="korttilista">
-  <section *ngFor="let place of loadedPlaces">
+  <section *ngFor="let place of loadedPlaces" class="place-card-wrap">
     <div class="kortti">
-      <h1 class="mx-2 mb-1">{{ place.name.fi }}</h1>
+      <h3>{{ place.name.fi }}</h3>
       
       <!-- Display this place's image with broken image handling -->
       <div class="image-container">
@@ -236,12 +237,12 @@
         </div>
       </div>
       
-      <button (click)="toggleInfo(place.id)" class="btn bg-indigo-700 hover:bg-indigo-800 text-white font-bold rounded">
+      <button (click)="toggleInfo(place.id)" class="details-btn">
         Lisätiedot <fa-icon [icon]="ChevronDown"></fa-icon>
       </button>
 
       <!-- Wrap the togglable content in a div and use *ngIf to check the toggle state -->
-      <div *ngIf="toggleStates.get(place.id)" class="mt-2 mb-2">
+      <div *ngIf="toggleStates.get(place.id)" class="place-extra">
         <div *ngIf="place.description && place.description.fi" class="description">{{ place.description.fi }}</div>
         <div *ngIf="place.info_url && place.info_url.fi" class="website-link">
           <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpRightIcon"></fa-icon></a>

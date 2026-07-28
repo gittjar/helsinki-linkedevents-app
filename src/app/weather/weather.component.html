@@ -1,84 +1,85 @@
 <section class="weather-container">
-  <div class="weather-header">
+  <header class="weather-header">
     <h3 class="weather-title">
-      <fa-icon [icon]="Clock"></fa-icon>
+      <svg class="lucide-icon title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
       24 tunnin sääennuste Helsinkiin
     </h3>
-    <p class="weather-subtitle">Vieritä nähdäksesi koko ennusteen</p>
-  </div>
-  
-  <div class="weather-scroll-container">
-    <div class="weather-timeline">
-      <div class="forecast-item" 
-           *ngFor="let forecast of forecastData; let i = index"
-           [class.new-day]="forecast.isNewDay"
-           [style.background]="getCardGradient(forecast)">
-        
-        <!-- Date separator for new day -->
-        <div class="day-separator" *ngIf="forecast.isNewDay && i > 0">
-          <div class="separator-line"></div>
-          <div class="separator-badge">
-            <fa-icon [icon]="Calendar"></fa-icon>
-            <span>{{ forecast.time | date: 'dd.MM' }}</span>
-          </div>
-          <div class="separator-line"></div>
-        </div>
+    <button class="weather-menu-btn" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen">
+      <span class="menu-icon" [class.open]="isMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <span>{{ isMenuOpen ? 'Piilota tuntitiedot' : 'Näytä tuntitiedot' }}</span>
+    </button>
+  </header>
 
-        <!-- Time indicator -->
-        <div class="time-indicator">
-          <div class="time-dot" [class.current-hour]="forecast.hourNumber === currentTime.getHours()"></div>
-          <div class="time-label" [style.color]="getTextColor(forecast)">
-            <fa-icon [icon]="Clock"></fa-icon>
-            {{ forecast.time | date: 'HH:mm' }}
+  <section class="weather-accordion" *ngIf="isMenuOpen">
+    <article class="hour-row" *ngFor="let forecast of forecastData; let i = index" [class.current]="forecast.hourNumber === currentTime.getHours() && forecast.isToday">
+      <button class="hour-toggle" (click)="toggleHour(i)">
+        <div class="hour-main">
+          <img [src]="forecast.condition.icon" alt="{{ forecast.condition.text }}" class="hour-icon" [title]="forecast.condition.text">
+          <div class="hour-texts">
+            <strong>{{ getHourHeader(forecast) }}</strong>
+            <span>{{ forecast.condition.text }}</span>
           </div>
         </div>
-
-        <!-- Weather icon -->
-        <div class="weather-icon-container">
-          <img [src]="forecast.condition.icon" 
-               alt="{{ forecast.condition.text }}" 
-               class="weather-icon"
-               [title]="forecast.condition.text">
-        </div>
-
-        <!-- Temperature -->
-        <div class="temperature-container">
-          <div class="temperature-value" 
-               [style.color]="getTemperatureColor(forecast.temp_c)">
-            <fa-icon [icon]="Temperature"></fa-icon>
+        <div class="hour-meta">
+          <span class="hour-temp" [style.color]="getTemperatureColor(forecast.temp_c)">
+            <svg class="lucide-icon mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 14.76V3.5a2 2 0 0 0-4 0v11.26a4 4 0 1 0 4 0z"></path>
+            </svg>
             {{ forecast.temp_c }}°
+          </span>
+          <span class="hour-chevron" [class.open]="expandedHourIndex === i">▾</span>
+        </div>
+      </button>
+
+      <div class="hour-details" *ngIf="expandedHourIndex === i">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="label">Aika</span>
+            <span class="value">
+              <svg class="lucide-icon mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              {{ forecast.time | date: 'HH:mm' }}
+            </span>
           </div>
-          <div class="temperature-details">
-            <span class="feels-like" [style.color]="getSecondaryTextColor(forecast)">Tuntuu {{ forecast.feelslike_c }}°</span>
-            <span class="humidity" [style.color]="getSecondaryTextColor(forecast)">💧 {{ forecast.humidity }}%</span>
+          <div class="detail-item">
+            <span class="label">Päivä</span>
+            <span class="value">
+              <svg class="lucide-icon mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              {{ getDayLabel(forecast) }}
+            </span>
           </div>
-        </div>
-
-        <!-- Weather condition -->
-        <div class="condition-text" [style.color]="getTextColor(forecast)">
-          {{ forecast.condition.text }}
-        </div>
-
-        <!-- Wind info -->
-        <div class="wind-info">
-          <span class="wind-speed" [style.color]="getSecondaryTextColor(forecast)">🌬️ {{ forecast.wind_kph }} km/h</span>
-          <span class="wind-direction" [style.color]="getSecondaryTextColor(forecast)">{{ forecast.wind_dir }}</span>
-        </div>
-
-        <!-- Day indicator -->
-        <div class="day-indicator" 
-             [class.today]="forecast.isToday"
-             [class.tomorrow]="forecast.isTomorrow">
-          {{ forecast.isToday ? 'Tänään' : 'Huomenna' }}
+          <div class="detail-item">
+            <span class="label">Tuntuu kuin</span>
+            <span class="value">{{ forecast.feelslike_c }}°</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Kosteus</span>
+            <span class="value">{{ forecast.humidity }}%</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Tuuli</span>
+            <span class="value">{{ forecast.wind_kph }} km/h {{ forecast.wind_dir }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Säätila</span>
+            <span class="value">{{ forecast.condition.text }}</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  
-  <!-- Scroll indicators -->
-  <div class="scroll-indicators">
-    <div class="scroll-hint">
-      <span>← Vieritä katsellaksesi →</span>
-    </div>
-  </div>
+    </article>
+  </section>
 </section>
