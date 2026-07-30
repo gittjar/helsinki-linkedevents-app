@@ -11,7 +11,7 @@ export class PlaceService {
   getPlace(textid: string): Observable<any> {
     return this.searchPlaces(textid, 1);
   }
-  private linkedEventsApiRoot = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/';
+  private linkedEventsApiRoot = 'https://api.hel.fi/linkedevents/v1/';
 
   constructor(private http: HttpClient) { }
 

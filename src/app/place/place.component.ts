@@ -16,7 +16,7 @@ export class PlaceComponent implements OnInit {
 
   toggleStates = new Map<string, boolean>();
 
-  linkedEventsApiRoot: string = 'https://api.codetabs.com/v1/proxy/?quest=https://api.hel.fi/linkedevents/v1/';
+  linkedEventsApiRoot: string = 'https://api.hel.fi/linkedevents/v1/';
   mapLoaded!: boolean;
   map!: google.maps.Map;
   geocoder = new google.maps.Geocoder();

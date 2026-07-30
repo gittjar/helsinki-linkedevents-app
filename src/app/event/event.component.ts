@@ -19,7 +19,7 @@ export class EventComponent implements OnInit {
   searchTextDate: string = "";
   newPageNumber: number = 1;
   events: any;
-  filteredEvents: any;
+  filteredEvents: any[] = [];
   currentDate: Date | undefined;
   tomorrowDate: Date | undefined;
   tomorrow2Date: Date | undefined;
