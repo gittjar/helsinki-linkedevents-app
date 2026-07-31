@@ -11,12 +11,15 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 export class ImageComponent implements OnInit {
   i: any;
   images: any;
+  displayImages: any[] = [];
   newPageNumber = 1;
   isLoading: boolean = true;
   copiedImages: Set<any> = new Set(); // Track which images have been copied
   sortOrder: string = '-last_modified_time'; // Default sort by last modified descending
   searchTerm: string = '';
   lastSearchTerm: string = '';
+  showDuplicateTitles: boolean = false;
+  hiddenDuplicateCount: number = 0;
   totalCount: number = 0;
   totalPages: number = 0;
   itemsPerPage: number = 0; // Will be set dynamically
@@ -37,6 +40,7 @@ export class ImageComponent implements OnInit {
     this.imageService.getImages(page, searchText, this.sortOrder).subscribe((data: any) => {
       this.images = data;
       this.totalCount = data.meta.count;
+      this.displayImages = this.filterDuplicateTitles(data?.data || []);
       // Set itemsPerPage based on API response, fallback to 1 to avoid division by zero
       this.itemsPerPage = (data.data && data.data.length) ? data.data.length : 1;
       this.totalPages = Math.ceil(this.totalCount / this.itemsPerPage);
@@ -50,6 +54,46 @@ export class ImageComponent implements OnInit {
 
       this.isLoading = false;
     });
+  }
+
+  toggleDuplicateTitles(): void {
+    this.showDuplicateTitles = !this.showDuplicateTitles;
+    this.displayImages = this.filterDuplicateTitles(this.images?.data || []);
+  }
+
+  private filterDuplicateTitles(images: any[]): any[] {
+    if (this.showDuplicateTitles) {
+      this.hiddenDuplicateCount = 0;
+      return images;
+    }
+
+    const seenTitles = new Set<string>();
+    const filteredImages: any[] = [];
+
+    for (const image of images) {
+      const rawTitle = this.getImageTitle(image);
+      const titleKey = rawTitle.trim().toLowerCase();
+
+      if (!titleKey) {
+        filteredImages.push(image);
+        continue;
+      }
+
+      if (seenTitles.has(titleKey)) {
+        continue;
+      }
+
+      seenTitles.add(titleKey);
+      filteredImages.push(image);
+    }
+
+    this.hiddenDuplicateCount = Math.max(images.length - filteredImages.length, 0);
+    return filteredImages;
+  }
+
+  private getImageTitle(image: any): string {
+    const title = image?.name || image?.title || image?.alt_text || '';
+    return typeof title === 'string' ? title : '';
   }
 
   selectPage(page: number): void {

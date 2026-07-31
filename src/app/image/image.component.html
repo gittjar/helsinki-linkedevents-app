@@ -90,10 +90,24 @@
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
-              <span class="stat-number">{{images?.data?.length || 0}}</span>
+              <span class="stat-number">{{displayImages.length}}</span>
               <span class="stat-label">kuvaa sivulla {{newPageNumber}}</span>
             </div>
           </div>
+          <button type="button" class="duplicate-toggle" (click)="toggleDuplicateTitles()" [attr.aria-pressed]="showDuplicateTitles">
+            <span class="duplicate-toggle-copy">
+              <span class="duplicate-toggle-title">Näytä myös duplikaatit</span>
+              <span class="duplicate-toggle-subtitle">
+                {{ showDuplicateTitles ? 'Kaikki kuvat näkyvät' : 'Sama otsikko näkyy vain kerran oletuksena' }}
+              </span>
+            </span>
+            <span class="duplicate-toggle-track" [class.is-active]="showDuplicateTitles" aria-hidden="true">
+              <span class="duplicate-toggle-thumb"></span>
+            </span>
+          </button>
+          <p class="duplicate-note" *ngIf="!showDuplicateTitles && hiddenDuplicateCount > 0">
+            {{hiddenDuplicateCount}} duplikaattia samalla otsikolla on piilotettu oletuksena.
+          </p>
         </div>
       </div>
     </div>
@@ -188,7 +202,7 @@
 
     <!-- Image Grid -->
     <section class="image-grid">
-      <article *ngFor="let image of images?.data" class="image-card">
+      <article *ngFor="let image of displayImages" class="image-card">
         <div class="image-container" (click)="openJumbotron(image)">
           <img 
             [src]="image?.url" 
