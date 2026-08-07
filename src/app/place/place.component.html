@@ -128,6 +128,10 @@
     
     <!-- Results Info -->
     <div class="results-info">
+      <div class="search-notice" *ngIf="noticeText" [ngClass]="'search-notice-' + noticeType" role="status" aria-live="polite">
+        <span>{{ noticeText }} <strong *ngIf="noticeCountdown > 0">({{ noticeCountdown }}s)</strong></span>
+        <button type="button" class="search-notice-close" (click)="clearNotice()" aria-label="Sulje ilmoitus">×</button>
+      </div>
       <p>
         <span *ngIf="isSearching">Etsitään paikkoja...</span>
         <span *ngIf="!isSearching">
@@ -229,20 +233,18 @@
       <div class="address-info">
         <div class="street-address">{{ place.street_address.fi }}</div>
         <div class="postal-address">{{ place.postal_code }}, {{ place.address_locality.fi }}</div>
-        
-        <!-- Telephone information -->
-        <div *ngIf="place.telephone && place.telephone.fi" class="telephone-info">
-          <i class="phone-icon">📞</i>
-          <a href="tel:{{ place.telephone.fi }}" class="phone-link">{{ place.telephone.fi }}</a>
-        </div>
       </div>
       
       <button (click)="toggleInfo(place.id)" class="details-btn">
-        Lisätiedot <fa-icon [icon]="ChevronDown"></fa-icon>
+        {{ toggleStates.get(place.id) ? 'Piilota lisätiedot' : 'Näytä lisätiedot' }} <fa-icon [icon]="ChevronDown"></fa-icon>
       </button>
 
       <!-- Wrap the togglable content in a div and use *ngIf to check the toggle state -->
       <div *ngIf="toggleStates.get(place.id)" class="place-extra">
+        <div *ngIf="place.telephone && place.telephone.fi" class="telephone-info">
+          <i class="phone-icon">📞</i>
+          <a href="tel:{{ place.telephone.fi }}" class="phone-link">{{ place.telephone.fi }}</a>
+        </div>
         <div *ngIf="place.description && place.description.fi" class="description">{{ place.description.fi }}</div>
         <div *ngIf="place.info_url && place.info_url.fi" class="website-link">
           <a href="{{ place.info_url.fi }}" target="_blank">Kohteen sivusto <fa-icon [icon]="ArrowUpRightIcon"></fa-icon></a>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlaceService } from '../place.service';
 import { faArrowUpRightFromSquare, faChevronRight, faMagnifyingGlassLocation, faRectangleXmark, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -7,7 +7,7 @@ import { faArrowUpRightFromSquare, faChevronRight, faMagnifyingGlassLocation, fa
   templateUrl: './place.component.html',
   styleUrls: ['./place.component.css']
 })
-export class PlaceComponent implements OnInit {
+export class PlaceComponent implements OnInit, OnDestroy {
   ArrowUpRightIcon = faArrowUpRightFromSquare;
   ChevronRight = faChevronRight;
   MagnifyingGlassLocation = faMagnifyingGlassLocation;
@@ -40,11 +40,20 @@ export class PlaceComponent implements OnInit {
   public loadedPlaces: any[] = [];
   hoveredImageId: number | null = null;
   isSearching = false;
+  noticeText = '';
+  noticeType: 'warning' | 'error' = 'warning';
+  noticeCountdown = 0;
+  private noticeTimer: ReturnType<typeof setInterval> | null = null;
+  private resetInputsOnNoticeDismiss = false;
 
   constructor(private placeservice: PlaceService) {}
 
   ngOnInit() {
     this.initMap();
+  }
+
+  ngOnDestroy(): void {
+    this.clearNoticeTimer();
   }
 
   initMap(): void {
@@ -57,6 +66,7 @@ export class PlaceComponent implements OnInit {
     console.log(`showContent called with textid="${textid}", division="${division}", pageNumber=${pageNumber}`);
     
     this.isSearching = true;
+    this.clearNotice();
     
     try {
       let response;
@@ -101,6 +111,21 @@ export class PlaceComponent implements OnInit {
       );
       
       console.log(`Processing ${validPlaces.length} valid places out of ${this.loadedPlaces.length} total places`);
+
+      const searchContext = this.getSearchContext(textid, division);
+      if (this.loadedPlaces.length === 0) {
+        this.setNotice(
+          'warning',
+          `Haulla ${searchContext} ei löytynyt tuloksia. Kokeile toista hakusanaa tai aluetta.`,
+          true
+        );
+      } else if (validPlaces.length === 0) {
+        this.setNotice(
+          'warning',
+          `Tuloksia löytyi haulla ${searchContext}, mutta niissä ei ollut riittäviä karttatietoja näytettäväksi.`,
+          true
+        );
+      }
 
       // Add markers for valid places
       validPlaces.forEach((place: any) => {
@@ -153,9 +178,80 @@ export class PlaceComponent implements OnInit {
       this.loadedPlaces = [];
       this.totalPages = 1;
       this.totalCount = 0;
+      this.setNotice(
+        'error',
+        'Tietojen hakeminen epäonnistui. Tarkista verkkoyhteys ja yritä uudelleen.',
+        false
+      );
     } finally {
       this.isSearching = false;
     }
+  }
+
+  clearNotice(): void {
+    this.clearNoticeTimer();
+    this.noticeText = '';
+    this.noticeCountdown = 0;
+    this.resetInputsOnNoticeDismiss = false;
+  }
+
+  private setNotice(type: 'warning' | 'error', text: string, resetInputsOnDismiss: boolean): void {
+    this.noticeType = type;
+    this.noticeText = text;
+    this.resetInputsOnNoticeDismiss = resetInputsOnDismiss;
+    this.startNoticeCountdown();
+  }
+
+  private startNoticeCountdown(): void {
+    this.clearNoticeTimer();
+    this.noticeCountdown = 6;
+
+    this.noticeTimer = setInterval(() => {
+      this.noticeCountdown -= 1;
+
+      if (this.noticeCountdown <= 0) {
+        this.clearNoticeTimer();
+        this.noticeText = '';
+        this.noticeCountdown = 0;
+
+        if (this.resetInputsOnNoticeDismiss) {
+          this.resetSearchInputs();
+        }
+
+        this.resetInputsOnNoticeDismiss = false;
+      }
+    }, 1000);
+  }
+
+  private clearNoticeTimer(): void {
+    if (this.noticeTimer) {
+      clearInterval(this.noticeTimer);
+      this.noticeTimer = null;
+    }
+  }
+
+  private resetSearchInputs(): void {
+    this.textid = '';
+    this.division = '';
+  }
+
+  private getSearchContext(textid: string, division?: string): string {
+    const text = (textid || '').trim();
+    const area = (division || '').trim();
+
+    if (text && area) {
+      return `"${text}" alueella "${area}"`;
+    }
+
+    if (text) {
+      return `"${text}"`;
+    }
+
+    if (area) {
+      return `alueella "${area}"`;
+    }
+
+    return 'valituilla ehdoilla';
   }
 
   private getPlaceTitle(place: any): string {
