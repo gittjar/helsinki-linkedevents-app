@@ -188,39 +188,102 @@ gallery {
 .area-card {
   position: relative;
   overflow: hidden;
-  min-height: 180px;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(194, 24, 91, 0.08), rgba(59, 130, 246, 0.08));
+  min-height: 230px;
+  padding: 0;
+  background: #e2e8f0;
+  border-radius: 22px;
 }
 
-.area-card::before {
-  content: "";
+.area-cover,
+.area-overlay,
+.area-content {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(194, 24, 91, 0.18), rgba(15, 23, 42, 0));
 }
 
-.area-card > * {
-  position: relative;
+.area-cover {
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+}
+
+.area-overlay {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.18) 0%, rgba(15, 23, 42, 0.72) 100%);
+}
+
+.area-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.2rem;
   z-index: 1;
 }
 
-.area-name {
-  display: block;
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin-bottom: 0.5rem;
+.area-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.area-icon {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
 }
 
 .area-tag {
   display: inline-block;
   padding: 0.4rem 0.7rem;
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.06);
-  color: #334155;
-  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f8fafc;
+  font-size: 0.72rem;
   font-weight: 600;
+  backdrop-filter: blur(6px);
+}
+
+.area-content h3 {
+  margin: 0 0 0.8rem;
+  font-size: clamp(1.5rem, 2vw, 1.9rem);
+  color: #ffffff;
+}
+
+.area-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.stat-item {
+  background: rgba(15, 23, 42, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 0.55rem 0.65rem;
+  backdrop-filter: blur(3px);
+}
+
+.stat-item span {
+  display: block;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.7rem;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-item strong {
+  color: #ffffff;
+  font-size: 1.05rem;
 }
 
 @media (max-width: 768px) {

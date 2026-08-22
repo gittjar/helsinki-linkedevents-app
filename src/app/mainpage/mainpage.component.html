@@ -43,8 +43,26 @@
 
   <div class="area-grid">
     <a *ngFor="let area of areaTiles" [routerLink]="['/place']" [queryParams]="{ division: area.name }" class="area-card">
-      <span class="area-name">{{ area.name }}</span>
-      <span class="area-tag">{{ area.tag }}</span>
+      <div class="area-cover" [style.background-image]="'url(' + area.cover + ')'" aria-hidden="true"></div>
+      <div class="area-overlay" aria-hidden="true"></div>
+
+      <div class="area-content">
+        <div class="area-topline">
+          <span class="area-icon">
+            <lucide-icon [img]="area.icon" [size]="18" [strokeWidth]="2.2"></lucide-icon>
+          </span>
+          <span class="area-tag">{{ area.tag }}</span>
+        </div>
+
+        <h3>{{ area.name }}</h3>
+
+        <div class="area-stats">
+          <div class="stat-item" *ngFor="let stat of area.stats">
+            <span>{{ stat.label }}</span>
+            <strong>{{ stat.value }}</strong>
+          </div>
+        </div>
+      </div>
     </a>
   </div>
 </section>

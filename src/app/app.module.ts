@@ -23,6 +23,7 @@ import { EventComponent } from './event/event.component';
 import { WeatherComponent } from './weather/weather.component';
 import { SearchSelectComponent } from './search-select/search-select.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { LucideAngularModule } from 'lucide-angular';
 
 import { environment } from '../environment/environment';
 
@@ -50,6 +51,7 @@ import { environment } from '../environment/environment';
     FontAwesomeModule,
     GalleryModule,
     ClipboardModule,
+    LucideAngularModule,
   ],
   providers: [
     {
