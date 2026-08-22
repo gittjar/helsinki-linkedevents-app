@@ -43,7 +43,7 @@
 
   <div class="area-grid">
     <a *ngFor="let area of areaTiles" [routerLink]="['/place']" [queryParams]="{ division: area.name }" class="area-card">
-      <div class="area-cover" [style.background-image]="'url(' + area.cover + ')'" aria-hidden="true"></div>
+      <div class="area-cover" [ngStyle]="getAreaStyles(area)" aria-hidden="true"></div>
       <div class="area-overlay" aria-hidden="true"></div>
 
       <div class="area-content">
