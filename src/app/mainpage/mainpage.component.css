@@ -107,19 +107,142 @@ gallery {
   transform: translateY(-2px);
 }
 
+.home-sections {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 1rem;
+}
+
+.section-header {
+  margin-bottom: 1.5rem;
+}
+
+.section-kicker {
+  margin: 0 0 0.5rem;
+  color: #c2185b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.section-header h2 {
+  margin: 0;
+  color: #1e293b;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+}
+
+.quick-links,
+.area-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.feature-card,
+.area-card {
+  display: block;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+  text-decoration: none;
+  color: #0f172a;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.feature-card {
+  padding: 1.5rem;
+}
+
+.feature-card:hover,
+.area-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+  border-color: rgba(194, 24, 91, 0.35);
+}
+
+.feature-icon {
+  display: inline-flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(194, 24, 91, 0.12);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.feature-card p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.area-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(194, 24, 91, 0.08), rgba(59, 130, 246, 0.08));
+}
+
+.area-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(194, 24, 91, 0.18), rgba(15, 23, 42, 0));
+}
+
+.area-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.area-name {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.area-tag {
+  display: inline-block;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.06);
+  color: #334155;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .hero-overlay {
     padding: 2rem 1.5rem;
   }
+
   .hero-title {
     font-size: 3.25rem;
   }
+
   .hero-subtitle {
     font-size: 1rem;
     margin-bottom: 2rem;
   }
+
   .hero-btn {
     padding: 0.8rem 1.5rem;
     font-size: 0.875rem;
+  }
+
+  .home-sections {
+    padding-top: 3rem;
   }
 }

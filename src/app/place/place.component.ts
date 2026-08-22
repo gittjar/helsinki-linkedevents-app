@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { PlaceService } from '../place.service';
 import { faArrowUpRightFromSquare, faChevronRight, faMagnifyingGlassLocation, faRectangleXmark, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -46,10 +47,21 @@ export class PlaceComponent implements OnInit, OnDestroy {
   private noticeTimer: ReturnType<typeof setInterval> | null = null;
   private resetInputsOnNoticeDismiss = false;
 
-  constructor(private placeservice: PlaceService) {}
+  constructor(private placeservice: PlaceService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.initMap();
+    this.route.queryParams.subscribe(params => {
+      const division = params['division'] || '';
+      const text = params['text'] || '';
+
+      if (division || text) {
+        this.textid = text;
+        this.division = division;
+        this.currentPage = 1;
+        this.showContent(this.textid, this.currentPage, this.division);
+      }
+    });
   }
 
   ngOnDestroy(): void {

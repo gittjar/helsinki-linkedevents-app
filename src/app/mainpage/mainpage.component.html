@@ -19,3 +19,32 @@
     </div>
   </div>
 </div>
+
+<section class="home-sections">
+  <div class="section-header">
+    <p class="section-kicker">Pikakäynnit</p>
+    <h2>Suunnista helposti</h2>
+  </div>
+
+  <div class="quick-links">
+    <a *ngFor="let item of quickLinks" [routerLink]="item.link" class="feature-card">
+      <span class="feature-icon">{{ item.icon }}</span>
+      <h3>{{ item.title }}</h3>
+      <p>{{ item.description }}</p>
+    </a>
+  </div>
+</section>
+
+<section class="home-sections">
+  <div class="section-header">
+    <p class="section-kicker">Alueet</p>
+    <h2>Valitse kaupunginosa</h2>
+  </div>
+
+  <div class="area-grid">
+    <a *ngFor="let area of areaTiles" [routerLink]="['/place']" [queryParams]="{ division: area.name }" class="area-card">
+      <span class="area-name">{{ area.name }}</span>
+      <span class="area-tag">{{ area.tag }}</span>
+    </a>
+  </div>
+</section>
