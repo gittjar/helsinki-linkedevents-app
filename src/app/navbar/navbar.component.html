@@ -18,6 +18,11 @@
       </a>
     </h3>
 
+    <button class="theme-toggle" type="button" (click)="toggleTheme()" aria-label="Toggle light and dark mode">
+      <span class="theme-toggle-icon" aria-hidden="true">{{ isDarkMode ? '☀' : '☾' }}</span>
+      <span class="theme-toggle-label">{{ isDarkMode ? 'Light' : 'Dark' }}</span>
+    </button>
+
     <article class="navlinks" *ngIf="menuVisible">
       <div class="nav-item">
         <a routerLink="/event" (click)="toggleMenu(false)">Events</a>

@@ -19,9 +19,9 @@ export class MainpageComponent implements OnInit {
   readonly sparkIcon = Sparkles;
 
   quickLinks = [
-    { title: 'Tapahtumat', description: 'Katso mitä Helsingissä tapahtuu tänään.', icon: '🎉', link: '/event' },
-    { title: 'Paikat', description: 'Löydä suosittuja kohteita kaupungista.', icon: '📍', link: '/place' },
-    { title: 'Kuvat', description: 'Sivusta löytyy kuva-aiheisia inspiraatiokokonaisuuksia.', icon: '📷', link: '/image' }
+    { title: 'Tapahtumat', description: 'Katso mitä Helsingissä tapahtuu tänään.', icon: CalendarDays, link: '/event' },
+    { title: 'Paikat', description: 'Löydä suosittuja kohteita kaupungista.', icon: MapPinned, link: '/place' },
+    { title: 'Kuvat', description: 'Sivusta löytyy kuva-aiheisia inspiraatiokokonaisuuksia.', icon: Camera, link: '/image' }
   ];
 
   areaTiles = [

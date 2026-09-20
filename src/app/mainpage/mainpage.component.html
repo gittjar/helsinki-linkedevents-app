@@ -28,7 +28,9 @@
 
   <div class="quick-links">
     <a *ngFor="let item of quickLinks" [routerLink]="item.link" class="feature-card">
-      <span class="feature-icon">{{ item.icon }}</span>
+      <span class="feature-icon">
+        <lucide-icon [img]="item.icon" [size]="22" [strokeWidth]="2.1"></lucide-icon>
+      </span>
       <h3>{{ item.title }}</h3>
       <p>{{ item.description }}</p>
     </a>

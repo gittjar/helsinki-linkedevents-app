@@ -11,8 +11,8 @@ import { faMapPin } from '@fortawesome/free-solid-svg-icons';
 })
 export class NavbarComponent {
   isSticky = false;
-  menuVisible = false; // Controls the visibility of the menu
-  MapPin = faMapPin;
+  menuVisible = false;
+  isDarkMode = true;
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: any) {
@@ -20,11 +20,25 @@ export class NavbarComponent {
     this.isSticky = scrollTop > 100;
   }
 
+  ngOnInit(): void {
+    this.applyTheme(this.isDarkMode);
+  }
+
   toggleMenu(shouldOpen?: boolean) {
     if (shouldOpen === undefined) {
-      this.menuVisible = !this.menuVisible; // Toggle the menu visibility
+      this.menuVisible = !this.menuVisible;
     } else {
-      this.menuVisible = shouldOpen; // Set the menu visibility explicitly
+      this.menuVisible = shouldOpen;
     }
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    this.applyTheme(this.isDarkMode);
+  }
+
+  private applyTheme(isDark: boolean): void {
+    document.body.classList.toggle('light-theme', !isDark);
+    document.body.classList.toggle('dark-theme', isDark);
   }
 }
